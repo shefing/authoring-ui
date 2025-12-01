@@ -5,7 +5,11 @@ const API_URL =
   '' // empty → use same-origin relative requests
 const API_TOKEN = process.env.PAYLOAD_API_TOKEN || process.env.FRONTEND_PAYLOAD_API_TOKEN
 
-if (!process.env.PAYLOAD_API_URL && !process.env.FRONTEND_PAYLOAD_API_URL && !process.env.NEXT_PUBLIC_PAYLOAD_API_URL) {
+if (
+  !process.env.PAYLOAD_API_URL &&
+  !process.env.FRONTEND_PAYLOAD_API_URL &&
+  !process.env.NEXT_PUBLIC_PAYLOAD_API_URL
+) {
   // Same-origin fallback. This is fine for the co-located frontend.
   // Set one of the *_PAYLOAD_API_URL envs to override.
   console.info('PAYLOAD API URL not set; using same-origin relative requests for Payload API')
@@ -13,7 +17,7 @@ if (!process.env.PAYLOAD_API_URL && !process.env.FRONTEND_PAYLOAD_API_URL && !pr
 
 export async function payloadGet(path: string, init?: RequestInit) {
   const url = API_URL ? `${API_URL}${path}` : path
-    console.log("url",url)
+  console.log('url', url)
   const res = await fetch(url, {
     ...init,
     headers: {
@@ -27,10 +31,10 @@ export async function payloadGet(path: string, init?: RequestInit) {
     const text = await res.text()
     throw new Error(`Payload GET ${url} failed: ${res.status} ${text}`)
   }
-    const results=await res.json()
-    console.log("res",results)
+  const results = await res.json()
+  console.log('res', results)
 
-    return results
+  return results
 }
 
 export async function payloadPost(path: string, body: any, init?: RequestInit) {
@@ -55,7 +59,7 @@ export async function payloadPost(path: string, body: any, init?: RequestInit) {
 export type TemplateSummary = { id: string; name: string; slug: string; _status?: string }
 
 export async function listPublishedTemplates(): Promise<TemplateSummary[]> {
-  const data = await payloadGet(`/api/templates?limit=100&draft=false`)
+  const data = await payloadGet(`/api/templates?limit=100`)
   return data?.docs || []
 }
 

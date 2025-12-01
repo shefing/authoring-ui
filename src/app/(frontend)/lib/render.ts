@@ -26,7 +26,11 @@ export function buildPreview({ template, variables }: PreviewInput) {
       { type: 'TextBlock', text: title, weight: 'Bolder', size: 'Medium' },
       { type: 'TextBlock', text, wrap: true },
     ],
-    actions: (device.actions || []).map((a: any) => ({ type: 'Action.Submit', title: a.label || a.kind, data: { action: a.kind } })),
+    actions: (device.actions || []).map((a: any) => ({
+      type: 'Action.Submit',
+      title: a.label || a.kind,
+      data: { action: a.kind },
+    })),
   }
 
   return { title, text, device, teams }
@@ -37,8 +41,6 @@ function inferActionsFromTemplate(template: any) {
   if (template?.type === 'action') {
     actions.push({ kind: 'approve', label: 'Approve' })
     actions.push({ kind: 'snooze', label: 'Remind me later' })
-    actions.push({ kind: 'dismiss', label: 'Dismiss' })
-  } else {
     actions.push({ kind: 'dismiss', label: 'Dismiss' })
   }
   return actions

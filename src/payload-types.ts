@@ -191,6 +191,8 @@ export interface Template {
     };
     [k: string]: unknown;
   };
+  brandingRef?: (number | null) | BrandingPackage;
+  policyRefs?: (number | Policy)[] | null;
   channels?: {
     device?:
       | {
@@ -211,8 +213,6 @@ export interface Template {
       | boolean
       | null;
   };
-  brandingRef?: (number | null) | BrandingPackage;
-  policyRefs?: (number | Policy)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -225,11 +225,57 @@ export interface BrandingPackage {
   id: number;
   name: string;
   slug: string;
-  logo?: (number | null) | Media;
-  assets?: (number | Media)[] | null;
-  /**
-   * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
-   */
+  generalStyling?: {
+    /**
+     * Default text color
+     */
+    textColorText?: string | null;
+    /**
+     * Default background color
+     */
+    backgroundColorText?: string | null;
+    /**
+     * Text direction
+     */
+    direction?: ('ltr' | 'rtl') | null;
+    /**
+     * Message width in pixels
+     */
+    messageWidth?: number | null;
+    /**
+     * Title alignment
+     */
+    titleAlign?: ('left' | 'center' | 'right') | null;
+    /**
+     * Buttons alignment
+     */
+    buttonsAlign?: ('left' | 'center' | 'right') | null;
+  };
+  logoSettings?: {
+    logo?: (number | null) | Media;
+    /**
+     * Logo position relative to title
+     */
+    logoPos?: ('left-inline' | 'right-inline' | 'before' | 'after' | 'center') | null;
+  };
+  approveBtn?: {
+    /**
+     * Text on the approve button
+     */
+    label?: string | null;
+    /**
+     * Button background color
+     */
+    bgColor?: string | null;
+    /**
+     * Button text color
+     */
+    textColor?: string | null;
+  };
+  signature?: {
+    text?: string | null;
+    position?: ('left' | 'right' | 'center') | null;
+  };
   themeTokens?:
     | {
         [k: string]: unknown;
@@ -239,9 +285,6 @@ export interface BrandingPackage {
     | number
     | boolean
     | null;
-  /**
-   * Optional allowlist of CSS tokens/styles permitted for branding.
-   */
   cssAllowlist?:
     | {
         [k: string]: unknown;
@@ -251,7 +294,7 @@ export interface BrandingPackage {
     | number
     | boolean
     | null;
-  signature?: string | null;
+  assets?: (number | Media)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -495,14 +538,14 @@ export interface TemplatesSelect<T extends boolean = true> {
   slug?: T;
   type?: T;
   body?: T;
+  brandingRef?: T;
+  policyRefs?: T;
   channels?:
     | T
     | {
         device?: T;
         teams?: T;
       };
-  brandingRef?: T;
-  policyRefs?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -514,11 +557,38 @@ export interface TemplatesSelect<T extends boolean = true> {
 export interface BrandingPackagesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  logo?: T;
-  assets?: T;
+  generalStyling?:
+    | T
+    | {
+        textColorText?: T;
+        backgroundColorText?: T;
+        direction?: T;
+        messageWidth?: T;
+        titleAlign?: T;
+        buttonsAlign?: T;
+      };
+  logoSettings?:
+    | T
+    | {
+        logo?: T;
+        logoPos?: T;
+      };
+  approveBtn?:
+    | T
+    | {
+        label?: T;
+        bgColor?: T;
+        textColor?: T;
+      };
+  signature?:
+    | T
+    | {
+        text?: T;
+        position?: T;
+      };
   themeTokens?: T;
   cssAllowlist?: T;
-  signature?: T;
+  assets?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
