@@ -1,4 +1,4 @@
-import type {CollectionConfig} from 'payload'
+import {CollectionConfig, slugField} from 'payload'
 import {
     BlockquoteFeature, BlocksFeature,
     BoldFeature,
@@ -27,9 +27,14 @@ export const Templates: CollectionConfig = {
         },
     },
     fields: [
-        {name: 'name', type: 'text', required: true},
-        {name: 'slug', type: 'text', unique: true, required: true},
-        {name: 'type', type: 'select', options: ['notification', 'action'], required: true},
+        {
+            type: "row",
+            fields: [
+                {name: 'name', type: 'text', required: true},
+                {name: 'type', type: 'select', options: ['notification', 'action'], required: true},
+                slugField({fieldToUse: 'name'}),
+            ]
+        },
         {
             name: 'body',
             type: 'richText',

@@ -174,8 +174,12 @@ export interface Media {
 export interface Template {
   id: number;
   name: string;
-  slug: string;
   type: 'notification' | 'action';
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   body: {
     root: {
       type: string;
@@ -224,6 +228,10 @@ export interface Template {
 export interface BrandingPackage {
   id: number;
   name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
   logo?: (number | null) | Media;
   assets?: (number | Media)[] | null;
@@ -263,8 +271,12 @@ export interface BrandingPackage {
 export interface Policy {
   id: number;
   name: string;
-  slug: string;
   type: 'fatigue' | 'quietHours' | 'routing' | 'dndExceptions';
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   fatigue?: {
     maxPerWindow: number;
     windowHours: number;
@@ -492,8 +504,9 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   type?: T;
+  generateSlug?: T;
+  slug?: T;
   body?: T;
   channels?:
     | T
@@ -513,6 +526,7 @@ export interface TemplatesSelect<T extends boolean = true> {
  */
 export interface BrandingPackagesSelect<T extends boolean = true> {
   name?: T;
+  generateSlug?: T;
   slug?: T;
   logo?: T;
   assets?: T;
@@ -529,8 +543,9 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
  */
 export interface PoliciesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   type?: T;
+  generateSlug?: T;
+  slug?: T;
   fatigue?:
     | T
     | {
