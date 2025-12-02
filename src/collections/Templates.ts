@@ -1,4 +1,4 @@
-import { CollectionConfig, slugField, FieldClientComponent } from 'payload'
+import { CollectionConfig, slugField } from 'payload'
 import {
   BlockquoteFeature,
   BlocksFeature,
