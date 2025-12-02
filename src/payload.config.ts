@@ -23,14 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [
-    Users,
-    Media,
-    Templates,
-    BrandingPackages,
-    Policies,
-    Variables,
-  ],
+  collections: [Users, Media, Templates, BrandingPackages, Policies, Variables],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

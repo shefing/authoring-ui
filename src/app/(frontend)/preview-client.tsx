@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import * as React from 'react'
 import { Button } from './components/ui/button'
 import { Input } from './components/ui/input'
@@ -7,21 +7,30 @@ import { Select } from './components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { extractInlineVarDefs, type VarDef, coerceVarValue } from './lib/vars'
 import type { TemplateSummary } from './lib/payload'
+import { MessagePreview } from './components/MessagePreview'
 
 type Props = { templates: TemplateSummary[] }
 
 type VarRow = { id: string; key: string; value: string }
 
-export default function ClientComposer({ templates, initialTemplateId, initialDraft }: Props & { initialTemplateId?: string; initialDraft?: boolean }) {
+export default function ClientComposer({
+  templates,
+  initialTemplateId,
+  initialDraft,
+}: Props & { initialTemplateId?: string; initialDraft?: boolean }) {
   const [templateId, setTemplateId] = React.useState<string>(initialTemplateId || '')
   const [draft, setDraft] = React.useState(!!initialDraft)
-  const [rows, setRows] = React.useState<VarRow[]>([{ id: crypto.randomUUID(), key: '', value: '' }])
+  const [rows, setRows] = React.useState<VarRow[]>([
+    { id: crypto.randomUUID(), key: '', value: '' },
+  ])
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [preview, setPreview] = React.useState<any | null>(null)
   const [tplJson, setTplJson] = React.useState<any | null>(null)
   const [inlineVars, setInlineVars] = React.useState<VarDef[]>([])
   const [inlineValues, setInlineValues] = React.useState<Record<string, string>>({})
+  const [branding, setBranding] = React.useState<any | null>(null)
+  const [showPopup, setShowPopup] = React.useState(false)
 
   const selected = templates.find((t) => t.id === templateId)
 
@@ -31,9 +40,10 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
       setTplJson(null)
       setInlineVars([])
       setInlineValues({})
+      setBranding(null)
       if (!templateId) return
       try {
-       // const qs = new URLSearchParams({ draft: draft ? '1' : '0' }).toString()
+        // const qs = new URLSearchParams({ draft: draft ? '1' : '0' }).toString()
         const res = await fetch(`/api/templates/${templateId}`, { cache: 'no-store' })
         const data = await res.json()
         if (!res.ok) throw new Error(data?.error || 'failed to load template')
@@ -46,6 +56,21 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
           if (d.sampleValue != null) init[d.key] = String(d.sampleValue)
         }
         setInlineValues(init)
+
+        // Fetch branding package if referenced
+        if (data.brandingRef) {
+          const brandingId =
+            typeof data.brandingRef === 'object' ? data.brandingRef.id : data.brandingRef
+          if (brandingId) {
+            const brandingRes = await fetch(`/api/branding-packages/${brandingId}`, {
+              cache: 'no-store',
+            })
+            if (brandingRes.ok) {
+              const brandingData = await brandingRes.json()
+              setBranding(brandingData)
+            }
+          }
+        }
       } catch (e: any) {
         console.error(e)
         setError(e?.message || 'Failed to load template')
@@ -93,11 +118,16 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Preview failed')
       setPreview(data.preview)
+      setShowPopup(true)
     } catch (e: any) {
       setError(e?.message || 'Preview failed')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false)
   }
 
   return (
@@ -108,11 +138,15 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
         <div className="space-y-4">
           <div>
             <Label htmlFor="template">Template</Label>
-            <Select id="template" value={templateId} onChange={(e) => setTemplateId(e.target.value)}>
-              <option value="">Select a published template…</option>
+            <Select
+              id="template"
+              value={templateId}
+              onChange={(e) => setTemplateId(e.target.value)}
+            >
+              <option value="">Select a template…</option>
               {templates.map((t) => (
                 <option key={t.id} value={t.id}>
-                  {t.name || t.slug}
+                  {t.name || t.slug} {t._status === 'draft' ? '(Draft)' : ''}
                 </option>
               ))}
             </Select>
@@ -120,7 +154,12 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
           </div>
 
           <div className="flex items-center gap-2">
-            <input id="draft" type="checkbox" checked={draft} onChange={(e) => setDraft(e.target.checked)} />
+            <input
+              id="draft"
+              type="checkbox"
+              checked={draft}
+              onChange={(e) => setDraft(e.target.checked)}
+            />
             <Label htmlFor="draft">Use draft (if exists)</Label>
           </div>
 
@@ -131,14 +170,19 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
                 {inlineVars.map((v) => (
                   <div key={v.id} className="grid grid-cols-12 items-center gap-2">
                     <div className="col-span-5">
-                      <Label>{v.label || v.key}{v.required ? ' *' : ''}</Label>
+                      <Label>
+                        {v.label || v.key}
+                        {v.required ? ' *' : ''}
+                      </Label>
                       {v.formatHint && <p className="text-xs text-gray-500">{v.formatHint}</p>}
                     </div>
                     <div className="col-span-7">
                       {v.type === 'enum' && Array.isArray(v.enumOptions) ? (
                         <Select
                           value={inlineValues[v.key] ?? ''}
-                          onChange={(e) => setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))}
+                          onChange={(e) =>
+                            setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
+                          }
                         >
                           <option value="">Select…</option>
                           {v.enumOptions.map((opt, i) => (
@@ -153,7 +197,12 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
                             id={`bool-${v.key}`}
                             type="checkbox"
                             checked={inlineValues[v.key] === 'true'}
-                            onChange={(e) => setInlineValues((m) => ({ ...m, [v.key]: e.target.checked ? 'true' : 'false' }))}
+                            onChange={(e) =>
+                              setInlineValues((m) => ({
+                                ...m,
+                                [v.key]: e.target.checked ? 'true' : 'false',
+                              }))
+                            }
                           />
                           <Label htmlFor={`bool-${v.key}`}>{v.label || v.key}</Label>
                         </div>
@@ -161,7 +210,9 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
                         <Input
                           placeholder={v.sampleValue || v.formatHint || v.key}
                           value={inlineValues[v.key] ?? ''}
-                          onChange={(e) => setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))}
+                          onChange={(e) =>
+                            setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
+                          }
                         />
                       )}
                     </div>
@@ -181,13 +232,34 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Device Preview</CardTitle>
+              <CardTitle>Message Preview</CardTitle>
             </CardHeader>
             <CardContent>
               {preview ? (
-                <pre className="max-h-96 overflow-auto rounded bg-gray-50 p-3 text-xs">{JSON.stringify(preview.device, null, 2)}</pre>
+                <div className="space-y-4">
+                  {showPopup && (
+                    <MessagePreview
+                      content={{
+                        title: preview.title || 'Message',
+                        body: tplJson?.body || preview.text || 'No content',
+                        actions: preview.device?.actions || [],
+                      }}
+                      branding={branding}
+                      asPopup={true}
+                      onClose={handleClosePopup}
+                    />
+                  )}
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">Generated JSON (Device)</h3>
+                    <pre className="max-h-64 overflow-auto rounded bg-gray-50 p-3 text-xs">
+                      {JSON.stringify(preview.device, null, 2)}
+                    </pre>
+                  </div>
+                </div>
               ) : (
-                <p className="text-sm text-gray-500">No preview yet.</p>
+                <p className="text-sm text-gray-500">
+                  No preview yet. Select a template and click Preview.
+                </p>
               )}
             </CardContent>
           </Card>
@@ -198,7 +270,9 @@ export default function ClientComposer({ templates, initialTemplateId, initialDr
             </CardHeader>
             <CardContent>
               {preview ? (
-                <pre className="max-h-96 overflow-auto rounded bg-gray-50 p-3 text-xs">{JSON.stringify(preview.teams, null, 2)}</pre>
+                <pre className="max-h-96 overflow-auto rounded bg-gray-50 p-3 text-xs">
+                  {JSON.stringify(preview.teams, null, 2)}
+                </pre>
               ) : (
                 <p className="text-sm text-gray-500">No preview yet.</p>
               )}

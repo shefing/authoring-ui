@@ -195,6 +195,8 @@ export interface Template {
     };
     [k: string]: unknown;
   };
+  brandingRef?: (number | null) | BrandingPackage;
+  policyRefs?: (number | Policy)[] | null;
   channels?: {
     device?:
       | {
@@ -215,8 +217,6 @@ export interface Template {
       | boolean
       | null;
   };
-  brandingRef?: (number | null) | BrandingPackage;
-  policyRefs?: (number | Policy)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -233,7 +233,57 @@ export interface BrandingPackage {
    */
   generateSlug?: boolean | null;
   slug: string;
-  logo?: (number | null) | Media;
+  generalStyling?: {
+    /**
+     * Default text color
+     */
+    textColorText?: string | null;
+    /**
+     * Default background color
+     */
+    backgroundColorText?: string | null;
+    /**
+     * Text direction
+     */
+    direction?: ('ltr' | 'rtl') | null;
+    /**
+     * Message width in pixels
+     */
+    messageWidth?: number | null;
+    /**
+     * Title alignment
+     */
+    titleAlign?: ('left' | 'center' | 'right') | null;
+  };
+  logoSettings?: {
+    logo?: (number | null) | Media;
+    /**
+     * Logo position relative to title
+     */
+    logoPos?: ('left-inline' | 'right-inline' | 'before' | 'after' | 'center') | null;
+  };
+  approveBtn?: {
+    /**
+     * Text on the approve button
+     */
+    label?: string | null;
+    /**
+     * Button background color
+     */
+    bgColor?: string | null;
+    /**
+     * Button text color
+     */
+    textColor?: string | null;
+    /**
+     * Buttons alignment
+     */
+    align?: ('left' | 'center' | 'right') | null;
+  };
+  signature?: {
+    text?: string | null;
+    position?: ('left' | 'right' | 'center') | null;
+  };
   assets?: (number | Media)[] | null;
   /**
    * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
@@ -259,7 +309,6 @@ export interface BrandingPackage {
     | number
     | boolean
     | null;
-  signature?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -508,14 +557,14 @@ export interface TemplatesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   body?: T;
+  brandingRef?: T;
+  policyRefs?: T;
   channels?:
     | T
     | {
         device?: T;
         teams?: T;
       };
-  brandingRef?: T;
-  policyRefs?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -528,11 +577,38 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  logo?: T;
+  generalStyling?:
+    | T
+    | {
+        textColorText?: T;
+        backgroundColorText?: T;
+        direction?: T;
+        messageWidth?: T;
+        titleAlign?: T;
+      };
+  logoSettings?:
+    | T
+    | {
+        logo?: T;
+        logoPos?: T;
+      };
+  approveBtn?:
+    | T
+    | {
+        label?: T;
+        bgColor?: T;
+        textColor?: T;
+        align?: T;
+      };
+  signature?:
+    | T
+    | {
+        text?: T;
+        position?: T;
+      };
   assets?: T;
   themeTokens?: T;
   cssAllowlist?: T;
-  signature?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

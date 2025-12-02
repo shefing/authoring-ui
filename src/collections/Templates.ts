@@ -10,7 +10,6 @@ import {
   UnderlineFeature,
 } from '@payloadcms/richtext-lexical'
 // import { VariableInlineField } from '@/components/TextToDisplayInVars'
-import LabelComponent from '@/components/CustomInlineBlockLabel'
 
 export const Templates: CollectionConfig = {
   slug: 'templates',
@@ -108,6 +107,13 @@ export const Templates: CollectionConfig = {
       }),
     },
     {
+      type: 'row',
+      fields: [
+        { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
+        { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
+      ],
+    },
+    {
       name: 'channels',
       type: 'group',
       fields: [
@@ -115,8 +121,6 @@ export const Templates: CollectionConfig = {
         { name: 'teams', type: 'json' },
       ],
     },
-    { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
-    { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
   ],
 }
 
