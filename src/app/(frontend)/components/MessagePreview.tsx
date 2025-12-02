@@ -38,6 +38,7 @@ type MessagePreviewProps = {
   branding?: BrandingPackage | null
   asPopup?: boolean
   onClose?: () => void
+  variableValues?: Record<string, string>
 }
 
 export function MessagePreview({
@@ -45,6 +46,7 @@ export function MessagePreview({
   branding,
   asPopup = false,
   onClose,
+  variableValues = {},
 }: MessagePreviewProps) {
   const colors = branding?.themeTokens?.colors || {}
   const spacing = branding?.themeTokens?.spacing || {}
@@ -137,8 +139,7 @@ export function MessagePreview({
       padding: spacing.medium || '16px',
       borderRadius: radii.medium || '8px',
       border: `1px solid ${colors.border || '#e5e7eb'}`,
-      maxWidth: `${messageWidth}px`,
-      width: '100%',
+      width: `${messageWidth}px`,
       fontFamily: 'system-ui, -apple-system, sans-serif',
       direction: direction,
       ...(asPopup && {
@@ -318,6 +319,7 @@ export function MessagePreview({
         colors={colors}
         spacing={spacing}
         radii={radii}
+        variableValues={variableValues}
         customButtons={
           approveBtn
             ? [

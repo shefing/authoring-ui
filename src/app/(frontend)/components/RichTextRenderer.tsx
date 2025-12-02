@@ -30,6 +30,7 @@ type RichTextRendererProps = {
     backgroundColor: string
     textColor: string
   }>
+  variableValues?: Record<string, string>
 }
 
 export function RichTextRenderer({
@@ -40,6 +41,7 @@ export function RichTextRenderer({
   radii = {},
   onButtonClick,
   customButtons = [],
+  variableValues = {},
 }: RichTextRendererProps) {
   const getButtonStyle = (actionKind: string) => {
     const customButton = customButtons.find((btn) => btn.kind === actionKind)
@@ -168,7 +170,7 @@ export function RichTextRenderer({
     }
 
     // Block node (for images and other blocks)
-    if (node.type === 'block') {
+    if (node.type === 'inlineBlock' || node.type === 'block') {
       const { fields } = node
 
       // Image block
@@ -191,20 +193,74 @@ export function RichTextRenderer({
 
       // Variable block (inline)
       if (fields?.blockType === 'var' && fields?.variable) {
-        return (
-          <span
-            key={index}
-            style={{
-              backgroundColor: colors.border || '#e5e7eb',
-              padding: '2px 6px',
-              borderRadius: radii.small || '4px',
-              fontFamily: 'monospace',
-              fontSize: `${textSize * 0.875}px`,
-            }}
-          >
-            {`{{${fields.variable.name || 'variable'}}}`}
-          </span>
-        )
+        const varKey = fields.variable.key || fields.variable.name
+        const varType = fields.variable.type || 'string'
+
+        // Use the actual value from variableValues if available, otherwise use textToDisplay or variable name
+        const displayText =
+          variableValues[varKey] || fields.textToDisplay || fields.variable.name || 'variable'
+
+        // URL - render as actual link
+        if (varType === 'url') {
+          return (
+            <a
+              key={index}
+              href={displayText}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: colors.primary || '#3b82f6',
+                textDecoration: 'underline',
+              }}
+            >
+              {displayText}
+            </a>
+          )
+        }
+
+        // Email - render as link with blue color
+        if (varType === 'email') {
+          return (
+            <a
+              key={index}
+              href={`mailto:${displayText}`}
+              style={{
+                color: colors.primary || '#3b82f6',
+                textDecoration: 'underline',
+              }}
+            >
+              {displayText}
+            </a>
+          )
+        }
+
+        // Date/DateTime - render with underline (like Cmd+U)
+        if (varType === 'date' || varType === 'dateTime') {
+          return (
+            <span
+              key={index}
+              style={{
+                textDecoration: 'underline',
+              }}
+            >
+              {displayText}
+            </span>
+          )
+        }
+
+        // Boolean - render as regular text with checkmark/x
+        if (varType === 'boolean') {
+          const boolValue = displayText.toLowerCase()
+          const icon = boolValue === 'true' || boolValue === '1' ? '✓' : '✗'
+          return (
+            <span key={index}>
+              {icon} {displayText}
+            </span>
+          )
+        }
+
+        // String, Number, Enum - render as regular text
+        return <span key={index}>{displayText}</span>
       }
 
       // CTA block (inline button)
