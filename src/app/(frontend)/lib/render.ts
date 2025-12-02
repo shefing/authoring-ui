@@ -15,7 +15,7 @@ export function buildPreview({ template, variables }: PreviewInput) {
     kind: template?.type === 'action' ? 'confirm' : 'info',
     title,
     body: text,
-    actions: inferActionsFromTemplate(template),
+    actions: [],
   }
 
   const teams = {
@@ -34,14 +34,4 @@ export function buildPreview({ template, variables }: PreviewInput) {
   }
 
   return { title, text, device, teams }
-}
-
-function inferActionsFromTemplate(template: any) {
-  const actions: any[] = []
-  if (template?.type === 'action') {
-    actions.push({ kind: 'approve', label: 'Approve' })
-    actions.push({ kind: 'snooze', label: 'Remind me later' })
-    actions.push({ kind: 'dismiss', label: 'Dismiss' })
-  }
-  return actions
 }

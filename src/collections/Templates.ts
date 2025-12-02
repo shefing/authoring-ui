@@ -89,18 +89,18 @@ export const Templates: CollectionConfig = {
                   },
                 },
               },
-              {
-                slug: 'cta',
-                fields: [
-                  {
-                    name: 'kind',
-                    type: 'select',
-                    options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
-                    required: true,
-                  },
-                  { name: 'label', type: 'text' },
-                ],
-              },
+              // {
+              //   slug: 'cta',
+              //   fields: [
+              //     {
+              //       name: 'kind',
+              //       type: 'select',
+              //       options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
+              //       required: true,
+              //     },
+              //     { name: 'label', type: 'text' },
+              //   ],
+              // },
             ],
           }), // array of block configs
         ],

@@ -31,6 +31,7 @@ export default function ClientComposer({
   const [inlineValues, setInlineValues] = React.useState<Record<string, string>>({})
   const [branding, setBranding] = React.useState<any | null>(null)
   const [showPopup, setShowPopup] = React.useState(false)
+  const [validationErrors, setValidationErrors] = React.useState<Set<string>>(new Set())
 
   const selected = templates.find((t) => t.id === templateId)
 
@@ -91,6 +92,25 @@ export default function ClientComposer({
   }
 
   async function doPreview() {
+    // Validate required fields
+    const errors = new Set<string>()
+    for (const v of inlineVars) {
+      if (v.required) {
+        const value = inlineValues[v.key]
+        if (!value || value.trim() === '') {
+          errors.add(v.key)
+        }
+      }
+    }
+
+    setValidationErrors(errors)
+
+    // If there are validation errors, don't proceed
+    if (errors.size > 0) {
+      setError('Please fill in all required fields')
+      return
+    }
+
     setLoading(true)
     setError(null)
     setPreview(null)
@@ -141,7 +161,11 @@ export default function ClientComposer({
             <Select
               id="template"
               value={templateId}
-              onChange={(e) => setTemplateId(e.target.value)}
+              onChange={(e) => {
+                setTemplateId(e.target.value)
+                setPreview(null) // Reset preview when template changes
+                setShowPopup(false) // Close popup if open
+              }}
             >
               <option value="">Select a template…</option>
               {templates.map((t) => (
@@ -167,57 +191,102 @@ export default function ClientComposer({
             <div className="space-y-2">
               <Label>Required Variables (from template)</Label>
               <div className="space-y-2">
-                {inlineVars.map((v) => (
-                  <div key={v.id} className="grid grid-cols-12 items-center gap-2">
-                    <div className="col-span-5">
-                      <Label>
-                        {v.label || v.key}
-                        {v.required ? ' *' : ''}
-                      </Label>
-                      {v.formatHint && <p className="text-xs text-gray-500">{v.formatHint}</p>}
-                    </div>
-                    <div className="col-span-7">
-                      {v.type === 'enum' && Array.isArray(v.enumOptions) ? (
-                        <Select
-                          value={inlineValues[v.key] ?? ''}
-                          onChange={(e) =>
-                            setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
-                          }
-                        >
-                          <option value="">Select…</option>
-                          {v.enumOptions.map((opt, i) => (
-                            <option key={i} value={opt.value}>
-                              {opt.label || opt.value}
-                            </option>
-                          ))}
-                        </Select>
-                      ) : v.type === 'boolean' ? (
-                        <div className="flex items-center gap-2">
-                          <input
-                            id={`bool-${v.key}`}
-                            type="checkbox"
-                            checked={inlineValues[v.key] === 'true'}
-                            onChange={(e) =>
-                              setInlineValues((m) => ({
-                                ...m,
-                                [v.key]: e.target.checked ? 'true' : 'false',
-                              }))
+                {inlineVars.map((v) => {
+                  const hasError = validationErrors.has(v.key)
+                  return (
+                    <div key={v.id} className="grid grid-cols-12 items-center gap-2">
+                      <div className="col-span-5">
+                        <Label>
+                          {v.label || v.key}
+                          {v.required && <span style={{ color: '#dc2626' }}> *</span>}
+                        </Label>
+                        {v.formatHint && <p className="text-xs text-gray-500">{v.formatHint}</p>}
+                      </div>
+                      <div className="col-span-7">
+                        {v.type === 'enum' && Array.isArray(v.enumOptions) ? (
+                          <Select
+                            value={inlineValues[v.key] ?? ''}
+                            onChange={(e) => {
+                              setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
+                              // Clear validation error when user types
+                              if (hasError) {
+                                setValidationErrors((prev) => {
+                                  const next = new Set(prev)
+                                  next.delete(v.key)
+                                  return next
+                                })
+                              }
+                            }}
+                            style={
+                              hasError
+                                ? {
+                                    borderColor: '#dc2626',
+                                    borderWidth: '2px',
+                                    outline: 'none',
+                                  }
+                                : undefined
+                            }
+                          >
+                            <option value="">Select…</option>
+                            {v.enumOptions.map((opt, i) => (
+                              <option key={i} value={opt.value}>
+                                {opt.label || opt.value}
+                              </option>
+                            ))}
+                          </Select>
+                        ) : v.type === 'boolean' ? (
+                          <div className="flex items-center gap-2">
+                            <input
+                              id={`bool-${v.key}`}
+                              type="checkbox"
+                              checked={inlineValues[v.key] === 'true'}
+                              onChange={(e) => {
+                                setInlineValues((m) => ({
+                                  ...m,
+                                  [v.key]: e.target.checked ? 'true' : 'false',
+                                }))
+                                // Clear validation error when user interacts
+                                if (hasError) {
+                                  setValidationErrors((prev) => {
+                                    const next = new Set(prev)
+                                    next.delete(v.key)
+                                    return next
+                                  })
+                                }
+                              }}
+                            />
+                            <Label htmlFor={`bool-${v.key}`}>{v.label || v.key}</Label>
+                          </div>
+                        ) : (
+                          <Input
+                            placeholder={v.sampleValue || v.formatHint || v.key}
+                            value={inlineValues[v.key] ?? ''}
+                            onChange={(e) => {
+                              setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
+                              // Clear validation error when user types
+                              if (hasError) {
+                                setValidationErrors((prev) => {
+                                  const next = new Set(prev)
+                                  next.delete(v.key)
+                                  return next
+                                })
+                              }
+                            }}
+                            style={
+                              hasError
+                                ? {
+                                    borderColor: '#dc2626',
+                                    borderWidth: '2px',
+                                    outline: 'none',
+                                  }
+                                : undefined
                             }
                           />
-                          <Label htmlFor={`bool-${v.key}`}>{v.label || v.key}</Label>
-                        </div>
-                      ) : (
-                        <Input
-                          placeholder={v.sampleValue || v.formatHint || v.key}
-                          value={inlineValues[v.key] ?? ''}
-                          onChange={(e) =>
-                            setInlineValues((m) => ({ ...m, [v.key]: e.target.value }))
-                          }
-                        />
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )}
@@ -247,6 +316,7 @@ export default function ClientComposer({
                       branding={branding}
                       asPopup={true}
                       onClose={handleClosePopup}
+                      variableValues={inlineValues}
                     />
                   )}
                   <div className="space-y-2">
