@@ -174,8 +174,12 @@ export interface Media {
 export interface Template {
   id: number;
   name: string;
-  slug: string;
   type: 'notification' | 'action';
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   body: {
     root: {
       type: string;
@@ -224,6 +228,10 @@ export interface Template {
 export interface BrandingPackage {
   id: number;
   name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
   generalStyling?: {
     /**
@@ -246,10 +254,6 @@ export interface BrandingPackage {
      * Title alignment
      */
     titleAlign?: ('left' | 'center' | 'right') | null;
-    /**
-     * Buttons alignment
-     */
-    buttonsAlign?: ('left' | 'center' | 'right') | null;
   };
   logoSettings?: {
     logo?: (number | null) | Media;
@@ -271,11 +275,19 @@ export interface BrandingPackage {
      * Button text color
      */
     textColor?: string | null;
+    /**
+     * Buttons alignment
+     */
+    align?: ('left' | 'center' | 'right') | null;
   };
   signature?: {
     text?: string | null;
     position?: ('left' | 'right' | 'center') | null;
   };
+  assets?: (number | Media)[] | null;
+  /**
+   * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
+   */
   themeTokens?:
     | {
         [k: string]: unknown;
@@ -285,6 +297,9 @@ export interface BrandingPackage {
     | number
     | boolean
     | null;
+  /**
+   * Optional allowlist of CSS tokens/styles permitted for branding.
+   */
   cssAllowlist?:
     | {
         [k: string]: unknown;
@@ -294,7 +309,6 @@ export interface BrandingPackage {
     | number
     | boolean
     | null;
-  assets?: (number | Media)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -306,8 +320,12 @@ export interface BrandingPackage {
 export interface Policy {
   id: number;
   name: string;
-  slug: string;
   type: 'fatigue' | 'quietHours' | 'routing' | 'dndExceptions';
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   fatigue?: {
     maxPerWindow: number;
     windowHours: number;
@@ -535,8 +553,9 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   type?: T;
+  generateSlug?: T;
+  slug?: T;
   body?: T;
   brandingRef?: T;
   policyRefs?: T;
@@ -556,6 +575,7 @@ export interface TemplatesSelect<T extends boolean = true> {
  */
 export interface BrandingPackagesSelect<T extends boolean = true> {
   name?: T;
+  generateSlug?: T;
   slug?: T;
   generalStyling?:
     | T
@@ -565,7 +585,6 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
         direction?: T;
         messageWidth?: T;
         titleAlign?: T;
-        buttonsAlign?: T;
       };
   logoSettings?:
     | T
@@ -579,6 +598,7 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
         label?: T;
         bgColor?: T;
         textColor?: T;
+        align?: T;
       };
   signature?:
     | T
@@ -586,9 +606,9 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
         text?: T;
         position?: T;
       };
+  assets?: T;
   themeTokens?: T;
   cssAllowlist?: T;
-  assets?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -599,8 +619,9 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
  */
 export interface PoliciesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
   type?: T;
+  generateSlug?: T;
+  slug?: T;
   fatigue?:
     | T
     | {

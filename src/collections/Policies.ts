@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import {CollectionConfig, slugField} from 'payload'
 
 const isType = (expected: string) => ({ siblingData }: { siblingData: any }) => siblingData?.type === expected
 
@@ -9,20 +9,24 @@ export const Policies: CollectionConfig = {
     useAsTitle: 'name',
   },
   fields: [
-    { name: 'name', type: 'text', required: true },
-    { name: 'slug', type: 'text', unique: true, required: true },
-    {
-      name: 'type',
-      type: 'select',
-      options: [
-        { label: 'Fatigue', value: 'fatigue' },
-        { label: 'Quiet Hours', value: 'quietHours' },
-        { label: 'Routing', value: 'routing' },
-        { label: 'DND Exceptions', value: 'dndExceptions' },
-      ],
-      required: true,
-    },
-
+      {
+          type: "row",
+          fields: [
+              {name: 'name', type: 'text', required: true},
+              {
+                  name: 'type',
+                  type: 'select',
+                  options: [
+                      { label: 'Fatigue', value: 'fatigue' },
+                      { label: 'Quiet Hours', value: 'quietHours' },
+                      { label: 'Routing', value: 'routing' },
+                      { label: 'DND Exceptions', value: 'dndExceptions' },
+                  ],
+                  required: true,
+              },
+              slugField({fieldToUse: 'name'}),
+          ]
+      },
     // Fatigue policy
     {
       type: 'group',
@@ -86,7 +90,10 @@ export const Policies: CollectionConfig = {
             { label: 'Fallback to Teams', value: 'fallbackToTeams' },
             { label: 'Fallback to Device', value: 'fallbackToDevice' },
           ],
-          admin: { description: 'Used when preferredChannel = both' },
+          admin: {
+              condition: (data) => data?.routing?.preferredChannel == 'both',
+              description: 'Used when preferredChannel = both'
+          },
         },
       ],
     },

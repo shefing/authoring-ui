@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
 export const BrandingPackages: CollectionConfig = {
   slug: 'branding-packages',
@@ -7,26 +8,10 @@ export const BrandingPackages: CollectionConfig = {
     useAsTitle: 'name',
   },
   fields: [
-    // Basic Information
     {
       type: 'row',
-      fields: [
-        {
-          name: 'name',
-          type: 'text',
-          required: true,
-          admin: { width: '50%' },
-        },
-        {
-          name: 'slug',
-          type: 'text',
-          unique: true,
-          required: true,
-          admin: { width: '50%' },
-        },
-      ],
+      fields: [{ name: 'name', type: 'text', required: true }, slugField({ fieldToUse: 'name' })],
     },
-
     // General Styling
     {
       name: 'generalStyling',
@@ -42,7 +27,7 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: '#000000',
               admin: {
                 description: 'Default text color',
-                width: '33%',
+                width: '20%',
               },
             },
             {
@@ -51,7 +36,7 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: '#ffffff',
               admin: {
                 description: 'Default background color',
-                width: '33%',
+                width: '20%',
               },
             },
             {
@@ -61,21 +46,16 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: 'ltr',
               admin: {
                 description: 'Text direction',
-                width: '34%',
+                width: '20%',
               },
             },
-          ],
-        },
-        {
-          type: 'row',
-          fields: [
             {
               name: 'messageWidth',
               type: 'number',
               defaultValue: 500,
               admin: {
                 description: 'Message width in pixels',
-                width: '33%',
+                width: '20%',
               },
             },
             {
@@ -85,17 +65,7 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: 'left',
               admin: {
                 description: 'Title alignment',
-                width: '33%',
-              },
-            },
-            {
-              name: 'buttonsAlign',
-              type: 'select',
-              options: ['left', 'center', 'right'],
-              defaultValue: 'left',
-              admin: {
-                description: 'Buttons alignment',
-                width: '34%',
+                width: '20%',
               },
             },
           ],
@@ -154,7 +124,7 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: 'Approve',
               admin: {
                 description: 'Text on the approve button',
-                width: '33%',
+                width: '25%',
               },
             },
             {
@@ -163,7 +133,7 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: '#3b82f6',
               admin: {
                 description: 'Button background color',
-                width: '33%',
+                width: '25%',
               },
             },
             {
@@ -172,7 +142,17 @@ export const BrandingPackages: CollectionConfig = {
               defaultValue: '#ffffff',
               admin: {
                 description: 'Button text color',
-                width: '34%',
+                width: '25%',
+              },
+            },
+            {
+              name: 'align',
+              type: 'select',
+              options: ['left', 'center', 'right'],
+              defaultValue: 'left',
+              admin: {
+                description: 'Buttons alignment',
+                width: '25%',
               },
             },
           ],
@@ -192,7 +172,7 @@ export const BrandingPackages: CollectionConfig = {
             {
               name: 'text',
               type: 'text',
-              admin: { width: '70%' },
+              admin: { width: '50%' },
             },
             {
               name: 'position',
@@ -203,37 +183,30 @@ export const BrandingPackages: CollectionConfig = {
                 { label: 'Center', value: 'center' },
               ],
               defaultValue: 'center',
-              admin: { width: '30%' },
+              admin: { width: '50%' },
             },
           ],
         },
       ],
     },
-
-    {
-      name: 'themeTokens',
-      type: 'json',
-      defaultValue: {
-        colors: {
-          primary: '#3b82f6',
-          background: '#ffffff',
-          text: '#000000',
-          border: '#e5e7eb',
-          buttonText: '#ffffff',
-          textMuted: '#6b7280',
-        },
-        spacing: { xsmall: '8px', small: '12px', medium: '16px', large: '24px' },
-        radii: { small: '4px', medium: '8px', large: '12px' },
-      },
-      admin: { hidden: true },
-    },
-    { name: 'cssAllowlist', type: 'json', admin: { hidden: true } },
     {
       name: 'assets',
       type: 'relationship',
       relationTo: 'media',
       hasMany: true,
-      admin: { hidden: true },
+    },
+    {
+      name: 'themeTokens',
+      type: 'json',
+      admin: {
+        description:
+          'Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).',
+      },
+    },
+    {
+      name: 'cssAllowlist',
+      type: 'json',
+      admin: { description: 'Optional allowlist of CSS tokens/styles permitted for branding.' },
     },
   ],
 }

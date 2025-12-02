@@ -10,7 +10,6 @@ type BrandingPackage = {
     direction?: 'ltr' | 'rtl'
     messageWidth?: number
     titleAlign?: 'left' | 'center' | 'right'
-    buttonsAlign?: 'left' | 'center' | 'right'
   }
   logoSettings?: {
     logo?: { url: string }
@@ -20,6 +19,7 @@ type BrandingPackage = {
     label?: string
     bgColor?: string
     textColor?: string
+    align?: 'left' | 'center' | 'right'
   }
   signature?: {
     text?: string
@@ -60,7 +60,13 @@ export function MessagePreview({
   const direction = generalStyling.direction || 'ltr'
   const messageWidth = generalStyling.messageWidth || 500
   const titleAlignment = generalStyling.titleAlign || 'left'
-  const buttonsAlignment = generalStyling.buttonsAlign || 'left'
+  const flip: Record<'left' | 'right', 'right' | 'left'> = { left: 'right', right: 'left' }
+
+  const buttonsAlignment: 'left' | 'center' | 'right' =
+    generalStyling.direction === 'ltr'
+      ? approveBtn.align || 'center' // אם undefined → center
+      : (approveBtn.align && flip[approveBtn.align as 'left' | 'right']) || 'center'
+
   const logoPosition = logoSettings.logoPos || 'center'
   const signaturePosition = signature.position || 'center'
 

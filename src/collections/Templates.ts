@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import { CollectionConfig, slugField } from 'payload'
 import {
   BlockquoteFeature,
   BlocksFeature,
@@ -9,6 +9,7 @@ import {
   LinkFeature,
   UnderlineFeature,
 } from '@payloadcms/richtext-lexical'
+// import { VariableInlineField } from '@/components/TextToDisplayInVars'
 
 export const Templates: CollectionConfig = {
   slug: 'templates',
@@ -28,9 +29,14 @@ export const Templates: CollectionConfig = {
     },
   },
   fields: [
-    { name: 'name', type: 'text', required: true },
-    { name: 'slug', type: 'text', unique: true, required: true },
-    { name: 'type', type: 'select', options: ['notification', 'action'], required: true },
+    {
+      type: 'row',
+      fields: [
+        { name: 'name', type: 'text', required: true },
+        { name: 'type', type: 'select', options: ['notification', 'action'], required: true },
+        slugField({ fieldToUse: 'name' }),
+      ],
+    },
     {
       name: 'body',
       type: 'richText',
@@ -53,32 +59,49 @@ export const Templates: CollectionConfig = {
                 ],
               },
             ],
-            //TODO
-            // inlineBlocks: [
-            //   {
-            //     slug: 'var',
-            //     fields: [
-            //       {
-            //         name: 'variable',
-            //         type: 'relationship',
-            //         relationTo: 'variables',
-            //         required: true,
-            //       },
-            //     ],
-            //   },
-            //   {
-            //     slug: 'cta',
-            //     fields: [
-            //       {
-            //         name: 'kind',
-            //         type: 'select',
-            //         options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
-            //         required: true,
-            //       },
-            //       { name: 'label', type: 'text' },
-            //     ],
-            //   },
-            // ],
+            inlineBlocks: [
+              {
+                slug: 'var',
+                fields: [
+                  {
+                    name: 'variable',
+                    type: 'relationship',
+                    relationTo: 'variables',
+                    required: true,
+                  },
+                  {
+                    name: 'textToDisplay',
+                    type: 'text',
+                    admin: {
+                      components: {
+                        Field: {
+                          path: '/components/TextToDisplayInVars',
+                        },
+                      },
+                    },
+                  },
+                ],
+                admin: {
+                  components: {
+                    Label: {
+                      path: '/components/CustomInlineBlockLabel',
+                    },
+                  },
+                },
+              },
+              {
+                slug: 'cta',
+                fields: [
+                  {
+                    name: 'kind',
+                    type: 'select',
+                    options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
+                    required: true,
+                  },
+                  { name: 'label', type: 'text' },
+                ],
+              },
+            ],
           }), // array of block configs
         ],
       }),
@@ -93,9 +116,6 @@ export const Templates: CollectionConfig = {
     {
       name: 'channels',
       type: 'group',
-      admin: {
-        hidden: true,
-      },
       fields: [
         { name: 'device', type: 'json' },
         { name: 'teams', type: 'json' },
