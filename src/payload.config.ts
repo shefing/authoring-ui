@@ -12,6 +12,9 @@ import { Templates } from './collections/Templates'
 import { BrandingPackages } from './collections/BrandingPackages'
 import { Policies } from './collections/Policies'
 import { Variables } from './collections/Variables'
+import { Channels } from './collections/Channels'
+import { Buttons } from './collections/Buttons'
+import { Messages } from './collections/Messages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Templates, BrandingPackages, Policies, Variables],
+  collections: [Users, Media, Templates, BrandingPackages, Policies, Variables, Channels, Buttons, Messages],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -17,7 +17,9 @@ export const Policies: CollectionConfig = {
                   name: 'type',
                   type: 'select',
                   options: [
-                      { label: 'Fatigue', value: 'fatigue' },
+                      { label: 'Fatigue Prevention', value: 'fatigue' },
+                      { label: 'Sequencing Control', value: 'sequencing' },
+                      { label: 'VIP Handling', value: 'vip' },
                       { label: 'Quiet Hours', value: 'quietHours' },
                       { label: 'Routing', value: 'routing' },
                       { label: 'DND Exceptions', value: 'dndExceptions' },
@@ -32,11 +34,53 @@ export const Policies: CollectionConfig = {
       type: 'group',
       name: 'fatigue',
       admin: {
-          condition: (data) => data?.type == 'fatigue',
+          condition: (data) => data?.type === 'fatigue',
       },
       fields: [
-        { name: 'maxPerWindow', type: 'number', required: true, defaultValue: 2 },
-        { name: 'windowHours', type: 'number', required: true, defaultValue: 24 },
+        { name: 'maxSurveysPerWeek', type: 'number', required: true, defaultValue: 2 },
+        { name: 'minDaysBetweenSurveys', type: 'number', required: true, defaultValue: 3 },
+      ],
+    },
+
+    // Sequencing Control policy
+    {
+      type: 'group',
+      name: 'sequencing',
+      admin: {
+          condition: (data) => data?.type === 'sequencing',
+      },
+      fields: [
+        { name: 'allowParallelExecution', type: 'checkbox', defaultValue: false },
+        { name: 'maxConcurrentActions', type: 'number', defaultValue: 1 },
+        { name: 'queueNonIntrusiveMessages', type: 'checkbox', defaultValue: true },
+      ],
+    },
+
+    // VIP Handling policy
+    {
+      type: 'group',
+      name: 'vip',
+      admin: {
+          condition: (data) => data?.type === 'vip',
+      },
+      fields: [
+        {
+            name: 'reminderFrequency',
+            type: 'select',
+            options: [
+                { label: 'More Frequent', value: 'more_frequent' },
+                { label: 'Less Frequent', value: 'less_frequent' },
+                { label: 'Custom', value: 'custom' },
+            ],
+            defaultValue: 'less_frequent',
+        },
+        {
+            name: 'customIntervalDays',
+            type: 'number',
+            admin: {
+                condition: (data) => data?.vip?.reminderFrequency === 'custom',
+            },
+        },
       ],
     },
 
@@ -45,7 +89,7 @@ export const Policies: CollectionConfig = {
       type: 'group',
       name: 'quietHours',
       admin: {
-          condition: (data) => data?.type == 'quietHours',
+          condition: (data) => data?.type === 'quietHours',
       },
       fields: [
         { name: 'timezone', type: 'text', required: true, defaultValue: 'UTC' },
@@ -68,7 +112,7 @@ export const Policies: CollectionConfig = {
       name: 'routing',
 
         admin: {
-            condition: (data) => data?.type == 'routing',
+            condition: (data) => data?.type === 'routing',
         },
       fields: [
         {
@@ -91,7 +135,7 @@ export const Policies: CollectionConfig = {
             { label: 'Fallback to Device', value: 'fallbackToDevice' },
           ],
           admin: {
-              condition: (data) => data?.routing?.preferredChannel == 'both',
+              condition: (data) => data?.routing?.preferredChannel === 'both',
               description: 'Used when preferredChannel = both'
           },
         },
@@ -103,7 +147,7 @@ export const Policies: CollectionConfig = {
       type: 'group',
       name: 'dndExceptions',
       admin: {
-          condition: (data) => data?.type == 'dndExceptions',
+          condition: (data) => data?.type === 'dndExceptions',
       },
       fields: [
         { name: 'allowedDuringDndKinds', type: 'json', admin: { description: 'E.g., { "kinds": ["urgent", "security"] }' } },

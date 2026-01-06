@@ -73,6 +73,9 @@ export interface Config {
     'branding-packages': BrandingPackage;
     policies: Policy;
     variables: Variable;
+    channels: Channel;
+    buttons: Button;
+    messages: Message;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +89,9 @@ export interface Config {
     'branding-packages': BrandingPackagesSelect<false> | BrandingPackagesSelect<true>;
     policies: PoliciesSelect<false> | PoliciesSelect<true>;
     variables: VariablesSelect<false> | VariablesSelect<true>;
+    channels: ChannelsSelect<false> | ChannelsSelect<true>;
+    buttons: ButtonsSelect<false> | ButtonsSelect<true>;
+    messages: MessagesSelect<false> | MessagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -174,7 +180,10 @@ export interface Media {
 export interface Template {
   id: number;
   name: string;
-  type: 'notification' | 'action';
+  type: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  division?: ('Corporate' | 'IT Operations' | 'Engineering' | 'Support' | 'Sales' | 'Finance' | 'Marketing') | null;
+  category?: ('pre-defined' | 'system' | 'custom') | null;
+  priority?: ('low' | 'medium' | 'high' | 'urgent') | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -197,26 +206,12 @@ export interface Template {
   };
   brandingRef?: (number | null) | BrandingPackage;
   policyRefs?: (number | Policy)[] | null;
-  channels?: {
-    device?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-    teams?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-  };
+  channelRefs?: (number | Channel)[] | null;
+  buttonRefs?: (number | Button)[] | null;
+  /**
+   * Number of active campaigns using this template
+   */
+  usageCount?: number | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -233,15 +228,36 @@ export interface BrandingPackage {
    */
   generateSlug?: boolean | null;
   slug: string;
+  themeDesigner?: {
+    primaryColor?: string | null;
+    secondaryColor?: string | null;
+    backgroundColor?: string | null;
+    textColor?: string | null;
+    scope?:
+      | (
+          | 'all'
+          | 'survey'
+          | 'confirmation'
+          | 'notification'
+          | 'reminder'
+          | 'self-service'
+          | 'urgent'
+          | 'corporate'
+          | 'it-operations'
+          | 'engineering'
+          | 'support'
+          | 'sales'
+          | 'finance'
+          | 'marketing'
+        )
+      | null;
+    logo?: (number | null) | Media;
+    /**
+     * Logo position relative to title
+     */
+    logoPos?: ('left-inline' | 'right-inline' | 'before' | 'after' | 'center') | null;
+  };
   generalStyling?: {
-    /**
-     * Default text color
-     */
-    textColorText?: string | null;
-    /**
-     * Default background color
-     */
-    backgroundColorText?: string | null;
     /**
      * Text direction
      */
@@ -255,35 +271,13 @@ export interface BrandingPackage {
      */
     titleAlign?: ('left' | 'center' | 'right') | null;
   };
-  logoSettings?: {
-    logo?: (number | null) | Media;
-    /**
-     * Logo position relative to title
-     */
-    logoPos?: ('left-inline' | 'right-inline' | 'before' | 'after' | 'center') | null;
-  };
-  approveBtn?: {
-    /**
-     * Text on the approve button
-     */
-    label?: string | null;
-    /**
-     * Button background color
-     */
-    bgColor?: string | null;
-    /**
-     * Button text color
-     */
-    textColor?: string | null;
-    /**
-     * Buttons alignment
-     */
-    align?: ('left' | 'center' | 'right') | null;
-  };
   signature?: {
     text?: string | null;
     position?: ('left' | 'right' | 'center') | null;
   };
+  /**
+   * Assets used as part of the theme, such as custom icons for buttons, background images, or specialized fonts.
+   */
   assets?: (number | Media)[] | null;
   /**
    * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
@@ -298,7 +292,7 @@ export interface BrandingPackage {
     | boolean
     | null;
   /**
-   * Optional allowlist of CSS tokens/styles permitted for branding.
+   * Optional allowlist of CSS tokens/styles permitted for branding to prevent arbitrary or unsafe CSS injection.
    */
   cssAllowlist?:
     | {
@@ -320,15 +314,24 @@ export interface BrandingPackage {
 export interface Policy {
   id: number;
   name: string;
-  type: 'fatigue' | 'quietHours' | 'routing' | 'dndExceptions';
+  type: 'fatigue' | 'sequencing' | 'vip' | 'quietHours' | 'routing' | 'dndExceptions';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
   fatigue?: {
-    maxPerWindow: number;
-    windowHours: number;
+    maxSurveysPerWeek: number;
+    minDaysBetweenSurveys: number;
+  };
+  sequencing?: {
+    allowParallelExecution?: boolean | null;
+    maxConcurrentActions?: number | null;
+    queueNonIntrusiveMessages?: boolean | null;
+  };
+  vip?: {
+    reminderFrequency?: ('more_frequent' | 'less_frequent' | 'custom') | null;
+    customIntervalDays?: number | null;
   };
   quietHours?: {
     timezone: string;
@@ -389,6 +392,53 @@ export interface Policy {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channels".
+ */
+export interface Channel {
+  id: number;
+  name: string;
+  status: 'configured' | 'disabled';
+  description?: string | null;
+  supportedMessageTypes?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service')[] | null;
+  capabilities?: ('server-side' | 'oauth')[] | null;
+  /**
+   * Channel-specific configuration (API keys, endpoints, etc.)
+   */
+  configuration?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons".
+ */
+export interface Button {
+  id: number;
+  name: string;
+  label?: string | null;
+  icon?: string | null;
+  otherAttributes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "variables".
  */
 export interface Variable {
@@ -416,6 +466,36 @@ export interface Variable {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages".
+ */
+export interface Message {
+  id: number;
+  name: string;
+  type: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  channel: number | Channel;
+  mode: 'intrusive' | 'non-intrusive';
+  status: 'active' | 'draft' | 'scheduled' | 'completed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  responseRate?: {
+    /**
+     * Response rate percentage
+     */
+    percentage?: number | null;
+    /**
+     * Number of responses
+     */
+    count?: number | null;
+    /**
+     * Total targeted users
+     */
+    total?: number | null;
+  };
+  template: number | Template;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -464,6 +544,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'variables';
         value: number | Variable;
+      } | null)
+    | ({
+        relationTo: 'channels';
+        value: number | Channel;
+      } | null)
+    | ({
+        relationTo: 'buttons';
+        value: number | Button;
+      } | null)
+    | ({
+        relationTo: 'messages';
+        value: number | Message;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -554,17 +646,17 @@ export interface MediaSelect<T extends boolean = true> {
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
   type?: T;
+  division?: T;
+  category?: T;
+  priority?: T;
   generateSlug?: T;
   slug?: T;
   body?: T;
   brandingRef?: T;
   policyRefs?: T;
-  channels?:
-    | T
-    | {
-        device?: T;
-        teams?: T;
-      };
+  channelRefs?: T;
+  buttonRefs?: T;
+  usageCount?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -577,28 +669,23 @@ export interface BrandingPackagesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  generalStyling?:
+  themeDesigner?:
     | T
     | {
-        textColorText?: T;
-        backgroundColorText?: T;
-        direction?: T;
-        messageWidth?: T;
-        titleAlign?: T;
-      };
-  logoSettings?:
-    | T
-    | {
+        primaryColor?: T;
+        secondaryColor?: T;
+        backgroundColor?: T;
+        textColor?: T;
+        scope?: T;
         logo?: T;
         logoPos?: T;
       };
-  approveBtn?:
+  generalStyling?:
     | T
     | {
-        label?: T;
-        bgColor?: T;
-        textColor?: T;
-        align?: T;
+        direction?: T;
+        messageWidth?: T;
+        titleAlign?: T;
       };
   signature?:
     | T
@@ -625,8 +712,21 @@ export interface PoliciesSelect<T extends boolean = true> {
   fatigue?:
     | T
     | {
-        maxPerWindow?: T;
-        windowHours?: T;
+        maxSurveysPerWeek?: T;
+        minDaysBetweenSurveys?: T;
+      };
+  sequencing?:
+    | T
+    | {
+        allowParallelExecution?: T;
+        maxConcurrentActions?: T;
+        queueNonIntrusiveMessages?: T;
+      };
+  vip?:
+    | T
+    | {
+        reminderFrequency?: T;
+        customIntervalDays?: T;
       };
   quietHours?:
     | T
@@ -679,6 +779,54 @@ export interface VariablesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channels_select".
+ */
+export interface ChannelsSelect<T extends boolean = true> {
+  name?: T;
+  status?: T;
+  description?: T;
+  supportedMessageTypes?: T;
+  capabilities?: T;
+  configuration?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons_select".
+ */
+export interface ButtonsSelect<T extends boolean = true> {
+  name?: T;
+  label?: T;
+  icon?: T;
+  otherAttributes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages_select".
+ */
+export interface MessagesSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  channel?: T;
+  mode?: T;
+  status?: T;
+  priority?: T;
+  responseRate?:
+    | T
+    | {
+        percentage?: T;
+        count?: T;
+        total?: T;
+      };
+  template?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

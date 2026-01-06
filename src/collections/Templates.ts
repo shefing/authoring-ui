@@ -33,7 +33,52 @@ export const Templates: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'name', type: 'text', required: true },
-        { name: 'type', type: 'select', options: ['notification', 'action'], required: true },
+        {
+          name: 'type',
+          type: 'select',
+          options: [
+            { label: 'Survey', value: 'survey' },
+            { label: 'Confirmation', value: 'confirmation' },
+            { label: 'Notification', value: 'notification' },
+            { label: 'Reminder', value: 'reminder' },
+            { label: 'Self-Service', value: 'self-service' },
+          ],
+          required: true,
+        },
+        {
+          name: 'division',
+          type: 'select',
+          options: [
+            'Corporate',
+            'IT Operations',
+            'Engineering',
+            'Support',
+            'Sales',
+            'Finance',
+            'Marketing',
+          ],
+        },
+        {
+          name: 'category',
+          type: 'select',
+          options: [
+            { label: 'Pre-defined', value: 'pre-defined' },
+            { label: 'System', value: 'system' },
+            { label: 'Custom', value: 'custom' },
+          ],
+          defaultValue: 'custom',
+        },
+        {
+          name: 'priority',
+          type: 'select',
+          options: [
+            { label: 'Low', value: 'low' },
+            { label: 'Medium', value: 'medium' },
+            { label: 'High', value: 'high' },
+            { label: 'Urgent', value: 'urgent' },
+          ],
+          defaultValue: 'medium',
+        },
         slugField({ fieldToUse: 'name' }),
       ],
     },
@@ -111,14 +156,17 @@ export const Templates: CollectionConfig = {
       fields: [
         { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
         { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
-      ],
-    },
-    {
-      name: 'channels',
-      type: 'group',
-      fields: [
-        { name: 'device', type: 'json' },
-        { name: 'teams', type: 'json' },
+        { name: 'channelRefs', type: 'relationship', relationTo: 'channels', hasMany: true },
+        { name: 'buttonRefs', type: 'relationship', relationTo: 'buttons', hasMany: true },
+        {
+          name: 'usageCount',
+          type: 'number',
+          defaultValue: 0,
+          admin: {
+            readOnly: true,
+            description: 'Number of active campaigns using this template',
+          },
+        },
       ],
     },
   ],
