@@ -80,7 +80,7 @@ export const Templates: CollectionConfig = {
           ],
           defaultValue: 'medium',
         },
-        slugField({ useAsSlug: 'name' }),
+        slugField({ fieldToUse: 'name' }),
       ],
     },
     {
