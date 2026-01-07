@@ -34,8 +34,18 @@ export const Templates: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'name', type: 'text', required: true },
+        slugField({ fieldToUse: 'name' }),
+      ],
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      type: 'row',
+      fields: [
         {
-          name: 'type',
+          name: 'messageType',
           type: 'select',
           options: [
             { label: 'Survey', value: 'survey' },
@@ -47,46 +57,54 @@ export const Templates: CollectionConfig = {
           required: true,
         },
         {
-          name: 'division',
-          type: 'select',
-          options: [
-            'Corporate',
-            'IT Operations',
-            'Engineering',
-            'Support',
-            'Sales',
-            'Finance',
-            'Marketing',
-          ],
-        },
-        {
-          name: 'category',
+          name: 'templateType',
           type: 'select',
           options: [
             { label: 'Pre-defined', value: 'pre-defined' },
-            { label: 'System', value: 'system' },
             { label: 'Custom', value: 'custom' },
           ],
           defaultValue: 'custom',
         },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
         {
-          name: 'priority',
-          type: 'select',
-          options: [
-            { label: 'Low', value: 'low' },
-            { label: 'Medium', value: 'medium' },
-            { label: 'High', value: 'high' },
-            { label: 'Urgent', value: 'urgent' },
-          ],
-          defaultValue: 'medium',
+          name: 'division',
+          type: 'relationship',
+          relationTo: 'divisions',
         },
-        slugField({ useAsSlug: 'name' }),
+        {
+          name: 'branding',
+          type: 'relationship',
+          relationTo: 'branding',
+        },
+      ],
+    },
+    {
+      name: 'channels',
+      type: 'relationship',
+      relationTo: 'channels',
+      hasMany: true,
+    },
+    {
+      name: 'contentStructure',
+      type: 'blocks',
+      blocks: [
+        {
+          slug: 'contentField',
+          fields: [
+            { name: 'fieldName', type: 'text', required: true },
+            { name: 'fieldType', type: 'select', options: ['text', 'textarea', 'richText', 'number'] },
+            { name: 'required', type: 'checkbox' },
+          ],
+        },
       ],
     },
     {
       name: 'body',
       type: 'richText',
-      required: true,
       editor: lexicalEditor({
         features: () => [
           HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
@@ -95,7 +113,7 @@ export const Templates: CollectionConfig = {
           BoldFeature(),
           ItalicFeature(),
           UnderlineFeature(),
-            FixedToolbarFeature(),
+          FixedToolbarFeature(),
           BlocksFeature({
             blocks: [
               {
@@ -116,60 +134,17 @@ export const Templates: CollectionConfig = {
                     relationTo: 'variables',
                     required: true,
                   },
-                  {
-                    name: 'textToDisplay',
-                    type: 'text',
-                    admin: {
-                      components: {
-                        Field: {
-                          path: '/components/TextToDisplayInVars',
-                        },
-                      },
-                    },
-                  },
                 ],
-                admin: {
-                  components: {
-                    Label: {
-                      path: '/components/CustomInlineBlockLabel',
-                    },
-                  },
-                },
               },
-              // {
-              //   slug: 'cta',
-              //   fields: [
-              //     {
-              //       name: 'kind',
-              //       type: 'select',
-              //       options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
-              //       required: true,
-              //     },
-              //     { name: 'label', type: 'text' },
-              //   ],
-              // },
             ],
-          }), // array of block configs
+          }),
         ],
       }),
     },
     {
-      type: 'row',
-      fields: [
-        { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
-        { name: 'channelRefs', type: 'relationship', relationTo: 'channels', hasMany: true },
-        { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
-        { name: 'buttonRefs', type: 'relationship', relationTo: 'buttons', hasMany: true },
-        {
-          name: 'usageCount',
-          type: 'number',
-          defaultValue: 0,
-          admin: {
-            readOnly: true,
-            description: 'Number of active campaigns using this template',
-          },
-        },
-      ],
+      name: 'isActive',
+      type: 'checkbox',
+      defaultValue: true,
     },
   ],
 }

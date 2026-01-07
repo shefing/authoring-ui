@@ -15,18 +15,34 @@ export const Channels: CollectionConfig = {
       required: true,
     },
     {
-      name: 'status',
-      type: 'select',
-      options: [
-        { label: 'Configured', value: 'configured' },
-        { label: 'Disabled - Not Configured', value: 'disabled' },
-      ],
-      defaultValue: 'disabled',
+      name: 'channelId',
+      type: 'text',
       required: true,
+      unique: true,
     },
     {
       name: 'description',
       type: 'textarea',
+    },
+    {
+      name: 'isEnabled',
+      type: 'checkbox',
+      defaultValue: true,
+    },
+    {
+      name: 'isConfigured',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
+      name: 'capabilities',
+      type: 'select',
+      hasMany: true,
+      options: [
+        { label: 'Server-Side Only', value: 'server-side' },
+        { label: 'Requires OAuth', value: 'oauth' },
+        { label: 'Client-Side Support', value: 'client-side' },
+      ],
     },
     {
       name: 'supportedMessageTypes',
@@ -41,20 +57,20 @@ export const Channels: CollectionConfig = {
       ],
     },
     {
-      name: 'capabilities',
-      type: 'select',
-      hasMany: true,
-      options: [
-        { label: 'Server-Side Only', value: 'server-side' },
-        { label: 'Requires OAuth', value: 'oauth' },
-      ],
-    },
-    {
       name: 'configuration',
       type: 'json',
       admin: {
         description: 'Channel-specific configuration (API keys, endpoints, etc.)',
       },
+    },
+    {
+      name: 'requiresAuth',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
+      name: 'authProvider',
+      type: 'text',
     },
   ],
 }

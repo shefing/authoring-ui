@@ -9,12 +9,16 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Templates } from './collections/Templates'
-import { BrandingPackages } from './collections/BrandingPackages'
+import { Branding } from './collections/Branding'
 import { Policies } from './collections/Policies'
 import { Variables } from './collections/Variables'
 import { Channels } from './collections/Channels'
 import { Buttons } from './collections/Buttons'
 import { Messages } from './collections/Messages'
+import { Divisions } from './collections/Divisions'
+import { UserGroups } from './collections/UserGroups'
+import { DeliveryRules } from './collections/DeliveryRules'
+import { MessageAnalytics } from './collections/MessageAnalytics'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,7 +30,21 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Templates, BrandingPackages, Policies, Variables, Channels, Buttons, Messages],
+  collections: [
+    Users,
+    Media,
+    Templates,
+    Branding,
+    Policies,
+    Variables,
+    Channels,
+    Buttons,
+    Messages,
+    Divisions,
+    UserGroups,
+    DeliveryRules,
+    MessageAnalytics,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -35,7 +53,6 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  sharp,
   plugins: [
     // storage-adapter-placeholder
   ],

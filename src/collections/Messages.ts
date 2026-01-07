@@ -1,10 +1,19 @@
 import { CollectionConfig } from 'payload'
+import {
+  lexicalEditor,
+  HeadingFeature,
+  LinkFeature,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  FixedToolbarFeature,
+} from '@payloadcms/richtext-lexical'
 
 export const Messages: CollectionConfig = {
   slug: 'messages',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'type', 'channel', 'mode', 'status', 'responseRate'],
+    defaultColumns: ['name', 'messageType', 'channel', 'deliveryMode', 'status', 'responseRate'],
   },
   access: {
     read: () => true,
@@ -16,7 +25,11 @@ export const Messages: CollectionConfig = {
       required: true,
     },
     {
-      name: 'type',
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      name: 'messageType',
       type: 'select',
       options: [
         { label: 'Survey', value: 'survey' },
@@ -28,76 +41,95 @@ export const Messages: CollectionConfig = {
       required: true,
     },
     {
+      name: 'template',
+      type: 'relationship',
+      relationTo: 'templates',
+    },
+    {
+      name: 'targetGroup',
+      type: 'relationship',
+      relationTo: 'user-groups',
+    },
+    {
       name: 'channel',
       type: 'relationship',
       relationTo: 'channels',
-      required: true,
     },
     {
-      name: 'mode',
+      name: 'deliveryRules',
+      type: 'relationship',
+      relationTo: 'delivery-rules',
+      hasMany: true,
+    },
+    {
+      name: 'deliveryMode',
       type: 'select',
       options: [
         { label: 'Intrusive', value: 'intrusive' },
         { label: 'Non-Intrusive', value: 'non-intrusive' },
       ],
-      required: true,
     },
     {
       name: 'status',
       type: 'select',
       options: [
-        { label: 'Active', value: 'active' },
         { label: 'Draft', value: 'draft' },
+        { label: 'Active', value: 'active' },
         { label: 'Scheduled', value: 'scheduled' },
         { label: 'Completed', value: 'completed' },
       ],
       defaultValue: 'draft',
-      required: true,
     },
     {
       name: 'priority',
       type: 'select',
       options: [
-        { label: 'Low', value: 'low' },
-        { label: 'Medium', value: 'medium' },
+        { label: 'Normal', value: 'normal' },
         { label: 'High', value: 'high' },
         { label: 'Urgent', value: 'urgent' },
       ],
-      defaultValue: 'medium',
-      required: true,
+      defaultValue: 'normal',
+    },
+    {
+      name: 'deliverySchedule',
+      type: 'select',
+      options: [
+        { label: 'Send Immediately', value: 'immediate' },
+        { label: 'Scheduled', value: 'scheduled' },
+      ],
+      defaultValue: 'immediate',
+    },
+    {
+      name: 'scheduledDate',
+      type: 'date',
+      admin: {
+        condition: (data) => data.deliverySchedule === 'scheduled',
+      },
     },
     {
       name: 'responseRate',
-      type: 'group',
-      fields: [
-        {
-          name: 'percentage',
-          type: 'number',
-          admin: {
-            description: 'Response rate percentage',
-          },
-        },
-        {
-          name: 'count',
-          type: 'number',
-          admin: {
-            description: 'Number of responses',
-          },
-        },
-        {
-          name: 'total',
-          type: 'number',
-          admin: {
-            description: 'Total targeted users',
-          },
-        },
-      ],
+      type: 'number',
+      admin: {
+        description: 'Calculated response rate percentage',
+      },
     },
     {
-      name: 'template',
-      type: 'relationship',
-      relationTo: 'templates',
-      required: true,
+      name: 'totalRecipients',
+      type: 'number',
+    },
+    {
+      name: 'content',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: () => [
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
+          LinkFeature(),
+          BoldFeature(),
+          ItalicFeature(),
+          UnderlineFeature(),
+          FixedToolbarFeature(),
+        ],
+      }),
     },
   ],
 }
