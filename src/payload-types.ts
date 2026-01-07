@@ -98,7 +98,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {};
@@ -135,7 +135,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -159,7 +159,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -178,7 +178,7 @@ export interface Media {
  * via the `definition` "templates".
  */
 export interface Template {
-  id: number;
+  id: string;
   name: string;
   type: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   division?: ('Corporate' | 'IT Operations' | 'Engineering' | 'Support' | 'Sales' | 'Finance' | 'Marketing') | null;
@@ -204,10 +204,10 @@ export interface Template {
     };
     [k: string]: unknown;
   };
-  brandingRef?: (number | null) | BrandingPackage;
-  policyRefs?: (number | Policy)[] | null;
-  channelRefs?: (number | Channel)[] | null;
-  buttonRefs?: (number | Button)[] | null;
+  brandingRef?: (string | null) | BrandingPackage;
+  channelRefs?: (string | Channel)[] | null;
+  policyRefs?: (string | Policy)[] | null;
+  buttonRefs?: (string | Button)[] | null;
   /**
    * Number of active campaigns using this template
    */
@@ -221,7 +221,7 @@ export interface Template {
  * via the `definition` "branding-packages".
  */
 export interface BrandingPackage {
-  id: number;
+  id: string;
   name: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -251,7 +251,7 @@ export interface BrandingPackage {
           | 'marketing'
         )
       | null;
-    logo?: (number | null) | Media;
+    logo?: (string | null) | Media;
     /**
      * Logo position relative to title
      */
@@ -278,7 +278,7 @@ export interface BrandingPackage {
   /**
    * Assets used as part of the theme, such as custom icons for buttons, background images, or specialized fonts.
    */
-  assets?: (number | Media)[] | null;
+  assets?: (string | Media)[] | null;
   /**
    * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
    */
@@ -309,10 +309,36 @@ export interface BrandingPackage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channels".
+ */
+export interface Channel {
+  id: string;
+  name: string;
+  status: 'configured' | 'disabled';
+  description?: string | null;
+  supportedMessageTypes?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service')[] | null;
+  capabilities?: ('server-side' | 'oauth')[] | null;
+  /**
+   * Channel-specific configuration (API keys, endpoints, etc.)
+   */
+  configuration?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "policies".
  */
 export interface Policy {
-  id: number;
+  id: string;
   name: string;
   type: 'fatigue' | 'sequencing' | 'vip' | 'quietHours' | 'routing' | 'dndExceptions';
   /**
@@ -392,36 +418,10 @@ export interface Policy {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "channels".
- */
-export interface Channel {
-  id: number;
-  name: string;
-  status: 'configured' | 'disabled';
-  description?: string | null;
-  supportedMessageTypes?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service')[] | null;
-  capabilities?: ('server-side' | 'oauth')[] | null;
-  /**
-   * Channel-specific configuration (API keys, endpoints, etc.)
-   */
-  configuration?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "buttons".
  */
 export interface Button {
-  id: number;
+  id: string;
   name: string;
   label?: string | null;
   icon?: string | null;
@@ -442,7 +442,7 @@ export interface Button {
  * via the `definition` "variables".
  */
 export interface Variable {
-  id: number;
+  id: string;
   key: string;
   label: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'dateTime' | 'url' | 'email' | 'enum';
@@ -472,10 +472,10 @@ export interface Variable {
  * via the `definition` "messages".
  */
 export interface Message {
-  id: number;
+  id: string;
   name: string;
   type: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  channel: number | Channel;
+  channel: string | Channel;
   mode: 'intrusive' | 'non-intrusive';
   status: 'active' | 'draft' | 'scheduled' | 'completed';
   priority: 'low' | 'medium' | 'high' | 'urgent';
@@ -493,7 +493,7 @@ export interface Message {
      */
     total?: number | null;
   };
-  template: number | Template;
+  template: string | Template;
   updatedAt: string;
   createdAt: string;
 }
@@ -502,7 +502,7 @@ export interface Message {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -519,48 +519,48 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'templates';
-        value: number | Template;
+        value: string | Template;
       } | null)
     | ({
         relationTo: 'branding-packages';
-        value: number | BrandingPackage;
+        value: string | BrandingPackage;
       } | null)
     | ({
         relationTo: 'policies';
-        value: number | Policy;
+        value: string | Policy;
       } | null)
     | ({
         relationTo: 'variables';
-        value: number | Variable;
+        value: string | Variable;
       } | null)
     | ({
         relationTo: 'channels';
-        value: number | Channel;
+        value: string | Channel;
       } | null)
     | ({
         relationTo: 'buttons';
-        value: number | Button;
+        value: string | Button;
       } | null)
     | ({
         relationTo: 'messages';
-        value: number | Message;
+        value: string | Message;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -570,10 +570,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -593,7 +593,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -653,8 +653,8 @@ export interface TemplatesSelect<T extends boolean = true> {
   slug?: T;
   body?: T;
   brandingRef?: T;
-  policyRefs?: T;
   channelRefs?: T;
+  policyRefs?: T;
   buttonRefs?: T;
   usageCount?: T;
   updatedAt?: T;

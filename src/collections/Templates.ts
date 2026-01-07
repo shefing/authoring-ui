@@ -8,6 +8,7 @@ import {
   lexicalEditor,
   LinkFeature,
   UnderlineFeature,
+    FixedToolbarFeature
 } from '@payloadcms/richtext-lexical'
 // import { VariableInlineField } from '@/components/TextToDisplayInVars'
 
@@ -79,7 +80,7 @@ export const Templates: CollectionConfig = {
           ],
           defaultValue: 'medium',
         },
-        slugField({ fieldToUse: 'name' }),
+        slugField({ useAsSlug: 'name' }),
       ],
     },
     {
@@ -94,6 +95,7 @@ export const Templates: CollectionConfig = {
           BoldFeature(),
           ItalicFeature(),
           UnderlineFeature(),
+            FixedToolbarFeature(),
           BlocksFeature({
             blocks: [
               {
@@ -155,8 +157,8 @@ export const Templates: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
-        { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
         { name: 'channelRefs', type: 'relationship', relationTo: 'channels', hasMany: true },
+        { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
         { name: 'buttonRefs', type: 'relationship', relationTo: 'buttons', hasMany: true },
         {
           name: 'usageCount',
