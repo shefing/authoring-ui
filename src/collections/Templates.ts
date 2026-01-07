@@ -100,6 +100,7 @@ export const Templates: CollectionConfig = {
             { name: 'required', type: 'checkbox' },
           ],
         },
+        slugField({ fieldToUse: 'name' }),
       ],
     },
     {
