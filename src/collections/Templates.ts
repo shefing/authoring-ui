@@ -89,21 +89,6 @@ export const Templates: CollectionConfig = {
       hasMany: true,
     },
     {
-      name: 'contentStructure',
-      type: 'blocks',
-      blocks: [
-        {
-          slug: 'contentField',
-          fields: [
-            { name: 'fieldName', type: 'text', required: true },
-            { name: 'fieldType', type: 'select', options: ['text', 'textarea', 'richText', 'number'] },
-            { name: 'required', type: 'checkbox' },
-          ],
-        },
-        slugField({ fieldToUse: 'name' }),
-      ],
-    },
-    {
       name: 'body',
       type: 'richText',
       editor: lexicalEditor({

@@ -199,16 +199,6 @@ export interface Template {
   division?: (string | null) | Division;
   branding?: (string | null) | Branding;
   channels?: (string | Channel)[] | null;
-  contentStructure?:
-    | {
-        fieldName: string;
-        fieldType?: ('text' | 'textarea' | 'richText' | 'number') | null;
-        required?: boolean | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'contentField';
-      }[]
-    | null;
   body?: {
     root: {
       type: string;
@@ -461,6 +451,7 @@ export interface Message {
   template?: (string | null) | Template;
   targetGroup?: (string | null) | UserGroup;
   channel?: (string | null) | Channel;
+  deliveryRules?: (string | DeliveryRule)[] | null;
   deliveryMode?: ('intrusive' | 'non-intrusive') | null;
   status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
   priority?: ('normal' | 'high' | 'urgent') | null;
@@ -536,6 +527,10 @@ export interface DeliveryRule {
     | boolean
     | null;
   targetUserRole?: ('vip' | 'it-staff' | 'general' | 'all') | null;
+  /**
+   * Optional target user group for this rule
+   */
+  targetGroup?: (string | null) | UserGroup;
   /**
    * Rule priority for conflict resolution
    */
@@ -754,19 +749,6 @@ export interface TemplatesSelect<T extends boolean = true> {
   division?: T;
   branding?: T;
   channels?: T;
-  contentStructure?:
-    | T
-    | {
-        contentField?:
-          | T
-          | {
-              fieldName?: T;
-              fieldType?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
   body?: T;
   isActive?: T;
   updatedAt?: T;
@@ -933,6 +915,7 @@ export interface MessagesSelect<T extends boolean = true> {
   template?: T;
   targetGroup?: T;
   channel?: T;
+  deliveryRules?: T;
   deliveryMode?: T;
   status?: T;
   priority?: T;
@@ -980,6 +963,7 @@ export interface DeliveryRulesSelect<T extends boolean = true> {
   isEnabled?: T;
   configuration?: T;
   targetUserRole?: T;
+  targetGroup?: T;
   priority?: T;
   description?: T;
   updatedAt?: T;

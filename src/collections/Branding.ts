@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
-import { colorPickerField } from '@innovixx/payload-color-picker-field'
+import { createBackgroundColorField, createColorField } from '@/components/color-picker/index'
 
 export const Branding: CollectionConfig = {
   slug: 'branding',
@@ -90,10 +90,10 @@ export const Branding: CollectionConfig = {
                 {
                   type: 'row',
                   fields: [
-                    colorPickerField({ name: 'primaryColor', label: 'Primary Color' }),
-                    colorPickerField({ name: 'secondaryColor', label: 'Secondary Color' }),
-                    colorPickerField({ name: 'backgroundColor', label: 'Background Color' }),
-                    colorPickerField({ name: 'textColor', label: 'Text Color' }),
+                      createColorField({ name: 'primaryColor', label: 'Primary Color' }),
+                      createColorField({ name: 'secondaryColor', label: 'Secondary Color' }),
+                      createBackgroundColorField({ name: 'backgroundColor', label: 'Background Color' }),
+                      createColorField({ name: 'textColor', label: 'Text Color' }),
                   ],
                 },
               ],

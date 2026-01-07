@@ -18,6 +18,7 @@ import { Divisions } from './collections/Divisions'
 import { UserGroups } from './collections/UserGroups'
 import { DeliveryRules } from './collections/DeliveryRules'
 import { MessageAnalytics } from './collections/MessageAnalytics'
+import { seed } from './seed'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,6 +53,11 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
+  onInit: async (payload) => {
+    if (process.env.PAYLOAD_SEED === 'true') {
+      await seed(payload)
+    }
+  },
   plugins: [
     // storage-adapter-placeholder
   ],
