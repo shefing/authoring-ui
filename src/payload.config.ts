@@ -11,7 +11,6 @@ import { Templates } from './collections/Templates'
 import { Branding } from './collections/Branding'
 import { Policies } from './collections/Policies'
 import { Variables } from './collections/Variables'
-import { Channels } from './collections/Channels'
 import { Buttons } from './collections/Buttons'
 import { Messages } from './collections/Messages'
 import { Divisions } from './collections/Divisions'
@@ -37,7 +36,6 @@ export default buildConfig({
     Branding,
     Policies,
     Variables,
-    Channels,
     Buttons,
     Messages,
     Divisions,

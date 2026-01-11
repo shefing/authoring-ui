@@ -18,6 +18,9 @@ export const Templates: CollectionConfig = {
   access: {
     // Allow read access for preview UI (published/draft). In production, tighten to published-only.
     read: () => true,
+    create: () => false,
+    update: () => false,
+    delete: () => false,
   },
   admin: {
     useAsTitle: 'name',
@@ -46,24 +49,37 @@ export const Templates: CollectionConfig = {
       fields: [
         {
           name: 'messageType',
+          label: 'Type',
           type: 'select',
           options: [
-            { label: 'Survey', value: 'survey' },
-            { label: 'Confirmation', value: 'confirmation' },
             { label: 'Notification', value: 'notification' },
-            { label: 'Reminder', value: 'reminder' },
-            { label: 'Self-Service', value: 'self-service' },
           ],
           required: true,
         },
         {
-          name: 'templateType',
-          type: 'select',
-          options: [
-            { label: 'Pre-defined', value: 'pre-defined' },
-            { label: 'Custom', value: 'custom' },
-          ],
-          defaultValue: 'custom',
+          name: 'usage',
+          type: 'number',
+          admin: {
+            readOnly: true,
+            description: 'Number of messages using this template',
+          },
+          hooks: {
+            afterRead: [
+              async ({ data, req }) => {
+                if (!data?.id) return 0
+                const messages = await req.payload.find({
+                  collection: 'messages',
+                  where: {
+                    template: {
+                      equals: data.id,
+                    },
+                  },
+                  limit: 0,
+                })
+                return messages.totalDocs
+              },
+            ],
+          },
         },
       ],
     },
@@ -71,22 +87,11 @@ export const Templates: CollectionConfig = {
       type: 'row',
       fields: [
         {
-          name: 'division',
-          type: 'relationship',
-          relationTo: 'divisions',
-        },
-        {
           name: 'branding',
           type: 'relationship',
           relationTo: 'branding',
         },
       ],
-    },
-    {
-      name: 'channels',
-      type: 'relationship',
-      relationTo: 'channels',
-      hasMany: true,
     },
     {
       name: 'body',

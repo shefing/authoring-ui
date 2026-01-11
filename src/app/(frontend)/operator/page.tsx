@@ -25,7 +25,7 @@ export default async function OperatorPage({ searchParams }: { searchParams?: an
     <div className="px-6 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>Operator — Preview</CardTitle>
+          <CardTitle>Operator</CardTitle>
         </CardHeader>
         <CardContent>
           <ClientComposer

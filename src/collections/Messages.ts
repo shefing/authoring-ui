@@ -13,7 +13,7 @@ export const Messages: CollectionConfig = {
   slug: 'messages',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'messageType', 'channel', 'deliveryMode', 'status', 'responseRate'],
+    defaultColumns: ['name', 'messageType', 'deliveryMode'],
   },
   access: {
     read: () => true,
@@ -32,13 +32,13 @@ export const Messages: CollectionConfig = {
       name: 'messageType',
       type: 'select',
       options: [
-        { label: 'Survey', value: 'survey' },
-        { label: 'Confirmation', value: 'confirmation' },
         { label: 'Notification', value: 'notification' },
-        { label: 'Reminder', value: 'reminder' },
-        { label: 'Self-Service', value: 'self-service' },
       ],
+      defaultValue: 'notification',
       required: true,
+      admin: {
+        readOnly: true,
+      }
     },
     {
       name: 'template',
@@ -49,11 +49,14 @@ export const Messages: CollectionConfig = {
       name: 'targetGroup',
       type: 'relationship',
       relationTo: 'user-groups',
+      required: true,
     },
     {
-      name: 'channel',
-      type: 'relationship',
-      relationTo: 'channels',
+      name: 'expiredIn',
+      type: 'date',
+      admin: {
+        description: 'Expiration date for the message',
+      }
     },
     {
       name: 'deliveryRules',

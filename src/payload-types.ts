@@ -73,7 +73,6 @@ export interface Config {
     branding: Branding;
     policies: Policy;
     variables: Variable;
-    channels: Channel;
     buttons: Button;
     messages: Message;
     divisions: Division;
@@ -93,7 +92,6 @@ export interface Config {
     branding: BrandingSelect<false> | BrandingSelect<true>;
     policies: PoliciesSelect<false> | PoliciesSelect<true>;
     variables: VariablesSelect<false> | VariablesSelect<true>;
-    channels: ChannelsSelect<false> | ChannelsSelect<true>;
     buttons: ButtonsSelect<false> | ButtonsSelect<true>;
     messages: MessagesSelect<false> | MessagesSelect<true>;
     divisions: DivisionsSelect<false> | DivisionsSelect<true>;
@@ -194,11 +192,12 @@ export interface Template {
   generateSlug?: boolean | null;
   slug: string;
   description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  templateType?: ('pre-defined' | 'custom') | null;
-  division?: (string | null) | Division;
+  messageType: 'notification';
+  /**
+   * Number of messages using this template
+   */
+  usage?: number | null;
   branding?: (string | null) | Branding;
-  channels?: (string | Channel)[] | null;
   body?: {
     root: {
       type: string;
@@ -221,20 +220,6 @@ export interface Template {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "divisions".
- */
-export interface Division {
-  id: string;
-  name: string;
-  code: string;
-  description?: string | null;
-  parentDivision?: (string | null) | Division;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "branding".
  */
 export interface Branding {
@@ -245,65 +230,13 @@ export interface Branding {
    */
   generateSlug?: boolean | null;
   slug: string;
-  scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
-  scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
-  division?: (string | null) | Division;
-  messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
-  colors?: {
-    primaryColor?: string | null;
-    secondaryColor?: string | null;
-    backgroundColor?: string | null;
-    textColor?: string | null;
-  };
-  fonts?: {
-    fontFamily?: string | null;
-    fontSize?: string | null;
-    fontWeight?: string | null;
-  };
-  logos?:
-    | {
-        logo: string | Media;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Advanced CSS customization
-   */
-  customCSS?: string | null;
+  primaryColor?: string | null;
+  secondaryColor?: string | null;
+  logo: string | Media;
   isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "channels".
- */
-export interface Channel {
-  id: string;
-  name: string;
-  channelId: string;
-  description?: string | null;
-  isEnabled?: boolean | null;
-  isConfigured?: boolean | null;
-  capabilities?: ('server-side' | 'oauth' | 'client-side')[] | null;
-  supportedMessageTypes?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service')[] | null;
-  /**
-   * Channel-specific configuration (API keys, endpoints, etc.)
-   */
-  configuration?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  requiresAuth?: boolean | null;
-  authProvider?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -447,10 +380,13 @@ export interface Message {
   id: string;
   name: string;
   description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  messageType: 'notification';
   template?: (string | null) | Template;
-  targetGroup?: (string | null) | UserGroup;
-  channel?: (string | null) | Channel;
+  targetGroup: string | UserGroup;
+  /**
+   * Expiration date for the message
+   */
+  expiredIn?: string | null;
   deliveryRules?: (string | DeliveryRule)[] | null;
   deliveryMode?: ('intrusive' | 'non-intrusive') | null;
   status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
@@ -541,6 +477,20 @@ export interface DeliveryRule {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "divisions".
+ */
+export interface Division {
+  id: string;
+  name: string;
+  code: string;
+  description?: string | null;
+  parentDivision?: (string | null) | Division;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "message-analytics".
  */
 export interface MessageAnalytic {
@@ -624,10 +574,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'variables';
         value: string | Variable;
-      } | null)
-    | ({
-        relationTo: 'channels';
-        value: string | Channel;
       } | null)
     | ({
         relationTo: 'buttons';
@@ -745,10 +691,8 @@ export interface TemplatesSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   messageType?: T;
-  templateType?: T;
-  division?: T;
+  usage?: T;
   branding?: T;
-  channels?: T;
   body?: T;
   isActive?: T;
   updatedAt?: T;
@@ -763,32 +707,9 @@ export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  scope?: T;
-  scopeType?: T;
-  division?: T;
-  messageType?: T;
-  colors?:
-    | T
-    | {
-        primaryColor?: T;
-        secondaryColor?: T;
-        backgroundColor?: T;
-        textColor?: T;
-      };
-  fonts?:
-    | T
-    | {
-        fontFamily?: T;
-        fontSize?: T;
-        fontWeight?: T;
-      };
-  logos?:
-    | T
-    | {
-        logo?: T;
-        id?: T;
-      };
-  customCSS?: T;
+  primaryColor?: T;
+  secondaryColor?: T;
+  logo?: T;
   isActive?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -876,24 +797,6 @@ export interface VariablesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "channels_select".
- */
-export interface ChannelsSelect<T extends boolean = true> {
-  name?: T;
-  channelId?: T;
-  description?: T;
-  isEnabled?: T;
-  isConfigured?: T;
-  capabilities?: T;
-  supportedMessageTypes?: T;
-  configuration?: T;
-  requiresAuth?: T;
-  authProvider?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "buttons_select".
  */
 export interface ButtonsSelect<T extends boolean = true> {
@@ -914,7 +817,7 @@ export interface MessagesSelect<T extends boolean = true> {
   messageType?: T;
   template?: T;
   targetGroup?: T;
-  channel?: T;
+  expiredIn?: T;
   deliveryRules?: T;
   deliveryMode?: T;
   status?: T;
