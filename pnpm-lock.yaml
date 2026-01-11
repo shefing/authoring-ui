@@ -4,18 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  '@innovixx/payload-color-picker-field@2.0.4':
-    hash: e619edb9be3a407862665f56b0478e20552f7f9aeb32fe03143cb8450c960b6e
-    path: patches/@innovixx__payload-color-picker-field@2.0.4.patch
-
 importers:
 
   .:
     dependencies:
       '@innovixx/payload-color-picker-field':
         specifier: 2.0.4
-        version: 2.0.4(patch_hash=e619edb9be3a407862665f56b0478e20552f7f9aeb32fe03143cb8450c960b6e)(next@15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 2.0.4(next@15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@modernaut/payload-color-swatch-field':
         specifier: ^1.2.1
         version: 1.2.1(@types/react@19.1.8)(monaco-editor@0.55.1)(next@15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
@@ -5584,7 +5579,7 @@ snapshots:
   '@img/sharp-win32-x64@0.34.5':
     optional: true
 
-  '@innovixx/payload-color-picker-field@2.0.4(patch_hash=e619edb9be3a407862665f56b0478e20552f7f9aeb32fe03143cb8450c960b6e)(next@15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@innovixx/payload-color-picker-field@2.0.4(next@15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.65.0(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       next: 15.4.10(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
       payload: 3.65.0(graphql@16.12.0)(typescript@5.7.3)
