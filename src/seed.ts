@@ -2,7 +2,43 @@
 
 import { Payload } from 'payload';
 
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '');
+
 export const seed = async (payload: Payload): Promise<void> => {
+  // Clear existing data
+  console.log('  Clearing existing data...');
+  await Promise.all([
+    payload.delete({ collection: 'media', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'divisions', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'user-groups', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'channels', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'branding', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'templates', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'delivery-rules', where: { id: { exists: true } } }),
+    payload.delete({ collection: 'messages', where: { id: { exists: true } } }),
+  ]);
+
+  // 0. Media (for logos)
+  const media = await payload.create({
+    collection: 'media',
+    data: {
+      alt: 'Logo',
+    },
+    file: {
+      data: Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+        'base64',
+      ),
+      name: 'logo.png',
+      mimetype: 'image/png',
+      size: 68,
+    },
+  });
+
   // 1. Divisions
   const divisions = await Promise.all([
     payload.create({
@@ -225,9 +261,10 @@ export const seed = async (payload: Payload): Promise<void> => {
   // 4. Branding Themes
   const brandingThemes = await Promise.all([
     payload.create({
-      collection: 'branding',
+      collection: 'branding', draft: false,
       data: {
         name: 'Corporate Default',
+        slug: slugify('Corporate Default'),
         scope: 'all',
         scopeType: 'global',
         colors: {
@@ -236,13 +273,15 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
+        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
     payload.create({
-      collection: 'branding',
+      collection: 'branding', draft: false,
       data: {
         name: 'Security Alert Theme',
+        slug: slugify('Security Alert Theme'),
         scope: 'urgent',
         scopeType: 'urgency',
         colors: {
@@ -251,13 +290,15 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#7f1d1d',
         },
+        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
     payload.create({
-      collection: 'branding',
+      collection: 'branding', draft: false,
       data: {
         name: 'Engineering Division',
+        slug: slugify('Engineering Division'),
         scope: 'division',
         scopeType: 'division',
         division: divisions[2].id,
@@ -267,13 +308,15 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
+        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
     payload.create({
-      collection: 'branding',
+      collection: 'branding', draft: false,
       data: {
         name: 'Remediation Confirmation',
+        slug: slugify('Remediation Confirmation'),
         scope: 'message-type',
         scopeType: 'message-type',
         messageType: 'confirmation',
@@ -283,13 +326,15 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
+        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
     payload.create({
-      collection: 'branding',
+      collection: 'branding', draft: false,
       data: {
         name: 'Executive VIP Theme',
+        slug: slugify('Executive VIP Theme'),
         scope: 'division',
         scopeType: 'division',
         colors: {
@@ -298,6 +343,7 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
+        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
@@ -306,9 +352,10 @@ export const seed = async (payload: Payload): Promise<void> => {
   // 5. Templates
   const templates = await Promise.all([
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Multi-step Survey',
+        slug: slugify('Multi-step Survey'),
         description: 'Interactive multi-step survey template for comprehensive feedback collection',
         messageType: 'survey',
         templateType: 'pre-defined',
@@ -318,9 +365,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Remediation Confirmation',
+        slug: slugify('Remediation Confirmation'),
         description: 'Confirmation template for IT remediation actions',
         messageType: 'confirmation',
         templateType: 'pre-defined',
@@ -330,9 +378,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Success Notification',
+        slug: slugify('Success Notification'),
         description: 'Generic success notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -342,9 +391,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Remediation Reminder',
+        slug: slugify('Remediation Reminder'),
         description: 'Reminder template for pending remediation actions',
         messageType: 'reminder',
         templateType: 'pre-defined',
@@ -354,9 +404,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Chat Interface',
+        slug: slugify('Chat Interface'),
         description: 'Interactive chat interface for self-service support',
         messageType: 'self-service',
         templateType: 'pre-defined',
@@ -366,9 +417,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Security Alert - Engineering',
+        slug: slugify('Security Alert - Engineering'),
         description: 'Security alert template for Engineering division',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -378,9 +430,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Annual Survey',
+        slug: slugify('Annual Survey'),
         description: 'Annual employee satisfaction survey',
         messageType: 'survey',
         templateType: 'pre-defined',
@@ -390,9 +443,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Urgent Confirmation',
+        slug: slugify('Urgent Confirmation'),
         description: 'Urgent action confirmation template',
         messageType: 'confirmation',
         templateType: 'pre-defined',
@@ -402,9 +456,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'System Notification',
+        slug: slugify('System Notification'),
         description: 'Generic system notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -414,9 +469,10 @@ export const seed = async (payload: Payload): Promise<void> => {
       },
     }),
     payload.create({
-      collection: 'templates',
+      collection: 'templates', draft: false,
       data: {
         name: 'Scheduled Reminder',
+        slug: slugify('Scheduled Reminder'),
         description: 'Scheduled reminder template for recurring notifications',
         messageType: 'reminder',
         templateType: 'pre-defined',
@@ -468,18 +524,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Please complete this survey to help us understand your Windows 11 migration readiness.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -508,18 +564,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'A network issue has been detected and an automatic fix is ready to apply.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -548,18 +604,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'The network connectivity issue you reported has been successfully resolved.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -589,18 +645,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'You have a pending remediation action that requires your attention.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -629,18 +685,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Use this self-service portal to check device health and get support.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -669,18 +725,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Please take a few minutes to complete our annual employee satisfaction survey.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -709,18 +765,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'A critical security patch needs to be installed. Please confirm to proceed.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -750,18 +806,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'A scheduled maintenance window will occur this weekend.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -790,18 +846,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Your password will expire soon. Please change it before it expires.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -830,18 +886,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Use the help desk self-service portal for quick support and troubleshooting.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -870,18 +926,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Please provide feedback about your IT equipment and tools.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -910,18 +966,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Please review and accept the company policies as part of your onboarding.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -950,18 +1006,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'The development environment update has been completed successfully.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -990,18 +1046,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Several software licenses are expiring soon. Please review and renew.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1030,18 +1086,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Use our AI-powered troubleshooting assistant for quick problem resolution.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1070,18 +1126,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Help us understand your IT training needs for the next quarter.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1111,18 +1167,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Please confirm that your data backup has been completed successfully.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1151,18 +1207,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'A critical security vulnerability has been detected. Immediate action required.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1191,18 +1247,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Reminder: Your scheduled training session is coming up soon.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
@@ -1231,18 +1287,18 @@ export const seed = async (payload: Payload): Promise<void> => {
             type: 'root',
             format: '',
             indent: 0,
-            version: 1,
+            version: 1, direction: 'ltr',
             children: [
               {
                 type: 'paragraph',
                 format: '',
                 indent: 0,
-                version: 1,
+                version: 1, direction: 'ltr',
                 children: [
                   {
                     type: 'text',
                     text: 'Follow our step-by-step wizard to resolve common issues quickly.',
-                    version: 1,
+                    version: 1, direction: 'ltr',
                   }
                 ],
               }
