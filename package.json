@@ -80,9 +80,6 @@
       "sharp",
       "esbuild",
       "unrs-resolver"
-    ],
-    "patchedDependencies": {
-      "@innovixx/payload-color-picker-field@2.0.4": "patches/@innovixx__payload-color-picker-field@2.0.4.patch"
-    }
+    ]
   }
 }
