@@ -9,7 +9,7 @@ test.describe('Frontend', () => {
   })
 
   test('can go on homepage', async ({ page }) => {
-    const baseUrl = process.env.PAYLOAD_PUBLIC_URL || 'http://localhost:3000'
+    const baseUrl = process.env.PAYLOAD_PUBLIC_URL || 'http://127.0.0.1:3000'
     await page.goto(baseUrl)
 
     await expect(page).toHaveTitle(/Payload Blank Template/)
