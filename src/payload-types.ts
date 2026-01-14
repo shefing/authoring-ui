@@ -70,9 +70,16 @@ export interface Config {
     users: User;
     media: Media;
     templates: Template;
-    'branding-packages': BrandingPackage;
+    branding: Branding;
     policies: Policy;
     variables: Variable;
+    channels: Channel;
+    buttons: Button;
+    messages: Message;
+    divisions: Division;
+    'user-groups': UserGroup;
+    'delivery-rules': DeliveryRule;
+    'message-analytics': MessageAnalytic;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -83,16 +90,23 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     templates: TemplatesSelect<false> | TemplatesSelect<true>;
-    'branding-packages': BrandingPackagesSelect<false> | BrandingPackagesSelect<true>;
+    branding: BrandingSelect<false> | BrandingSelect<true>;
     policies: PoliciesSelect<false> | PoliciesSelect<true>;
     variables: VariablesSelect<false> | VariablesSelect<true>;
+    channels: ChannelsSelect<false> | ChannelsSelect<true>;
+    buttons: ButtonsSelect<false> | ButtonsSelect<true>;
+    messages: MessagesSelect<false> | MessagesSelect<true>;
+    divisions: DivisionsSelect<false> | DivisionsSelect<true>;
+    'user-groups': UserGroupsSelect<false> | UserGroupsSelect<true>;
+    'delivery-rules': DeliveryRulesSelect<false> | DeliveryRulesSelect<true>;
+    'message-analytics': MessageAnalyticsSelect<false> | MessageAnalyticsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {};
@@ -129,7 +143,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -153,7 +167,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -172,15 +186,20 @@ export interface Media {
  * via the `definition` "templates".
  */
 export interface Template {
-  id: number;
+  id: string;
   name: string;
-  type: 'notification' | 'action';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  body: {
+  description?: string | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  templateType?: ('pre-defined' | 'custom') | null;
+  division?: (string | null) | Division;
+  branding?: (string | null) | Branding;
+  channels?: (string | Channel)[] | null;
+  body?: {
     root: {
       type: string;
       children: {
@@ -194,141 +213,123 @@ export interface Template {
       version: number;
     };
     [k: string]: unknown;
-  };
-  brandingRef?: (number | null) | BrandingPackage;
-  policyRefs?: (number | Policy)[] | null;
-  channels?: {
-    device?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-    teams?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-  };
+  } | null;
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "branding-packages".
+ * via the `definition` "divisions".
  */
-export interface BrandingPackage {
-  id: number;
+export interface Division {
+  id: string;
+  name: string;
+  code: string;
+  description?: string | null;
+  parentDivision?: (string | null) | Division;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branding".
+ */
+export interface Branding {
+  id: string;
   name: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  generalStyling?: {
-    /**
-     * Default text color
-     */
-    textColorText?: string | null;
-    /**
-     * Default background color
-     */
-    backgroundColorText?: string | null;
-    /**
-     * Text direction
-     */
-    direction?: ('ltr' | 'rtl') | null;
-    /**
-     * Message width in pixels
-     */
-    messageWidth?: number | null;
-    /**
-     * Title alignment
-     */
-    titleAlign?: ('left' | 'center' | 'right') | null;
-  };
-  logoSettings?: {
-    logo?: (number | null) | Media;
-    /**
-     * Logo position relative to title
-     */
-    logoPos?: ('left-inline' | 'right-inline' | 'before' | 'after' | 'center') | null;
-  };
-  approveBtn?: {
-    /**
-     * Text on the approve button
-     */
-    label?: string | null;
-    /**
-     * Button background color
-     */
-    bgColor?: string | null;
-    /**
-     * Button text color
-     */
+  scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
+  scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
+  division?: (string | null) | Division;
+  messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
+  colors?: {
+    primaryColor?: string | null;
+    secondaryColor?: string | null;
+    backgroundColor?: string | null;
     textColor?: string | null;
-    /**
-     * Buttons alignment
-     */
-    align?: ('left' | 'center' | 'right') | null;
   };
-  signature?: {
-    text?: string | null;
-    position?: ('left' | 'right' | 'center') | null;
+  fonts?: {
+    fontFamily?: string | null;
+    fontSize?: string | null;
+    fontWeight?: string | null;
   };
-  assets?: (number | Media)[] | null;
-  /**
-   * Design tokens exported from your theme generator (colors, spacing, radii, typography, semantic states, light/dark variants).
-   */
-  themeTokens?:
+  logos?:
     | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
+        logo: string | Media;
+        id?: string | null;
+      }[]
     | null;
   /**
-   * Optional allowlist of CSS tokens/styles permitted for branding.
+   * Advanced CSS customization
    */
-  cssAllowlist?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  customCSS?: string | null;
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channels".
+ */
+export interface Channel {
+  id: string;
+  name: string;
+  channelId: string;
+  description?: string | null;
+  isEnabled?: boolean | null;
+  isConfigured?: boolean | null;
+  capabilities?: ('server-side' | 'oauth' | 'client-side')[] | null;
+  supportedMessageTypes?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service')[] | null;
+  /**
+   * Channel-specific configuration (API keys, endpoints, etc.)
+   */
+  configuration?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  requiresAuth?: boolean | null;
+  authProvider?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "policies".
  */
 export interface Policy {
-  id: number;
+  id: string;
   name: string;
-  type: 'fatigue' | 'quietHours' | 'routing' | 'dndExceptions';
+  type: 'fatigue' | 'sequencing' | 'vip' | 'quietHours' | 'routing' | 'dndExceptions';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
   fatigue?: {
-    maxPerWindow: number;
-    windowHours: number;
+    maxSurveysPerWeek: number;
+    minDaysBetweenSurveys: number;
+  };
+  sequencing?: {
+    allowParallelExecution?: boolean | null;
+    maxConcurrentActions?: number | null;
+    queueNonIntrusiveMessages?: boolean | null;
+  };
+  vip?: {
+    reminderFrequency?: ('more_frequent' | 'less_frequent' | 'custom') | null;
+    customIntervalDays?: number | null;
   };
   quietHours?: {
     timezone: string;
@@ -392,7 +393,7 @@ export interface Policy {
  * via the `definition` "variables".
  */
 export interface Variable {
-  id: number;
+  id: string;
   key: string;
   label: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'dateTime' | 'url' | 'email' | 'enum';
@@ -419,10 +420,169 @@ export interface Variable {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons".
+ */
+export interface Button {
+  id: string;
+  name: string;
+  label?: string | null;
+  icon?: string | null;
+  otherAttributes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages".
+ */
+export interface Message {
+  id: string;
+  name: string;
+  description?: string | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  template?: (string | null) | Template;
+  targetGroup?: (string | null) | UserGroup;
+  channel?: (string | null) | Channel;
+  deliveryRules?: (string | DeliveryRule)[] | null;
+  deliveryMode?: ('intrusive' | 'non-intrusive') | null;
+  status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
+  priority?: ('normal' | 'high' | 'urgent') | null;
+  deliverySchedule?: ('immediate' | 'scheduled') | null;
+  scheduledDate?: string | null;
+  /**
+   * Calculated response rate percentage
+   */
+  responseRate?: number | null;
+  totalRecipients?: number | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-groups".
+ */
+export interface UserGroup {
+  id: string;
+  name: string;
+  description?: string | null;
+  /**
+   * Dynamic criteria for user selection
+   */
+  criteria?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  estimatedSize?: number | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "delivery-rules".
+ */
+export interface DeliveryRule {
+  id: string;
+  name: string;
+  ruleType: 'fatigue' | 'sequencing' | 'vip' | 'urgency';
+  isEnabled?: boolean | null;
+  /**
+   * Rule-specific settings
+   */
+  configuration?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  targetUserRole?: ('vip' | 'it-staff' | 'general' | 'all') | null;
+  /**
+   * Optional target user group for this rule
+   */
+  targetGroup?: (string | null) | UserGroup;
+  /**
+   * Rule priority for conflict resolution
+   */
+  priority?: number | null;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "message-analytics".
+ */
+export interface MessageAnalytic {
+  id: string;
+  message: string | Message;
+  totalSent?: number | null;
+  totalViewed?: number | null;
+  totalResponded?: number | null;
+  /**
+   * Calculated response rate
+   */
+  responseRate?: number | null;
+  deliveryDate?: string | null;
+  /**
+   * Stats per channel
+   */
+  channelBreakdown?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  userInteractions?:
+    | {
+        userId?: string | null;
+        action?: string | null;
+        timestamp?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -439,36 +599,64 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'templates';
-        value: number | Template;
+        value: string | Template;
       } | null)
     | ({
-        relationTo: 'branding-packages';
-        value: number | BrandingPackage;
+        relationTo: 'branding';
+        value: string | Branding;
       } | null)
     | ({
         relationTo: 'policies';
-        value: number | Policy;
+        value: string | Policy;
       } | null)
     | ({
         relationTo: 'variables';
-        value: number | Variable;
+        value: string | Variable;
+      } | null)
+    | ({
+        relationTo: 'channels';
+        value: string | Channel;
+      } | null)
+    | ({
+        relationTo: 'buttons';
+        value: string | Button;
+      } | null)
+    | ({
+        relationTo: 'messages';
+        value: string | Message;
+      } | null)
+    | ({
+        relationTo: 'divisions';
+        value: string | Division;
+      } | null)
+    | ({
+        relationTo: 'user-groups';
+        value: string | UserGroup;
+      } | null)
+    | ({
+        relationTo: 'delivery-rules';
+        value: string | DeliveryRule;
+      } | null)
+    | ({
+        relationTo: 'message-analytics';
+        value: string | MessageAnalytic;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -478,10 +666,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -501,7 +689,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -553,62 +741,55 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
-  type?: T;
   generateSlug?: T;
   slug?: T;
+  description?: T;
+  messageType?: T;
+  templateType?: T;
+  division?: T;
+  branding?: T;
+  channels?: T;
   body?: T;
-  brandingRef?: T;
-  policyRefs?: T;
-  channels?:
-    | T
-    | {
-        device?: T;
-        teams?: T;
-      };
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "branding-packages_select".
+ * via the `definition` "branding_select".
  */
-export interface BrandingPackagesSelect<T extends boolean = true> {
+export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  generalStyling?:
+  scope?: T;
+  scopeType?: T;
+  division?: T;
+  messageType?: T;
+  colors?:
     | T
     | {
-        textColorText?: T;
-        backgroundColorText?: T;
-        direction?: T;
-        messageWidth?: T;
-        titleAlign?: T;
+        primaryColor?: T;
+        secondaryColor?: T;
+        backgroundColor?: T;
+        textColor?: T;
       };
-  logoSettings?:
+  fonts?:
+    | T
+    | {
+        fontFamily?: T;
+        fontSize?: T;
+        fontWeight?: T;
+      };
+  logos?:
     | T
     | {
         logo?: T;
-        logoPos?: T;
+        id?: T;
       };
-  approveBtn?:
-    | T
-    | {
-        label?: T;
-        bgColor?: T;
-        textColor?: T;
-        align?: T;
-      };
-  signature?:
-    | T
-    | {
-        text?: T;
-        position?: T;
-      };
-  assets?: T;
-  themeTokens?: T;
-  cssAllowlist?: T;
+  customCSS?: T;
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -625,8 +806,21 @@ export interface PoliciesSelect<T extends boolean = true> {
   fatigue?:
     | T
     | {
-        maxPerWindow?: T;
-        windowHours?: T;
+        maxSurveysPerWeek?: T;
+        minDaysBetweenSurveys?: T;
+      };
+  sequencing?:
+    | T
+    | {
+        allowParallelExecution?: T;
+        maxConcurrentActions?: T;
+        queueNonIntrusiveMessages?: T;
+      };
+  vip?:
+    | T
+    | {
+        reminderFrequency?: T;
+        customIntervalDays?: T;
       };
   quietHours?:
     | T
@@ -679,6 +873,124 @@ export interface VariablesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channels_select".
+ */
+export interface ChannelsSelect<T extends boolean = true> {
+  name?: T;
+  channelId?: T;
+  description?: T;
+  isEnabled?: T;
+  isConfigured?: T;
+  capabilities?: T;
+  supportedMessageTypes?: T;
+  configuration?: T;
+  requiresAuth?: T;
+  authProvider?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons_select".
+ */
+export interface ButtonsSelect<T extends boolean = true> {
+  name?: T;
+  label?: T;
+  icon?: T;
+  otherAttributes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages_select".
+ */
+export interface MessagesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  messageType?: T;
+  template?: T;
+  targetGroup?: T;
+  channel?: T;
+  deliveryRules?: T;
+  deliveryMode?: T;
+  status?: T;
+  priority?: T;
+  deliverySchedule?: T;
+  scheduledDate?: T;
+  responseRate?: T;
+  totalRecipients?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "divisions_select".
+ */
+export interface DivisionsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  description?: T;
+  parentDivision?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-groups_select".
+ */
+export interface UserGroupsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  criteria?: T;
+  estimatedSize?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "delivery-rules_select".
+ */
+export interface DeliveryRulesSelect<T extends boolean = true> {
+  name?: T;
+  ruleType?: T;
+  isEnabled?: T;
+  configuration?: T;
+  targetUserRole?: T;
+  targetGroup?: T;
+  priority?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "message-analytics_select".
+ */
+export interface MessageAnalyticsSelect<T extends boolean = true> {
+  message?: T;
+  totalSent?: T;
+  totalViewed?: T;
+  totalResponded?: T;
+  responseRate?: T;
+  deliveryDate?: T;
+  channelBreakdown?: T;
+  userInteractions?:
+    | T
+    | {
+        userId?: T;
+        action?: T;
+        timestamp?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

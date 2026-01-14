@@ -8,6 +8,7 @@ import {
   lexicalEditor,
   LinkFeature,
   UnderlineFeature,
+    FixedToolbarFeature
 } from '@payloadcms/richtext-lexical'
 // import { VariableInlineField } from '@/components/TextToDisplayInVars'
 
@@ -33,14 +34,63 @@ export const Templates: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'name', type: 'text', required: true },
-        { name: 'type', type: 'select', options: ['notification', 'action'], required: true },
         slugField({ fieldToUse: 'name' }),
       ],
     },
     {
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'messageType',
+          type: 'select',
+          options: [
+            { label: 'Survey', value: 'survey' },
+            { label: 'Confirmation', value: 'confirmation' },
+            { label: 'Notification', value: 'notification' },
+            { label: 'Reminder', value: 'reminder' },
+            { label: 'Self-Service', value: 'self-service' },
+          ],
+          required: true,
+        },
+        {
+          name: 'templateType',
+          type: 'select',
+          options: [
+            { label: 'Pre-defined', value: 'pre-defined' },
+            { label: 'Custom', value: 'custom' },
+          ],
+          defaultValue: 'custom',
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'division',
+          type: 'relationship',
+          relationTo: 'divisions',
+        },
+        {
+          name: 'branding',
+          type: 'relationship',
+          relationTo: 'branding',
+        },
+      ],
+    },
+    {
+      name: 'channels',
+      type: 'relationship',
+      relationTo: 'channels',
+      hasMany: true,
+    },
+    {
       name: 'body',
       type: 'richText',
-      required: true,
       editor: lexicalEditor({
         features: () => [
           HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
@@ -49,6 +99,7 @@ export const Templates: CollectionConfig = {
           BoldFeature(),
           ItalicFeature(),
           UnderlineFeature(),
+          FixedToolbarFeature(),
           BlocksFeature({
             blocks: [
               {
@@ -69,57 +120,17 @@ export const Templates: CollectionConfig = {
                     relationTo: 'variables',
                     required: true,
                   },
-                  {
-                    name: 'textToDisplay',
-                    type: 'text',
-                    admin: {
-                      components: {
-                        Field: {
-                          path: '/components/TextToDisplayInVars',
-                        },
-                      },
-                    },
-                  },
                 ],
-                admin: {
-                  components: {
-                    Label: {
-                      path: '/components/CustomInlineBlockLabel',
-                    },
-                  },
-                },
               },
-              // {
-              //   slug: 'cta',
-              //   fields: [
-              //     {
-              //       name: 'kind',
-              //       type: 'select',
-              //       options: ['approve', 'dismiss', 'snooze', 'openSelfService'],
-              //       required: true,
-              //     },
-              //     { name: 'label', type: 'text' },
-              //   ],
-              // },
             ],
-          }), // array of block configs
+          }),
         ],
       }),
     },
     {
-      type: 'row',
-      fields: [
-        { name: 'brandingRef', type: 'relationship', relationTo: 'branding-packages' },
-        { name: 'policyRefs', type: 'relationship', relationTo: 'policies', hasMany: true },
-      ],
-    },
-    {
-      name: 'channels',
-      type: 'group',
-      fields: [
-        { name: 'device', type: 'json' },
-        { name: 'teams', type: 'json' },
-      ],
+      name: 'isActive',
+      type: 'checkbox',
+      defaultValue: true,
     },
   ],
 }

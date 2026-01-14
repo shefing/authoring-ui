@@ -2,7 +2,7 @@ export function cn(...classes: Array<string | undefined | false | null>) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function deepReplacePlaceholders(input: any, vars: Record<string, any>) {
+export function deepReplacePlaceholders(input: any, vars: Record<string, any>): any {
   // Replace any string occurrences of {{key}} with provided values
   const replacer = (s: string) =>
     s.replace(/\{\{\s*([a-zA-Z][a-zA-Z0-9_\-]*)\s*\}\}/g, (_, key) =>
@@ -12,9 +12,9 @@ export function deepReplacePlaceholders(input: any, vars: Record<string, any>) {
   if (typeof input === 'string') return replacer(input)
   if (Array.isArray(input)) return input.map((v) => deepReplacePlaceholders(v, vars))
   if (input && typeof input === 'object') {
-    const out: any = Array.isArray(input) ? [] : {}
+    const out: Record<string, any> = {}
     for (const [k, v] of Object.entries(input)) {
-      out[k] = deepReplacePlaceholders(v as any, vars)
+      out[k] = deepReplacePlaceholders(v, vars)
     }
     return out
   }
