@@ -12,7 +12,6 @@ export const seed = async (payload: Payload): Promise<void> => {
   // Clear existing data
   console.log('  Clearing existing data...');
   await Promise.all([
-    payload.delete({ collection: 'media', where: { id: { exists: true } } }),
     payload.delete({ collection: 'divisions', where: { id: { exists: true } } }),
     payload.delete({ collection: 'user-groups', where: { id: { exists: true } } }),
     payload.delete({ collection: 'channels', where: { id: { exists: true } } }),
@@ -21,23 +20,6 @@ export const seed = async (payload: Payload): Promise<void> => {
     payload.delete({ collection: 'delivery-rules', where: { id: { exists: true } } }),
     payload.delete({ collection: 'messages', where: { id: { exists: true } } }),
   ]);
-
-  // 0. Media (for logos)
-  const media = await payload.create({
-    collection: 'media',
-    data: {
-      alt: 'Logo',
-    },
-    file: {
-      data: Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
-        'base64',
-      ),
-      name: 'logo.png',
-      mimetype: 'image/png',
-      size: 68,
-    },
-  });
 
   // 1. Divisions
   const divisions = await Promise.all([
@@ -273,7 +255,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
-        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
@@ -290,7 +271,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#7f1d1d',
         },
-        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
@@ -308,7 +288,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
-        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
@@ -326,7 +305,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
-        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
@@ -343,7 +321,6 @@ export const seed = async (payload: Payload): Promise<void> => {
           backgroundColor: '#ffffff',
           textColor: '#1e293b',
         },
-        logos: [{ logo: media.id }],
         isActive: true,
       },
     }),
