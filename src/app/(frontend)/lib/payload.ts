@@ -1,13 +1,11 @@
 const API_URL =
   process.env.PAYLOAD_API_URL ||
-  process.env.FRONTEND_PAYLOAD_API_URL ||
   process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
   '' // empty → use same-origin relative requests
-const API_TOKEN = process.env.PAYLOAD_API_TOKEN || process.env.FRONTEND_PAYLOAD_API_TOKEN
+const API_TOKEN = process.env.PAYLOAD_API_TOKEN
 
 if (
   !process.env.PAYLOAD_API_URL &&
-  !process.env.FRONTEND_PAYLOAD_API_URL &&
   !process.env.NEXT_PUBLIC_PAYLOAD_API_URL
 ) {
   // Same-origin fallback. This is fine for the co-located frontend.
