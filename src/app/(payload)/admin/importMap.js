@@ -12,6 +12,8 @@ import { LinkFeatureClient as LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { HeadingFeatureClient as HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SelectColorFont as SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { SelectColorBackground as SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
+import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
+import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
   "@payloadcms/ui#SlugField": SlugField_3817bf644402e67bfe6577f60ef982de,
@@ -27,5 +29,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#LinkFeatureClient": LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HeadingFeatureClient": HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/components/color-picker/CustomTailWindColors#SelectColorFont": SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3,
-  "/components/color-picker/CustomTailWindColors#SelectColorBackground": SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3
+  "/components/color-picker/CustomTailWindColors#SelectColorBackground": SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3,
+  "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
+  "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }
