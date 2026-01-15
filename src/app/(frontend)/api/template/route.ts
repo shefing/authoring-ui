@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { getTemplateById } from '../../lib/payload'
+import { getTemplateByIdServer } from '../../lib/payload-server'
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
     let tpl: any
     try {
-      tpl = await getTemplateById(id, { draft })
+      tpl = await getTemplateByIdServer(id, { draft })
     } catch (e: any) {
       const msg = String(e?.message || '')
       const status = /\b404\b/.test(msg) ? 404 : 502

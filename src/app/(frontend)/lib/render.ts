@@ -1,4 +1,4 @@
-import { deepReplacePlaceholders, extractPlainText } from './utils'
+import { deepReplacePlaceholders, extractPlainText, extractHtml } from './utils'
 
 export type PreviewInput = {
   template: any
@@ -6,8 +6,9 @@ export type PreviewInput = {
 }
 
 export function buildPreview({ template, variables }: PreviewInput) {
-  const bound = deepReplacePlaceholders(template?.body ?? template, variables)
-  const text = extractPlainText(bound)
+  const body = template?.body ?? template
+  const text = extractPlainText(body, variables)
+  const html = extractHtml(body, variables)
 
   const title = template?.name || template?.slug || 'Preview'
 
@@ -24,7 +25,11 @@ export function buildPreview({ template, variables }: PreviewInput) {
     version: '1.5',
     body: [
       { type: 'TextBlock', text: title, weight: 'Bolder', size: 'Medium' },
-      { type: 'TextBlock', text, wrap: true },
+      ...text.split('\n').filter(line => line.trim() !== '').map(line => ({
+        type: 'TextBlock',
+        text: line,
+        wrap: true
+      })),
     ],
     actions: (device.actions || []).map((a: any) => ({
       type: 'Action.Submit',
@@ -33,5 +38,5 @@ export function buildPreview({ template, variables }: PreviewInput) {
     })),
   }
 
-  return { title, text, device, teams }
+  return { title, text, html, device, teams }
 }

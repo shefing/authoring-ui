@@ -17,7 +17,12 @@ export default function ClientComposer({
   templates,
   initialTemplateId,
   initialDraft,
-}: Props & { initialTemplateId?: string; initialDraft?: boolean }) {
+  initialTemplateData,
+}: Props & {
+  initialTemplateId?: string
+  initialDraft?: boolean
+  initialTemplateData?: any
+}) {
   const [templateId, setTemplateId] = React.useState<string>(initialTemplateId || '')
   const [draft, setDraft] = React.useState(!!initialDraft)
   const [rows, setRows] = React.useState<VarRow[]>([
@@ -26,9 +31,19 @@ export default function ClientComposer({
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [preview, setPreview] = React.useState<any | null>(null)
-  const [tplJson, setTplJson] = React.useState<any | null>(null)
-  const [inlineVars, setInlineVars] = React.useState<VarDef[]>([])
-  const [inlineValues, setInlineValues] = React.useState<Record<string, string>>({})
+  const [tplJson, setTplJson] = React.useState<any | null>(initialTemplateData || null)
+  const [inlineVars, setInlineVars] = React.useState<VarDef[]>(
+    initialTemplateData ? extractInlineVarDefs(initialTemplateData) : [],
+  )
+  const [inlineValues, setInlineValues] = React.useState<Record<string, string>>(() => {
+    if (!initialTemplateData) return {}
+    const defs = extractInlineVarDefs(initialTemplateData)
+    const init: Record<string, string> = {}
+    for (const d of defs) {
+      if (d.sampleValue != null) init[d.key] = String(d.sampleValue)
+    }
+    return init
+  })
   const [branding, setBranding] = React.useState<any | null>(null)
   const [showPopup, setShowPopup] = React.useState(false)
   const [validationErrors, setValidationErrors] = React.useState<Set<string>>(new Set())
@@ -306,23 +321,36 @@ export default function ClientComposer({
             <CardContent>
               {preview ? (
                 <div className="space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold">HTML Rendered (Raw)</h3>
+                    <div className="max-h-64 overflow-auto rounded border border-gray-200 bg-white p-3 text-sm">
+                      <div dangerouslySetInnerHTML={{ __html: preview.html }} />
+                    </div>
+                  </div>
                   {showPopup && (
                     <MessagePreview
                       content={{
                         title: preview.title || 'Message',
-                        body: tplJson?.body || preview.text || 'No content',
+                        body: tplJson?.body || 'No content',
                         actions: preview.device?.actions || [],
                       }}
                       branding={branding}
                       asPopup={true}
                       onClose={handleClosePopup}
                       variableValues={inlineValues}
+                      previewHtml={preview.html}
                     />
                   )}
                   <div className="space-y-2">
                     <h3 className="text-sm font-semibold">Generated JSON (Device)</h3>
                     <pre className="max-h-64 overflow-auto rounded bg-gray-50 p-3 text-xs">
                       {JSON.stringify(preview.device, null, 2)}
+                    </pre>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold text-red-600">Debug: Lexical JSON (Raw)</h3>
+                    <pre className="max-h-64 overflow-auto rounded border border-red-200 bg-red-50 p-3 text-xs">
+                      {JSON.stringify(tplJson?.body || tplJson, null, 2)}
                     </pre>
                   </div>
                 </div>

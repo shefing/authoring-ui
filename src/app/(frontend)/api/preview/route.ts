@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { getTemplateById } from '../../lib/payload'
+import { getTemplateByIdServer } from '../../lib/payload-server'
 import { buildPreview } from '../../lib/render'
 
 // Simple in-memory rate limiter per process (IP → {count, reset})
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     // Fetch template and build preview
     let tpl: any
     try {
-      tpl = await getTemplateById(templateId, { draft: !!draft })
+      tpl = await getTemplateByIdServer(templateId, { draft: !!draft })
     } catch (e: any) {
       const msg = String(e?.message || '')
       const status = /\b404\b/.test(msg) ? 404 : 502

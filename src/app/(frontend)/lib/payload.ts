@@ -54,7 +54,7 @@ export async function payloadPost(path: string, body: any, init?: RequestInit) {
   return res.json()
 }
 
-export type TemplateSummary = { id: string; name: string; slug: string; _status?: string }
+export type TemplateSummary = { id: string; name: string; slug: string; _status?: string | null }
 
 export async function listPublishedTemplates(): Promise<TemplateSummary[]> {
   const data = await payloadGet(`/api/templates?limit=100`)

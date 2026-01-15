@@ -301,6 +301,7 @@ export function RichTextRenderer({
       return (
         <div style={{ marginBottom: spacing.medium || '16px' }}>
           {lexicalContent.root.children.map((node, idx) => renderLexicalNode(node, idx))}
+          <div style={{ height: spacing.small || '12px' }} />
         </div>
       )
     }

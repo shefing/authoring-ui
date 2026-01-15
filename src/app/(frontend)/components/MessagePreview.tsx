@@ -39,6 +39,7 @@ type MessagePreviewProps = {
   asPopup?: boolean
   onClose?: () => void
   variableValues?: Record<string, string>
+  previewHtml?: string
 }
 
 export function MessagePreview({
@@ -47,6 +48,7 @@ export function MessagePreview({
   asPopup = false,
   onClose,
   variableValues = {},
+  previewHtml,
 }: MessagePreviewProps) {
   const colors = branding?.themeTokens?.colors || {}
   const spacing = branding?.themeTokens?.spacing || {}
@@ -313,26 +315,38 @@ export function MessagePreview({
     <div style={styles.container}>
       {renderHeader()}
 
-      <RichTextRenderer
-        content={content.body}
-        textSize={textSize}
-        colors={colors}
-        spacing={spacing}
-        radii={radii}
-        variableValues={variableValues}
-        customButtons={
-          approveBtn
-            ? [
-                {
-                  kind: 'approve',
-                  label: approveBtn.label || 'Approve',
-                  backgroundColor: approveBtn.bgColor || '#3b82f6',
-                  textColor: approveBtn.textColor || '#ffffff',
-                },
-              ]
-            : []
-        }
-      />
+      {previewHtml ? (
+        <div
+          style={{
+            fontSize: `${textSize}px`,
+            lineHeight: 1.5,
+            color: colors.text || '#374151',
+            marginBottom: spacing.medium || '16px',
+          }}
+          dangerouslySetInnerHTML={{ __html: previewHtml }}
+        />
+      ) : (
+        <RichTextRenderer
+          content={content.body}
+          textSize={textSize}
+          colors={colors}
+          spacing={spacing}
+          radii={radii}
+          variableValues={variableValues}
+          customButtons={
+            approveBtn
+              ? [
+                  {
+                    kind: 'approve',
+                    label: approveBtn.label || 'Approve',
+                    backgroundColor: approveBtn.bgColor || '#3b82f6',
+                    textColor: approveBtn.textColor || '#ffffff',
+                  },
+                ]
+              : []
+          }
+        />
+      )}
 
       {((content.actions && content.actions.length > 0) || showApproveButton) && (
         <div style={styles.actions}>
