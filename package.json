@@ -26,6 +26,7 @@
     "@modernaut/payload-color-swatch-field": "^1.2.1",
     "@payloadcms/db-mongodb": "3.71.1",
     "@payloadcms/email-nodemailer": "^3.72.0",
+    "@payloadcms/live-preview-react": "^3.72.0",
     "@payloadcms/next": "3.71.1",
     "@payloadcms/payload-cloud": "^3.72.0",
     "@payloadcms/plugin-import-export": "^3.72.0",

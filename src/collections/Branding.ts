@@ -9,6 +9,13 @@ export const Branding: CollectionConfig = {
     enableQueryPresets: true,
     admin: {
         useAsTitle: 'name',
+        livePreview: {
+            url: ({ data }: { data: any }) => {
+                const url = new URL('/preview/branding', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+                url.searchParams.set('id', data.id)
+                return url.toString()
+            },
+        },
     },
     access: {
         read: () => true,
@@ -106,28 +113,9 @@ export const Branding: CollectionConfig = {
                             ],
                         },
                         {
-                            name: 'colors',
+                            name: 'titleTypography',
                             type: 'group',
-                            label: 'Brand Colors',
-                            fields: [
-                                {
-                                    type: 'row',
-                                    fields: [
-                                        createColorField({name: 'primaryColor', label: 'Primary Color'}),
-                                        createColorField({name: 'secondaryColor', label: 'Secondary Color'}),
-                                        createBackgroundColorField({
-                                            name: 'backgroundColor',
-                                            label: 'Background Color'
-                                        }),
-                                        createColorField({name: 'textColor', label: 'Text Color'}),
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            name: 'fonts',
-                            type: 'group',
-                            label: 'Typography',
+                            label: 'Title Typography',
                             fields: [
                                 {
                                     type: 'row',
@@ -139,23 +127,69 @@ export const Branding: CollectionConfig = {
                                 },
                             ],
                         },
+                        {
+                            name: 'messageTypography',
+                            type: 'group',
+                            label: 'Message Typography',
+                            fields: [
+                                {
+                                    type: 'row',
+                                    fields: [
+                                        createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
+                                        createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                        createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
+                                    ],
+                                },
+                            ],
+                        },
+
+                        {
+                            name: 'colors',
+                            type: 'group',
+                            label: 'Brand Colors',
+                            fields: [
+                                {
+                                    type: 'row',
+                                    fields: [
+                                        createColorField({name: 'actionPrimaryColor', label: 'Title Text'}),
+                                        createColorField({name: 'actionSecondaryColor', label: 'Border'}),
+                                        createBackgroundColorField({
+                                            name: 'messageBackgroundColor',
+                                            label: 'Message Background'
+                                        }),
+                                        createColorField({name: 'messageTextColor', label: 'Message Text'}),
+                                    ],
+                                },
+                            ],
+                        },
+                        {
+                            name: 'buttonStyles',
+                            type: 'group',
+                            label: 'Button Styles', // Empty label to minimize name visibility
+                            admin: {
+                                hideGutter: true,
+                            },
+                            fields: [
+                                {
+                                    type: 'row',
+                                    fields: [
+                                        createColorField({name: 'approveBgColor', label: 'Approve Background'}),
+                                        createColorField({name: 'approveTextColor', label: 'Approve Text'}),
+                                        createColorField({name: 'dismissBgColor', label: 'Dismiss Background'}),
+                                        createColorField({name: 'dismissTextColor', label: 'Dismiss Text'}),
+                                    ],
+                                },
+                            ],
+                        },
                     ],
                 },
                 {
                     label: 'Assets & CSS',
                     fields: [
                         {
-                            name: 'logos',
-                            type: 'array',
-                            label: 'Theme Logos',
-                            fields: [
-                                {
-                                    name: 'logo',
-                                    type: 'relationship',
-                                    relationTo: 'media',
-                                    required: true,
-                                },
-                            ],
+                            name: 'logo',
+                            type: 'relationship',
+                            relationTo: 'media',
                         },
                         {
                             name: 'customCSS',

@@ -2,11 +2,12 @@
 import * as React from 'react'
 import type {MessageContent} from '../lib/messages'
 import {RichTextRenderer} from './RichTextRenderer'
+import {resolveTailwindColor} from '../lib/utils'
 
 type BrandingPackage = {
   generalStyling?: {
-    textColorText?: string
-    backgroundColorText?: string
+    messageTextColor?: string
+    messageBackgroundColor?: string
     direction?: 'ltr' | 'rtl'
     messageWidth?: number
     titleAlign?: 'left' | 'center' | 'right'
@@ -29,7 +30,16 @@ type BrandingPackage = {
     colors?: Record<string, string>
     spacing?: Record<string, string>
     radii?: Record<string, string>
-    typography?: Record<string, any>
+    typography?: {
+      fontFamily?: string
+      fontSize?: string | number
+      fontWeight?: string | number
+    }
+    titleTypography?: {
+      fontFamily?: string
+      fontSize?: string | number
+      fontWeight?: string | number
+    }
   }
 }
 
@@ -53,7 +63,40 @@ export function MessagePreview({
   const colors = branding?.themeTokens?.colors || {}
   const spacing = branding?.themeTokens?.spacing || {}
   const radii = branding?.themeTokens?.radii || {}
-  const textSize = 16
+  const typography = branding?.themeTokens?.typography || {}
+  const titleTypography = branding?.themeTokens?.titleTypography || {}
+  
+  // Dynamically load font families if they are not already present
+  React.useEffect(() => {
+    const fontsToLoad = new Set<string>()
+    if (typography.fontFamily) fontsToLoad.add(typography.fontFamily)
+    if (titleTypography.fontFamily) fontsToLoad.add(titleTypography.fontFamily)
+    
+    fontsToLoad.forEach(font => {
+      // Very basic check - if it has spaces or looks like a Google Font name, try to load it
+      if (font && !['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', '-apple-system'].includes(font.toLowerCase())) {
+        const linkId = `font-${font.replace(/\s+/g, '-').toLowerCase()}`
+        if (!document.getElementById(linkId)) {
+          console.log(`[DEBUG_LOG] Loading font: ${font}`);
+          const link = document.createElement('link')
+          link.id = linkId
+          link.rel = 'stylesheet'
+          link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/\s+/g, '+')}:wght@100;200;300;400;500;600;700;800;900&display=swap`
+          document.head.appendChild(link)
+        }
+      }
+    })
+  }, [typography.fontFamily, titleTypography.fontFamily])
+
+  const parseFontSize = (size: string | number | undefined, defaultValue: number): number => {
+    if (size === undefined || size === null || size === '') return defaultValue
+    if (typeof size === 'number') return size
+    const parsed = parseFloat(size)
+    return isNaN(parsed) ? defaultValue : parsed
+  }
+
+  const textSize = parseFontSize(typography.fontSize, 16)
+  const titleTextSize = parseFontSize(titleTypography.fontSize, textSize * 1.25)
 
   // Extract settings from branding
   const generalStyling = branding?.generalStyling || {}
@@ -75,28 +118,34 @@ export function MessagePreview({
   const signaturePosition = signature.position || 'center'
 
   // Determine what to show based on availability in branding
-  const showTitle = true // Always show title
+  const showTitle = !!content?.title
   const showLogo = !!logoSettings.logo?.url
-  const showApproveButton = !!approveBtn.label
   const showSignature = !!signature.text
 
   // Get button style by action kind
-  const getButtonStyle = (actionKind: string) => {
-    if (actionKind === 'approve' && approveBtn) {
+  const getButtonStyle = React.useCallback((actionKind: string) => {
+    if (actionKind === 'approve') {
       return {
-        backgroundColor: approveBtn.bgColor || '#3b82f6',
-        color: approveBtn.textColor || '#ffffff',
+        backgroundColor: resolveTailwindColor(approveBtn.bgColor || colors.primary || '#3b82f6'),
+        color: resolveTailwindColor(approveBtn.textColor || colors.buttonText || '#ffffff'),
         label: approveBtn.label || 'Approve',
       }
     }
+    if (actionKind === 'dismiss') {
+      return {
+        backgroundColor: resolveTailwindColor((branding as any)?.buttonStyles?.dismissBgColor || (branding as any)?.colors?.actionSecondaryColor || colors.secondary || '#6b7280'),
+        color: resolveTailwindColor((branding as any)?.buttonStyles?.dismissTextColor || colors.buttonText || '#ffffff'),
+        label: 'Dismiss',
+      }
+    }
     return {
-      backgroundColor: colors.primary || '#3b82f6',
-      color: colors.buttonText || '#ffffff',
+      backgroundColor: resolveTailwindColor(colors.primary || '#3b82f6'),
+      color: resolveTailwindColor(colors.buttonText || '#ffffff'),
       label: null,
     }
-  }
+  }, [approveBtn.bgColor, approveBtn.label, approveBtn.textColor, branding, colors.buttonText, colors.primary, colors.secondary])
 
-  const styles = {
+  const styles = React.useMemo(() => ({
     overlay: {
       position: 'fixed' as const,
       top: 0,
@@ -136,14 +185,20 @@ export function MessagePreview({
       lineHeight: 1,
     },
     container: {
-      backgroundColor: generalStyling.backgroundColorText || colors.background || '#ffffff',
-      color: generalStyling.textColorText || colors.text || '#000000',
+      backgroundColor: resolveTailwindColor((branding as any)?.colors?.messageBackgroundColor || branding?.themeTokens?.colors?.background || colors.background || '#ffffff'),
+      color: resolveTailwindColor((branding as any)?.colors?.messageTextColor || branding?.themeTokens?.colors?.text || colors.text || '#000000'),
       padding: spacing.medium || '16px',
       borderRadius: radii.medium || '8px',
-      border: `1px solid ${colors.border || '#e5e7eb'}`,
-      width: `${messageWidth}px`,
-      fontFamily: 'system-ui, -apple-system, sans-serif',
+      border: `1px solid ${resolveTailwindColor((branding as any)?.colors?.actionSecondaryColor || colors.border || '#e5e7eb')}`,
+      width: (messageWidth as any) === '100%' ? '100%' : `${messageWidth}px`,
+      maxWidth: '100%',
+      fontFamily: typography.fontFamily ? `${typography.fontFamily}, system-ui, -apple-system, sans-serif` : 'system-ui, -apple-system, sans-serif',
+      fontSize: typeof typography.fontSize === 'number' ? `${typography.fontSize}px` : (typography.fontSize || `${textSize}px`),
+      fontWeight: typography.fontWeight === 'italic' || typography.fontWeight === 'bold-italic' ? 'normal' : (typography.fontWeight || 'normal'),
+      fontStyle: typography.fontWeight === 'italic' || typography.fontWeight === 'bold-italic' ? 'italic' : 'normal',
       direction: direction,
+      margin: '0 auto',
+      textAlign: 'left' as const, // Default text alignment for body
       ...(asPopup && {
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
         maxHeight: '90vh',
@@ -175,7 +230,6 @@ export function MessagePreview({
     },
     headerBlock: {
       marginBottom: spacing.medium || '16px',
-      textAlign: titleAlignment as 'left' | 'center' | 'right',
     },
     logo: {
       width: '40px',
@@ -184,10 +238,18 @@ export function MessagePreview({
       borderRadius: radii.small || '4px',
     },
     title: {
-      fontSize: `${textSize * 1.25}px`,
-      fontWeight: 600,
-      color: colors.primary || '#1f2937',
+      fontSize: typeof titleTypography.fontSize === 'number' ? `${titleTypography.fontSize}px` : titleTypography.fontSize || `${titleTextSize}px`,
+      fontWeight: titleTypography.fontWeight === 'italic' || titleTypography.fontWeight === 'bold-italic' ? 'normal' : (titleTypography.fontWeight || 600),
+      fontStyle: titleTypography.fontWeight === 'italic' || titleTypography.fontWeight === 'bold-italic' ? 'italic' : 'normal',
+      color: resolveTailwindColor((branding as any)?.colors?.actionPrimaryColor || colors.primary || '#1f2937'),
       margin: 0,
+      fontFamily: titleTypography.fontFamily ? `${titleTypography.fontFamily}, ${typography.fontFamily ? `${typography.fontFamily}, ` : ''}system-ui, -apple-system, sans-serif` : 'inherit',
+      textAlign: titleAlignment as 'left' | 'center' | 'right',
+      display: 'block', // Ensure it behaves like a block element since we're using div
+      lineHeight: 1.2,
+      borderBottom: `2px solid ${resolveTailwindColor((branding as any)?.colors?.actionSecondaryColor || colors.secondary || 'transparent')}`,
+      paddingBottom: (branding as any)?.colors?.actionSecondaryColor ? '8px' : '0',
+      marginBottom: (branding as any)?.colors?.actionSecondaryColor ? '16px' : '0',
     },
 
     actions: {
@@ -209,9 +271,9 @@ export function MessagePreview({
       color: colors.textMuted || '#6b7280',
       fontStyle: 'italic',
     },
-  }
+  }), [asPopup, branding, buttonsAlignment, colors.background, colors.border, colors.primary, colors.text, colors.textMuted, direction, logoPosition, messageWidth, radii.medium, radii.small, spacing.medium, spacing.small, titleAlignment, titleTextSize, titleTypography.fontWeight, titleTypography.fontSize, titleTypography.fontFamily, typography.fontFamily, typography.fontSize, typography.fontWeight, textSize])
 
-  const getButtonStyles = (actionKind: string) => {
+  const getButtonStyles = React.useCallback((actionKind: string) => {
     const buttonStyle = getButtonStyle(actionKind)
     return {
       padding: `${spacing.xsmall || '8px'} ${spacing.small || '12px'}`,
@@ -224,7 +286,7 @@ export function MessagePreview({
       cursor: 'pointer',
       transition: 'opacity 0.2s',
     }
-  }
+  }, [getButtonStyle, radii.small, spacing.small, spacing.xsmall, textSize])
 
   const renderHeader = () => {
     if (!showTitle && !showLogo) return null
@@ -241,7 +303,7 @@ export function MessagePreview({
           </div>
           {showTitle && (
             <div style={styles.headerBlock}>
-              <h2 style={styles.title}>{content.title}</h2>
+              <div style={styles.title}>{content.title}</div>
             </div>
           )}
         </>
@@ -254,7 +316,7 @@ export function MessagePreview({
         <>
           {showTitle && (
             <div style={styles.headerBlock}>
-              <h2 style={styles.title}>{content.title}</h2>
+              <div style={styles.title}>{content.title}</div>
             </div>
           )}
           <div style={styles.logoContainer}>
@@ -273,7 +335,7 @@ export function MessagePreview({
           </div>
           {showTitle && (
             <div style={styles.headerBlock}>
-              <h2 style={styles.title}>{content.title}</h2>
+              <div style={styles.title}>{content.title}</div>
             </div>
           )}
         </>
@@ -285,7 +347,7 @@ export function MessagePreview({
       return (
         <div style={styles.headerInline}>
           <img src={logoUrl} alt="Logo" style={styles.logo} />
-          <h2 style={styles.title}>{content.title}</h2>
+          <div style={styles.title}>{content.title}</div>
         </div>
       )
     }
@@ -294,7 +356,7 @@ export function MessagePreview({
     if (showTitle) {
       return (
         <div style={styles.headerBlock}>
-          <h2 style={styles.title}>{content.title}</h2>
+          <div style={styles.title}>{content.title}</div>
         </div>
       )
     }
@@ -318,10 +380,12 @@ export function MessagePreview({
       {previewHtml ? (
         <div
           style={{
-            fontSize: `${textSize}px`,
+            fontSize: 'inherit',
             lineHeight: 1.5,
-            color: colors.text || '#374151',
+            color: 'inherit',
             marginBottom: spacing.medium || '16px',
+            whiteSpace: 'pre-wrap',
+            fontFamily: 'inherit',
           }}
           dangerouslySetInnerHTML={{ __html: previewHtml }}
         />
@@ -333,34 +397,12 @@ export function MessagePreview({
           spacing={spacing}
           radii={radii}
           variableValues={variableValues}
-          customButtons={
-            approveBtn
-              ? [
-                  {
-                    kind: 'approve',
-                    label: approveBtn.label || 'Approve',
-                    backgroundColor: approveBtn.bgColor || '#3b82f6',
-                    textColor: approveBtn.textColor || '#ffffff',
-                  },
-                ]
-              : []
-          }
+          customButtons={[]}
         />
       )}
 
-      {((content.actions && content.actions.length > 0) || showApproveButton) && (
+      {(content.actions && content.actions.length > 0) && (
         <div style={styles.actions}>
-          {showApproveButton && (
-            <button
-              type="button"
-              style={getButtonStyles('approve')}
-              onClick={() => onClose?.()}
-              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.9')}
-              onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
-            >
-              {approveBtn.label || 'Approve'}
-            </button>
-          )}
           {content.actions?.map((action, idx) => {
             const buttonStyle = getButtonStyle(action.kind)
             return (

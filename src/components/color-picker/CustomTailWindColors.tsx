@@ -1,11 +1,12 @@
 'use client'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {FieldLabel, useField} from '@payloadcms/ui'
 import {Button} from './components/button'
 import {Popover, PopoverContent, PopoverTrigger} from './components/popover'
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from './components/command'
 import {cn} from './lib/utils'
 import {Paintbrush} from 'lucide-react'
+import {resolveTailwindColor} from '@/app/(frontend)/lib/utils'
 import TailWindColors from './TailWindColors'
 import {SelectFieldClientProps} from 'payload'
 
@@ -56,25 +57,36 @@ export const SelectColor: React.FC<Props> = (props) => {
   const { path } = props
   const { isFont, isBackground, field } = props
   const { value, setValue } = useField<string>({ path })
+  const [inputValue, setInputValue] = useState(value || '')
   const [open, setOpen] = useState(false)
-  const [backgroundColor, setBackgroundColor] = useState(
-    (isBackground && colors.find((color) => color.value === value)?.color) || '#FFFFFF',
-  )
-  const [fontColor, setFontColor] = useState(
-    (isFont && colors.find((color) => color.value === value)?.color) || '#000000',
-  )
-  const [selectColor, setSelectColor] = useState(
-    colors.find((color) => color.value === value) || null,
-  )
+  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF')
+  const [fontColor, setFontColor] = useState('#000000')
+  const [selectColor, setSelectColor] = useState<{ color: string; value: string; label: string } | null>(null)
   const labelToUse = field.label ? field.label : 'Color'
+
+  useEffect(() => {
+    if (value !== undefined && value !== inputValue) {
+      console.log(`[DEBUG_LOG] SelectColor syncing value for ${path}: ${value}`);
+      setInputValue(value || '')
+    }
+  }, [value, path])
+
+  useEffect(() => {
+    const obj = colors.find((color) => color.value === inputValue) || null
+    setSelectColor(obj)
+    
+    // Use the found object's color if available, otherwise try to resolve it from the name
+    const colorHex = obj?.color || (inputValue ? resolveTailwindColor(inputValue) : null)
+    
+    if (isFont) setFontColor(colorHex || '#000000')
+    if (isBackground) setBackgroundColor(colorHex || '#FFFFFF')
+  }, [inputValue, isFont, isBackground])
 
   const handleSelect = (label: string) => {
     const obj = colors.find((color) => color.label === label) || null
-    setSelectColor(obj)
+    console.log(`[DEBUG_LOG] SelectColor handleSelect: ${label}, value: ${obj?.value}`);
+    setInputValue(obj?.value || '')
     setValue(obj?.value)
-    const color = obj?.color
-    isFont && color && setFontColor(color)
-    isBackground && color && setBackgroundColor(color)
     setOpen(false)
   }
 
@@ -97,16 +109,16 @@ export const SelectColor: React.FC<Props> = (props) => {
             style={{ backgroundColor: backgroundColor }}
           >
             <div className="comp w-full flex items-center gap-2">
-              {selectColor ? (
+              {(selectColor || inputValue) ? (
                 <div
                   className="comp h-4 w-4 rounded !bg-center !bg-cover transition-all"
-                  style={{ backgroundColor: selectColor ? selectColor.color : 'transparent' }}
+                  style={{ backgroundColor: selectColor ? selectColor.color : (inputValue ? resolveTailwindColor(inputValue) : 'transparent') }}
                 />
               ) : (
                 <Paintbrush className="h-4 w-4" />
               )}
               <div className="comp truncate flex-1" style={{ color: fontColor }}>
-                {selectColor ? selectColor.value : 'Pick a color'}
+                {selectColor ? selectColor.value : (inputValue || 'Pick a color')}
               </div>
             </div>
           </Button>

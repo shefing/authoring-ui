@@ -280,23 +280,29 @@ export interface Branding {
   isActive?: boolean | null;
   division?: (string | null) | Division;
   messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
-  colors?: {
-    primaryColor?: string | null;
-    secondaryColor?: string | null;
-    backgroundColor?: string | null;
-    textColor?: string | null;
-  };
-  fonts?: {
+  titleTypography?: {
     fontFamily?: string | null;
     fontSize?: string | null;
     fontWeight?: string | null;
   };
-  logos?:
-    | {
-        logo: string | Media;
-        id?: string | null;
-      }[]
-    | null;
+  messageTypography?: {
+    fontFamily?: string | null;
+    fontSize?: string | null;
+    fontWeight?: string | null;
+  };
+  colors?: {
+    actionPrimaryColor?: string | null;
+    actionSecondaryColor?: string | null;
+    messageBackgroundColor?: string | null;
+    messageTextColor?: string | null;
+  };
+  buttonStyles?: {
+    approveBgColor?: string | null;
+    approveTextColor?: string | null;
+    dismissBgColor?: string | null;
+    dismissTextColor?: string | null;
+  };
+  logo?: (string | null) | Media;
   /**
    * Advanced CSS customization
    */
@@ -1089,27 +1095,37 @@ export interface BrandingSelect<T extends boolean = true> {
   isActive?: T;
   division?: T;
   messageType?: T;
-  colors?:
-    | T
-    | {
-        primaryColor?: T;
-        secondaryColor?: T;
-        backgroundColor?: T;
-        textColor?: T;
-      };
-  fonts?:
+  titleTypography?:
     | T
     | {
         fontFamily?: T;
         fontSize?: T;
         fontWeight?: T;
       };
-  logos?:
+  messageTypography?:
     | T
     | {
-        logo?: T;
-        id?: T;
+        fontFamily?: T;
+        fontSize?: T;
+        fontWeight?: T;
       };
+  colors?:
+    | T
+    | {
+        actionPrimaryColor?: T;
+        actionSecondaryColor?: T;
+        messageBackgroundColor?: T;
+        messageTextColor?: T;
+      };
+  buttonStyles?:
+    | T
+    | {
+        approveBgColor?: T;
+        approveTextColor?: T;
+        dismissBgColor?: T;
+        dismissTextColor?: T;
+      };
+  logo?: T;
   customCSS?: T;
   creator?: T;
   updator?: T;

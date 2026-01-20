@@ -19,7 +19,7 @@ type LexicalContent = {
 
 type RichTextRendererProps = {
   content: any
-  textSize?: number
+  textSize?: number | string
   colors?: Record<string, string>
   spacing?: Record<string, string>
   radii?: Record<string, string>
@@ -43,7 +43,7 @@ export function RichTextRenderer({
   customButtons = [],
   variableValues = {},
 }: RichTextRendererProps) {
-  const getButtonStyle = (actionKind: string) => {
+  const getButtonStyle = React.useCallback((actionKind: string) => {
     const customButton = customButtons.find((btn) => btn.kind === actionKind)
     if (customButton) {
       return {
@@ -57,24 +57,25 @@ export function RichTextRenderer({
       color: colors.buttonText || '#ffffff',
       label: null,
     }
-  }
+  }, [colors.buttonText, colors.primary, customButtons])
 
-  const getButtonStyles = (actionKind: string) => {
+  const getButtonStyles = React.useCallback((actionKind: string) => {
     const buttonStyle = getButtonStyle(actionKind)
+    const baseSize = typeof textSize === 'number' ? textSize : parseFloat(String(textSize)) || 16;
     return {
       padding: `${spacing.xsmall || '8px'} ${spacing.small || '12px'}`,
       backgroundColor: buttonStyle.backgroundColor,
       color: buttonStyle.color,
       border: 'none',
       borderRadius: radii.small || '4px',
-      fontSize: `${textSize * 0.875}px`,
+      fontSize: `${baseSize * 0.875}px`,
       fontWeight: 500,
       cursor: 'pointer',
       transition: 'opacity 0.2s',
     }
-  }
+  }, [getButtonStyle, radii.small, spacing.small, spacing.xsmall, textSize])
 
-  const renderLexicalNode = (node: LexicalNode, index: number): React.ReactNode => {
+  const renderLexicalNode = React.useCallback((node: LexicalNode, index: number, renderFn: (node: LexicalNode, index: number, fn: any) => React.ReactNode): React.ReactNode => {
     if (!node) return null
 
     // Text node
@@ -118,11 +119,13 @@ export function RichTextRenderer({
           key={index}
           style={{
             margin: `${spacing.small || '12px'} 0`,
-            fontSize: `${textSize}px`,
+            fontSize: 'inherit',
             lineHeight: 1.5,
+            fontFamily: 'inherit',
+            color: 'inherit', // Ensure it inherits color from container
           }}
         >
-          {node.children?.map((child, idx) => renderLexicalNode(child, idx))}
+          {node.children?.map((child, idx) => renderFn(child, idx, renderFn))}
         </p>
       )
     }
@@ -130,10 +133,12 @@ export function RichTextRenderer({
     // Heading nodes
     if (node.type === 'heading') {
       const HeadingTag = node.tag || 'h2'
-      const headingSizes: Record<string, number> = {
-        h1: textSize * 2,
-        h2: textSize * 1.5,
-        h3: textSize * 1.25,
+      // Use numeric values for calculation, but fallback to strings if necessary
+      const baseSize = typeof textSize === 'number' ? textSize : parseFloat(String(textSize)) || 16;
+      const headingSizes: Record<string, string> = {
+        h1: `${baseSize * 2}px`,
+        h2: `${baseSize * 1.5}px`,
+        h3: `${baseSize * 1.25}px`,
       }
 
       return React.createElement(
@@ -141,13 +146,13 @@ export function RichTextRenderer({
         {
           key: index,
           style: {
-            fontSize: `${headingSizes[HeadingTag] || textSize * 1.5}px`,
+            fontSize: headingSizes[HeadingTag] || `${baseSize * 1.5}px`,
             fontWeight: 600,
             margin: `${spacing.medium || '16px'} 0 ${spacing.small || '12px'} 0`,
             color: colors.text || '#374151',
           },
         },
-        node.children?.map((child, idx) => renderLexicalNode(child, idx)),
+        node.children?.map((child, idx) => renderFn(child, idx, renderFn)),
       )
     }
 
@@ -164,7 +169,7 @@ export function RichTextRenderer({
             color: colors.textMuted || '#6b7280',
           }}
         >
-          {node.children?.map((child, idx) => renderLexicalNode(child, idx))}
+          {node.children?.map((child, idx) => renderFn(child, idx, renderFn))}
         </blockquote>
       )
     }
@@ -287,20 +292,20 @@ export function RichTextRenderer({
     // Fallback for unknown nodes
     if (node.children) {
       return (
-        <div key={index}>{node.children.map((child, idx) => renderLexicalNode(child, idx))}</div>
+        <div key={index}>{node.children.map((child, idx) => renderFn(child, idx, renderFn))}</div>
       )
     }
 
     return null
-  }
+  }, [colors.primary, colors.text, colors.textMuted, getButtonStyles, onButtonClick, radii.small, spacing.medium, spacing.small, textSize, variableValues])
 
   // Check if content is a Lexical rich text object
-  if (typeof content === 'object' && content !== null) {
+  if (typeof content === 'object' && content !== null && !Array.isArray(content)) {
     const lexicalContent = content as LexicalContent
     if (lexicalContent.root?.children) {
       return (
-        <div style={{ marginBottom: spacing.medium || '16px' }}>
-          {lexicalContent.root.children.map((node, idx) => renderLexicalNode(node, idx))}
+        <div style={{ marginBottom: spacing.medium || '16px', color: 'inherit', fontFamily: 'inherit' }}>
+          {lexicalContent.root.children.map((node, idx) => renderLexicalNode(node, idx, renderLexicalNode))}
           <div style={{ height: spacing.small || '12px' }} />
         </div>
       )
@@ -311,11 +316,12 @@ export function RichTextRenderer({
   return (
     <div
       style={{
-        fontSize: `${textSize}px`,
+        fontSize: 'inherit',
         lineHeight: 1.5,
-        color: colors.text || '#374151',
+        color: 'inherit', // Inherit from container
         marginBottom: spacing.medium || '16px',
         whiteSpace: 'pre-wrap',
+        fontFamily: 'inherit',
       }}
     >
       {String(content)}

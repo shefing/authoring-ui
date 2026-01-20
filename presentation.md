@@ -218,7 +218,7 @@ export const Theme: GlobalConfig = {
   access: { read: () => true }, // Publicly readable
   fields: [
     {
-      name: 'primaryColor',
+      name: 'actionPrimaryColor',
       type: 'text', // Users select brand color
       defaultValue: '#007bff',
     },

@@ -31,3 +31,13 @@ export async function getTemplateByIdServer(id: string, opts?: { draft?: boolean
     depth: 2,
   })
 }
+
+export async function getBrandingByIdServer(id: string, opts?: { draft?: boolean }) {
+  const payload = await getPayloadInstance()
+  return await payload.findByID({
+    collection: 'branding',
+    id,
+    draft: opts?.draft,
+    depth: 1,
+  })
+}
