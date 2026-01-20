@@ -1,6 +1,7 @@
 import type {CollectionConfig} from 'payload'
 import {slugField} from 'payload'
 import {createBackgroundColorField, createColorField} from '@/components/color-picker/index'
+import {createFontFamilyField, createFontSizeField, createFontWeightField} from '@/components/font-picker/index'
 
 export const Branding: CollectionConfig = {
     slug: 'branding',
@@ -13,7 +14,7 @@ export const Branding: CollectionConfig = {
         read: () => true,
     },
     custom: {
-        filterList: [['isActive','scopeType','messageType']],
+        filterList: [['isActive', 'scopeType', 'messageType']],
     },
     fields: [
         {
@@ -23,6 +24,11 @@ export const Branding: CollectionConfig = {
                     name: 'name',
                     type: 'text',
                     required: true,
+                    admin: {
+                        style: {
+                            marginRight: '10px',
+                        },
+                    },
                 },
                 slugField({fieldToUse: 'name'}),
             ],
@@ -46,6 +52,11 @@ export const Branding: CollectionConfig = {
                                         {label: 'Message-Type specific', value: 'message-type'},
                                     ],
                                     defaultValue: 'all',
+                                    admin: {
+                                        style: {
+                                            marginRight: '10px',
+                                        },
+                                    },
                                 },
                                 {
                                     name: 'scopeType',
@@ -56,6 +67,11 @@ export const Branding: CollectionConfig = {
                                         {label: 'Division', value: 'division'},
                                         {label: 'Message-Type', value: 'message-type'},
                                     ],
+                                },
+                                {
+                                    name: 'isActive',
+                                    type: 'checkbox',
+                                    defaultValue: true,
                                 },
                             ],
                         },
@@ -68,6 +84,9 @@ export const Branding: CollectionConfig = {
                                     relationTo: 'divisions',
                                     admin: {
                                         condition: (data) => data.scope === 'division' || data.scopeType === 'division',
+                                        style: {
+                                            marginRight: '10px',
+                                        },
                                     },
                                 },
                                 {
@@ -113,18 +132,9 @@ export const Branding: CollectionConfig = {
                                 {
                                     type: 'row',
                                     fields: [
-                                        {
-                                            name: 'fontFamily',
-                                            type: 'text',
-                                        },
-                                        {
-                                            name: 'fontSize',
-                                            type: 'text',
-                                        },
-                                        {
-                                            name: 'fontWeight',
-                                            type: 'text',
-                                        },
+                                        createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
+                                        createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                        createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
                                     ],
                                 },
                             ],
@@ -157,16 +167,7 @@ export const Branding: CollectionConfig = {
                         },
                     ],
                 },
-                {
-                    label: 'Status',
-                    fields: [
-                        {
-                            name: 'isActive',
-                            type: 'checkbox',
-                            defaultValue: true,
-                        },
-                    ],
-                },
+
             ],
         },
     ],

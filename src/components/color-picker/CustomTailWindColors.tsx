@@ -79,7 +79,7 @@ export const SelectColor: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className="useTw">
+    <div className="useTw mr-10" >
       {
         <FieldLabel
           htmlFor={`bfColourPickerField-${path?.replace(/\./gi, '__')}`}
