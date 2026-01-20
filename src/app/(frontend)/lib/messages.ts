@@ -1,5 +1,5 @@
 export type MessageContent = {
   title: string
-  body: string | any // Can be plain string or Lexical rich text object
+  body: string | object
   actions?: Array<{ kind: string; label: string }>
 }

@@ -79,7 +79,7 @@ export function RichTextRenderer({
 
     // Text node
     if (node.type === 'text') {
-      let textStyle: React.CSSProperties = {}
+      const textStyle: React.CSSProperties = {}
       const decorations: string[] = []
 
       // Format: 1 = bold, 2 = italic, 4 = strikethrough, 8 = underline (bitwise flags)

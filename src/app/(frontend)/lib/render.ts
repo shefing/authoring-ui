@@ -1,8 +1,9 @@
-import { deepReplacePlaceholders, extractPlainText, extractHtml } from './utils'
+import { Template } from '@/payload-types'
+import {extractHtml, extractPlainText} from './utils'
 
 export type PreviewInput = {
-  template: any
-  variables: Record<string, any>
+  template: Template
+  variables: Record<string, unknown>
 }
 
 export function buildPreview({ template, variables }: PreviewInput) {
@@ -13,7 +14,7 @@ export function buildPreview({ template, variables }: PreviewInput) {
   const title = template?.name || template?.slug || 'Preview'
 
   const device = {
-    kind: template?.type === 'action' ? 'confirm' : 'info',
+    kind: template?.messageType === 'confirmation' ? 'confirm' : 'info',
     title,
     body: text,
     actions: [],
@@ -31,7 +32,7 @@ export function buildPreview({ template, variables }: PreviewInput) {
         wrap: true
       })),
     ],
-    actions: (device.actions || []).map((a: any) => ({
+    actions: (device.actions || []).map((a: { label?: string; kind: string }) => ({
       type: 'Action.Submit',
       title: a.label || a.kind,
       data: { action: a.kind },

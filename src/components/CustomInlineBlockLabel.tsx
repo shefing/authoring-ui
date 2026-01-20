@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useFormFields } from '@payloadcms/ui'
+import {useFormFields} from '@payloadcms/ui'
 
 const CustomInlineBlockLabel: React.FC = () => {
   const textToDisplay: string = useFormFields(([fields]) => {

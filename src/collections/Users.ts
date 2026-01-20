@@ -1,7 +1,8 @@
-import type { CollectionConfig } from 'payload'
+import type {CollectionConfig} from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'email',
   },

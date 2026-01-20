@@ -1,6 +1,6 @@
 // src/seed.ts - Seed data for Broadcast Capability Development
 
-import { Payload } from 'payload';
+import {Payload} from 'payload';
 
 const slugify = (text: string) =>
   text

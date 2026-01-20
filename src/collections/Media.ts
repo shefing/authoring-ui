@@ -1,7 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type {CollectionConfig} from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  enableQueryPresets: true,
+  admin: {
+  },
   access: {
     read: () => true,
   },

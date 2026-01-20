@@ -1,20 +1,14 @@
 'use client'
-import { useState } from 'react'
-import { FieldLabel, useField } from '@payloadcms/ui'
-import { Button } from './components/button'
-import { Popover, PopoverContent, PopoverTrigger } from './components/popover'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from './components/command'
-import { cn } from './lib/utils'
-import { Paintbrush } from 'lucide-react'
+import {useState} from 'react'
+import {FieldLabel, useField} from '@payloadcms/ui'
+import {Button} from './components/button'
+import {Popover, PopoverContent, PopoverTrigger} from './components/popover'
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from './components/command'
+import {cn} from './lib/utils'
+import {Paintbrush} from 'lucide-react'
 import TailWindColors from './TailWindColors'
-import { SelectFieldClientProps } from 'payload'
+import {SelectFieldClientProps} from 'payload'
+
 type Props = {
   isFont?: boolean
   isBackground?: boolean

@@ -1,22 +1,26 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 import {
-  lexicalEditor,
-  HeadingFeature,
-  LinkFeature,
-  BoldFeature,
-  ItalicFeature,
-  UnderlineFeature,
-  FixedToolbarFeature,
+    BoldFeature,
+    FixedToolbarFeature,
+    HeadingFeature,
+    ItalicFeature,
+    lexicalEditor,
+    LinkFeature,
+    UnderlineFeature,
 } from '@payloadcms/richtext-lexical'
 
 export const Messages: CollectionConfig = {
   slug: 'messages',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'messageType', 'channel', 'deliveryMode', 'status', 'responseRate'],
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'scheduledDate' },'messageType', 'deliveryMode','status','priority','deliverySchedule']],
   },
   fields: [
     {

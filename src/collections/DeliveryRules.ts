@@ -1,12 +1,16 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const DeliveryRules: CollectionConfig = {
   slug: 'delivery-rules',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'isEnabled' },'ruleType','targetUserRole']],
   },
   fields: [
     {

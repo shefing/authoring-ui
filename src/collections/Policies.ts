@@ -5,8 +5,14 @@ const isType = (expected: string) => ({ siblingData }: { siblingData: any }) => 
 export const Policies: CollectionConfig = {
   slug: 'policies',
   versions: { drafts: true, maxPerDoc: 50 },
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
+  },
+  custom: {
+    filterList: [
+      [{ name: 'type' }],
+    ],
   },
   fields: [
       {
