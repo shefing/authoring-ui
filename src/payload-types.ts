@@ -277,6 +277,7 @@ export interface Branding {
   slug: string;
   scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
   scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
+  isActive?: boolean | null;
   division?: (string | null) | Division;
   messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
   colors?: {
@@ -300,7 +301,6 @@ export interface Branding {
    * Advanced CSS customization
    */
   customCSS?: string | null;
-  isActive?: boolean | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -1086,6 +1086,7 @@ export interface BrandingSelect<T extends boolean = true> {
   slug?: T;
   scope?: T;
   scopeType?: T;
+  isActive?: T;
   division?: T;
   messageType?: T;
   colors?:
@@ -1110,7 +1111,6 @@ export interface BrandingSelect<T extends boolean = true> {
         id?: T;
       };
   customCSS?: T;
-  isActive?: T;
   creator?: T;
   updator?: T;
   process?: T;

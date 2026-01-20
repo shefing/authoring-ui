@@ -19,6 +19,9 @@ import { HeadingFeatureClient as HeadingFeatureClient_e70f5e05f09f93e00b997edb1e
 import { default as default_4dd24e2ec1d9dc857c6d5bb6d71a585f } from '@shefing/quickfilter/QuickFilter'
 import { SelectColorFont as SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { SelectColorBackground as SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
+import { ActionFont as ActionFont_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
+import { ActionFontSize as ActionFontSize_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
+import { ActionFontStyle as ActionFontStyle_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
 import { Page as Page_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { SortBy as SortBy_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { SortOrder as SortOrder_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
@@ -66,6 +69,9 @@ export const importMap = {
   "@shefing/quickfilter/QuickFilter#default": default_4dd24e2ec1d9dc857c6d5bb6d71a585f,
   "/components/color-picker/CustomTailWindColors#SelectColorFont": SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3,
   "/components/color-picker/CustomTailWindColors#SelectColorBackground": SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3,
+  "/components/font-picker/FontActions#ActionFont": ActionFont_60743c5858c0abf56b6430f8ff699141,
+  "/components/font-picker/FontActions#ActionFontSize": ActionFontSize_60743c5858c0abf56b6430f8ff699141,
+  "/components/font-picker/FontActions#ActionFontStyle": ActionFontStyle_60743c5858c0abf56b6430f8ff699141,
   "@payloadcms/plugin-import-export/rsc#Page": Page_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#SortBy": SortBy_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#SortOrder": SortOrder_cdf7e044479f899a31f804427d568b36,
