@@ -1,5 +1,34 @@
+import TailWindColors from "@/components/color-picker/TailWindColors"
+
 export function cn(...classes: Array<string | undefined | false | null>) {
   return classes.filter(Boolean).join(' ')
+}
+
+export function resolveTailwindColor(colorName: string | undefined | null): string {
+  if (!colorName) return ''
+  if (colorName.startsWith('#') || colorName.startsWith('rgb')) return colorName
+
+  if (colorName === 'white') return '#ffffff'
+  if (colorName === 'black') return '#000000'
+
+  const parts = colorName.split('-')
+  if (parts.length < 2) return colorName
+
+  const category = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
+  const shade = parts[1]
+  
+  const colorArray = (TailWindColors as any)[category]
+  if (!colorArray) return colorName
+
+  // shade is like 50, 100, 200, ..., 900, 950
+  let index = 0
+  if (shade === '50') index = 0
+  else if (shade === '950') index = 10
+  else {
+    index = Math.floor(parseInt(shade) / 100)
+  }
+
+  return colorArray[index] || colorName
 }
 
 export function deepReplacePlaceholders(input: any, vars: Record<string, any>): any {

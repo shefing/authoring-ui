@@ -11,10 +11,38 @@ import {TextFieldClientProps} from 'payload'
 export const ActionFont: React.FC<TextFieldClientProps & { apiUrl?: string }> = (props) => {
   const { path, apiUrl, field } = props
   const { value, setValue } = useField<string>({ path })
+  const [inputValue, setInputValue] = useState(value || '')
   const [open, setOpen] = useState(false)
   const [fonts, setFonts] = useState<string[]>([
     'Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Oswald', 'Source Sans Pro', 'Slabo 27px', 'Raleway', 'PT Sans'
   ])
+
+  useEffect(() => {
+    if (value !== undefined && value !== inputValue) {
+      console.log(`[DEBUG_LOG] ActionFont syncing value: ${value}`);
+      setInputValue(value || '')
+    }
+  }, [value])
+
+  const handleChange = (val: string) => {
+    console.log(`[DEBUG_LOG] ActionFont handleChange: ${val}`);
+    setInputValue(val)
+    setValue(val)
+  }
+
+  // Load font preview in admin
+  useEffect(() => {
+    if (inputValue && !['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', '-apple-system'].includes(inputValue.toLowerCase())) {
+        const linkId = `admin-font-${inputValue.replace(/\s+/g, '-').toLowerCase()}`
+        if (!document.getElementById(linkId)) {
+            const link = document.createElement('link')
+            link.id = linkId
+            link.rel = 'stylesheet'
+            link.href = `https://fonts.googleapis.com/css2?family=${inputValue.replace(/\s+/g, '+')}:wght@100;200;300;400;500;600;700;800;900&display=swap`
+            document.head.appendChild(link)
+        }
+    }
+  }, [inputValue])
 
   useEffect(() => {
     if (apiUrl) {
@@ -40,7 +68,7 @@ export const ActionFont: React.FC<TextFieldClientProps & { apiUrl?: string }> = 
           >
             <div className="flex items-center gap-2">
               <Type className="h-4 w-4" />
-              <span>{value || 'Select font...'}</span>
+              <span style={{ fontFamily: inputValue || 'inherit' }}>{inputValue || 'Select font...'}</span>
             </div>
             <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
@@ -55,7 +83,7 @@ export const ActionFont: React.FC<TextFieldClientProps & { apiUrl?: string }> = 
                   <CommandItem
                     key={font}
                     onSelect={() => {
-                      setValue(font)
+                      handleChange(font)
                       setOpen(false)
                     }}
                     className="flex items-center justify-between"
@@ -75,19 +103,41 @@ export const ActionFont: React.FC<TextFieldClientProps & { apiUrl?: string }> = 
 export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
   const { path, field } = props
   const { value, setValue } = useField<string>({ path })
+  const [inputValue, setInputValue] = useState(value || '')
   
   const sizes = ['12px', '14px', '16px', '18px', '20px', '24px', '30px', '36px', '48px', '60px', '72px']
+
+  useEffect(() => {
+    if (value !== undefined && value !== inputValue) {
+      console.log(`[DEBUG_LOG] ActionFontSize syncing value: ${value}`);
+      setInputValue(value || '')
+    }
+  }, [value])
+
+  const handleChange = (val: string) => {
+    console.log(`[DEBUG_LOG] ActionFontSize handleChange: ${val}`);
+    setInputValue(val)
+    setValue(val)
+  }
+
+  // Ensure current value is in sizes list so select can show it
+  const displaySizes = [...sizes]
+  if (inputValue && !sizes.includes(inputValue)) {
+    displaySizes.push(inputValue)
+    displaySizes.sort((a, b) => parseInt(a) - parseInt(b))
+  }
 
   return (
     <div className="useTw mb-4 mr-10">
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Size'} />
       <div className="flex gap-2 items-center">
           <select 
-            value={value || '16px'} 
-            onChange={(e) => setValue(e.target.value)}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            value={inputValue} 
+            onChange={(e) => handleChange(e.target.value)}
+            className="flex h-9 w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           >
-              {sizes.map(size => (
+              <option value="" disabled>Select...</option>
+              {displaySizes.map(size => (
                   <option key={size} value={size}>{size}</option>
               ))}
           </select>
@@ -95,10 +145,11 @@ export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
             type="range" 
             min="8" 
             max="100" 
-            value={parseInt(value || '16')} 
-            onChange={(e) => setValue(e.target.value + 'px')}
-            className="w-full"
+            value={parseInt(inputValue || '16')} 
+            onChange={(e) => handleChange(e.target.value + 'px')}
+            className="flex-1"
           />
+          <span className="text-xs w-8 text-right">{parseInt(inputValue || '16')}px</span>
       </div>
     </div>
   )
@@ -107,6 +158,7 @@ export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
 export const ActionFontStyle: React.FC<TextFieldClientProps> = (props) => {
   const { path, field } = props
   const { value, setValue } = useField<string>({ path })
+  const [inputValue, setInputValue] = useState(value || '')
   
   const weights = [
       { label: 'Thin', value: '100' },
@@ -120,14 +172,28 @@ export const ActionFontStyle: React.FC<TextFieldClientProps> = (props) => {
       { label: 'Black', value: '900' },
   ]
 
+  useEffect(() => {
+    if (value !== undefined && value !== inputValue) {
+      console.log(`[DEBUG_LOG] ActionFontStyle syncing value: ${value}`);
+      setInputValue(value || '')
+    }
+  }, [value])
+
+  const handleChange = (val: string) => {
+    console.log(`[DEBUG_LOG] ActionFontStyle handleChange: ${val}`);
+    setInputValue(val)
+    setValue(val)
+  }
+
   return (
     <div className="useTw mb-4 mr-10" >
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Weight & Style'} />
       <select 
-        value={value || '400'} 
-        onChange={(e) => setValue(e.target.value)}
+        value={inputValue} 
+        onChange={(e) => handleChange(e.target.value)}
         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
       >
+          <option value="" disabled>Select...</option>
           {weights.map(w => (
               <option key={w.value} value={w.value}>{w.label} ({w.value})</option>
           ))}
