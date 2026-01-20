@@ -1,7 +1,8 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const Buttons: CollectionConfig = {
   slug: 'buttons',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
   },

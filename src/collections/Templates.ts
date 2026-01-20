@@ -1,23 +1,27 @@
-import { CollectionConfig, slugField } from 'payload'
+import {CollectionConfig, slugField} from 'payload'
 import {
-  BlockquoteFeature,
-  BlocksFeature,
-  BoldFeature,
-  HeadingFeature,
-  ItalicFeature,
-  lexicalEditor,
-  LinkFeature,
-  UnderlineFeature,
-    FixedToolbarFeature
+    BlockquoteFeature,
+    BlocksFeature,
+    BoldFeature,
+    FixedToolbarFeature,
+    HeadingFeature,
+    ItalicFeature,
+    lexicalEditor,
+    LinkFeature,
+    UnderlineFeature
 } from '@payloadcms/richtext-lexical'
 // import { VariableInlineField } from '@/components/TextToDisplayInVars'
 
 export const Templates: CollectionConfig = {
   slug: 'templates',
+  enableQueryPresets: true,
   versions: { drafts: true, maxPerDoc: 50 },
   access: {
     // Allow read access for preview UI (published/draft). In production, tighten to published-only.
     read: () => true,
+  },
+  custom: {
+    filterList: [['isActive' ,'messageType','templateType']],
   },
   admin: {
     useAsTitle: 'name',

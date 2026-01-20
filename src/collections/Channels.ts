@@ -1,12 +1,16 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const Channels: CollectionConfig = {
   slug: 'channels',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'isEnabled' }, { name: 'isConfigured' }, { name: 'requiresAuth' },'supportedMessageTypes','capabilities']],
   },
   fields: [
     {

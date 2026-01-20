@@ -1,7 +1,7 @@
-import { createLocalReq, getPayload } from 'payload'
-import { seed } from '@/seed'
+import {getPayload} from 'payload'
+import {seed} from '@/seed'
 import config from '@/payload.config'
-import { headers } from 'next/headers'
+import {headers} from 'next/headers'
 
 export const maxDuration = 60
 

@@ -1,7 +1,7 @@
 'use client'
 import * as React from 'react'
-import type { MessageContent } from '../lib/messages'
-import { RichTextRenderer } from './RichTextRenderer'
+import type {MessageContent} from '../lib/messages'
+import {RichTextRenderer} from './RichTextRenderer'
 
 type BrandingPackage = {
   generalStyling?: {

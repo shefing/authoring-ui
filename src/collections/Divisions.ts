@@ -1,12 +1,16 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const Divisions: CollectionConfig = {
   slug: 'divisions',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'isActive' }]],
   },
   fields: [
     {

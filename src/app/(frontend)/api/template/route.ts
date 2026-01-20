@@ -1,5 +1,6 @@
-import { NextRequest } from 'next/server'
-import { getTemplateByIdServer } from '../../lib/payload-server'
+import {NextRequest} from 'next/server'
+import {getTemplateByIdServer} from '../../lib/payload-server'
+import { Template } from '@/payload-types'
 
 export async function GET(req: NextRequest) {
   try {
@@ -9,16 +10,17 @@ export async function GET(req: NextRequest) {
     if (!id) {
       return new Response(JSON.stringify({ error: 'id is required' }), { status: 400 })
     }
-    let tpl: any
+    let tpl: Template
     try {
-      tpl = await getTemplateByIdServer(id, { draft })
-    } catch (e: any) {
-      const msg = String(e?.message || '')
+      tpl = (await getTemplateByIdServer(id, { draft })) as unknown as Template
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e)
       const status = /\b404\b/.test(msg) ? 404 : 502
       return new Response(JSON.stringify({ error: 'template_fetch_failed', detail: msg }), { status })
     }
     return new Response(JSON.stringify(tpl), { status: 200, headers: { 'Content-Type': 'application/json' } })
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e?.message || 'failed' }), { status: 500 })
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'failed'
+    return new Response(JSON.stringify({ error: msg }), { status: 500 })
   }
 }

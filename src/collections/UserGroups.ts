@@ -1,12 +1,16 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const UserGroups: CollectionConfig = {
   slug: 'user-groups',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'name',
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'isActive' }]],
   },
   fields: [
     {

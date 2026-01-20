@@ -1,4 +1,4 @@
-import { Field } from 'payload';
+import {Field} from 'payload';
 
 interface ColorFieldOptions {
   name?: string;

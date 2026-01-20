@@ -1,12 +1,16 @@
-import { CollectionConfig } from 'payload'
+import {CollectionConfig} from 'payload'
 
 export const MessageAnalytics: CollectionConfig = {
   slug: 'message-analytics',
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'message',
   },
   access: {
     read: () => true,
+  },
+  custom: {
+    filterList: [[{ name: 'deliveryDate' }]],
   },
   fields: [
     {

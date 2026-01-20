@@ -1,6 +1,7 @@
-import { NextRequest } from 'next/server'
-import { getTemplateByIdServer } from '../../lib/payload-server'
-import { buildPreview } from '../../lib/render'
+import {NextRequest} from 'next/server'
+import {getTemplateByIdServer} from '../../lib/payload-server'
+import {buildPreview} from '../../lib/render'
+import { Template } from '@/payload-types'
 
 // Simple in-memory rate limiter per process (IP → {count, reset})
 const RATE_WINDOW_MS = 5 * 60 * 1000 // 5 minutes
@@ -62,11 +63,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Fetch template and build preview
-    let tpl: any
+    let tpl: Template
     try {
-      tpl = await getTemplateByIdServer(templateId, { draft: !!draft })
-    } catch (e: any) {
-      const msg = String(e?.message || '')
+      tpl = (await getTemplateByIdServer(templateId, { draft: !!draft })) as unknown as Template
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e)
       const status = /\b404\b/.test(msg) ? 404 : 502
       return new Response(JSON.stringify({ error: 'template_fetch_failed', detail: msg }), { status })
     }
@@ -76,8 +77,9 @@ export async function POST(req: NextRequest) {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     })
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e?.message || 'preview failed' }), { status: 500 })
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'preview failed'
+    return new Response(JSON.stringify({ error: msg }), { status: 500 })
   }
 }
 

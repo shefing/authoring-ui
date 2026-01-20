@@ -1,13 +1,13 @@
 'use client'
 import * as React from 'react'
-import { Button } from './components/ui/button'
-import { Input } from './components/ui/input'
-import { Label } from './components/ui/label'
-import { Select } from './components/ui/select'
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
-import { extractInlineVarDefs, type VarDef, coerceVarValue } from './lib/vars'
-import type { TemplateSummary } from './lib/payload'
-import { MessagePreview } from './components/MessagePreview'
+import {Button} from './components/ui/button'
+import {Input} from './components/ui/input'
+import {Label} from './components/ui/label'
+import {Select} from './components/ui/select'
+import {Card, CardContent, CardHeader, CardTitle} from './components/ui/card'
+import {coerceVarValue, extractInlineVarDefs, type VarDef} from './lib/vars'
+import type {TemplateSummary} from './lib/payload'
+import {MessagePreview} from './components/MessagePreview'
 
 type Props = { templates: TemplateSummary[] }
 

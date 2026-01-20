@@ -1,11 +1,11 @@
 import React from 'react'
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
-import { getPayload } from 'payload'
+import {redirect} from 'next/navigation'
+import {headers} from 'next/headers'
+import {getPayload} from 'payload'
 import config from '@/payload.config'
 import ClientComposer from '../preview-client'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
-import { listPublishedTemplatesServer, getTemplateByIdServer } from '../lib/payload-server'
+import {Card, CardContent, CardHeader, CardTitle} from '../components/ui/card'
+import {getTemplateByIdServer, listPublishedTemplatesServer} from '../lib/payload-server'
 
 export const dynamic = 'force-dynamic'
 

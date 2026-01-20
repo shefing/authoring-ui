@@ -1,7 +1,7 @@
 'use client'
-import { TextField, useField, useFormInitializing } from '@payloadcms/ui'
-import { TextFieldClientProps } from 'payload'
-import { useEffect } from 'react'
+import {TextField, useField, useFormInitializing} from '@payloadcms/ui'
+import {TextFieldClientProps} from 'payload'
+import {useEffect} from 'react'
 
 const fetchVariableDetails = async (id: string) => {
   try {

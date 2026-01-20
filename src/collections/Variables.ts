@@ -1,4 +1,4 @@
-import type { CollectionConfig, FieldHook } from 'payload'
+import type {CollectionConfig, FieldHook} from 'payload'
 
 const keyPattern = /^[a-zA-Z][a-zA-Z0-9_\-]*$/
 
@@ -12,8 +12,14 @@ const validateKey: FieldHook = async ({ value }) => {
 
 export const Variables: CollectionConfig = {
   slug: 'variables',
+  enableQueryPresets: true,
   versions: { drafts: true, maxPerDoc: 50 },
-  admin: { useAsTitle: 'key' },
+  admin: {
+    useAsTitle: 'key',
+  },
+  custom: {
+    filterList: [[{ name: 'required' }]],
+  },
   fields: [
     { name: 'key', type: 'text', required: true, unique: true, hooks: { beforeValidate: [validateKey] } },
     { name: 'label', type: 'text', required: true },

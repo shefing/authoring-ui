@@ -59,7 +59,8 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | 'Pacific/Fiji'
+  | 'Asia/Jerusalem';
 
 export interface Config {
   auth: {
@@ -80,10 +81,14 @@ export interface Config {
     'user-groups': UserGroup;
     'delivery-rules': DeliveryRule;
     'message-analytics': MessageAnalytic;
+    exports: Export;
+    imports: Import;
     'payload-kv': PayloadKv;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
+    'payload-query-presets': PayloadQueryPreset;
   };
   collectionsJoins: {};
   collectionsSelect: {
@@ -100,10 +105,14 @@ export interface Config {
     'user-groups': UserGroupsSelect<false> | UserGroupsSelect<true>;
     'delivery-rules': DeliveryRulesSelect<false> | DeliveryRulesSelect<true>;
     'message-analytics': MessageAnalyticsSelect<false> | MessageAnalyticsSelect<true>;
+    exports: ExportsSelect<false> | ExportsSelect<true>;
+    imports: ImportsSelect<false> | ImportsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+    'payload-query-presets': PayloadQueryPresetsSelect<false> | PayloadQueryPresetsSelect<true>;
   };
   db: {
     defaultIDType: string;
@@ -116,7 +125,14 @@ export interface Config {
     collection: 'users';
   };
   jobs: {
-    tasks: unknown;
+    tasks: {
+      createCollectionExport: TaskCreateCollectionExport;
+      createCollectionImport: TaskCreateCollectionImport;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
   };
 }
@@ -144,8 +160,11 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -169,8 +188,11 @@ export interface User {
 export interface Media {
   id: string;
   alt: string;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
   url?: string | null;
   thumbnailURL?: string | null;
   filename?: string | null;
@@ -215,8 +237,13 @@ export interface Template {
     [k: string]: unknown;
   } | null;
   isActive?: boolean | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
+  updatedAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -230,8 +257,11 @@ export interface Division {
   description?: string | null;
   parentDivision?: (string | null) | Division;
   isActive?: boolean | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -271,8 +301,13 @@ export interface Branding {
    */
   customCSS?: string | null;
   isActive?: boolean | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
+  updatedAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -302,8 +337,11 @@ export interface Channel {
     | null;
   requiresAuth?: boolean | null;
   authProvider?: string | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -384,8 +422,13 @@ export interface Policy {
       | boolean
       | null;
   };
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
+  updatedAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -414,8 +457,13 @@ export interface Variable {
    * Optional example value for previews/tests
    */
   sampleValue?: string | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
+  updatedAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -436,8 +484,11 @@ export interface Button {
     | number
     | boolean
     | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -477,8 +528,11 @@ export interface Message {
     };
     [k: string]: unknown;
   } | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -502,8 +556,11 @@ export interface UserGroup {
     | null;
   estimatedSize?: number | null;
   isActive?: boolean | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -536,8 +593,11 @@ export interface DeliveryRule {
    */
   priority?: number | null;
   description?: string | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -574,8 +634,104 @@ export interface MessageAnalytic {
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
   createdAt: string;
+  updatedAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exports".
+ */
+export interface Export {
+  id: string;
+  name?: string | null;
+  format?: ('csv' | 'json') | null;
+  limit?: number | null;
+  page?: number | null;
+  sort?: string | null;
+  sortOrder?: ('asc' | 'desc') | null;
+  drafts?: ('yes' | 'no') | null;
+  selectionToUse?: ('currentSelection' | 'currentFilters' | 'all') | null;
+  fields?: string[] | null;
+  collectionSlug: string;
+  where?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "imports".
+ */
+export interface Import {
+  id: string;
+  collectionSlug:
+    | 'users'
+    | 'media'
+    | 'templates'
+    | 'branding'
+    | 'policies'
+    | 'variables'
+    | 'channels'
+    | 'buttons'
+    | 'messages'
+    | 'divisions'
+    | 'user-groups'
+    | 'delivery-rules'
+    | 'message-analytics';
+  importMode?: ('create' | 'update' | 'upsert') | null;
+  matchField?: string | null;
+  status?: ('pending' | 'completed' | 'partial' | 'failed') | null;
+  summary?: {
+    imported?: number | null;
+    updated?: number | null;
+    total?: number | null;
+    issues?: number | null;
+    issueDetails?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -593,6 +749,98 @@ export interface PayloadKv {
     | number
     | boolean
     | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: string;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'createCollectionExport' | 'createCollectionImport';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'createCollectionExport' | 'createCollectionImport') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -697,11 +945,76 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-query-presets".
+ */
+export interface PayloadQueryPreset {
+  id: string;
+  title: string;
+  isShared?: boolean | null;
+  access?: {
+    read?: {
+      constraint?: ('everyone' | 'onlyMe' | 'specificUsers') | null;
+      users?: (string | User)[] | null;
+    };
+    update?: {
+      constraint?: ('everyone' | 'onlyMe' | 'specificUsers') | null;
+      users?: (string | User)[] | null;
+    };
+    delete?: {
+      constraint?: ('everyone' | 'onlyMe' | 'specificUsers') | null;
+      users?: (string | User)[] | null;
+    };
+  };
+  where?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  columns?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  groupBy?: string | null;
+  relatedCollection:
+    | 'users'
+    | 'media'
+    | 'templates'
+    | 'branding'
+    | 'policies'
+    | 'variables'
+    | 'channels'
+    | 'buttons'
+    | 'messages'
+    | 'divisions'
+    | 'user-groups'
+    | 'delivery-rules'
+    | 'message-analytics';
+  /**
+   * This is a temporary field used to determine if updating the preset would remove the user's access to it. When `true`, this record will be deleted after running the preset's `validate` function.
+   */
+  isTemp?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
@@ -723,8 +1036,11 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
   url?: T;
   thumbnailURL?: T;
   filename?: T;
@@ -751,8 +1067,13 @@ export interface TemplatesSelect<T extends boolean = true> {
   channels?: T;
   body?: T;
   isActive?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  publishDate?: T;
+  publisher?: T;
   createdAt?: T;
+  updatedAt?: T;
   _status?: T;
 }
 /**
@@ -790,8 +1111,13 @@ export interface BrandingSelect<T extends boolean = true> {
       };
   customCSS?: T;
   isActive?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  publishDate?: T;
+  publisher?: T;
   createdAt?: T;
+  updatedAt?: T;
   _status?: T;
 }
 /**
@@ -847,8 +1173,13 @@ export interface PoliciesSelect<T extends boolean = true> {
     | {
         allowedDuringDndKinds?: T;
       };
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  publishDate?: T;
+  publisher?: T;
   createdAt?: T;
+  updatedAt?: T;
   _status?: T;
 }
 /**
@@ -870,8 +1201,13 @@ export interface VariablesSelect<T extends boolean = true> {
   description?: T;
   formatHint?: T;
   sampleValue?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  publishDate?: T;
+  publisher?: T;
   createdAt?: T;
+  updatedAt?: T;
   _status?: T;
 }
 /**
@@ -889,8 +1225,11 @@ export interface ChannelsSelect<T extends boolean = true> {
   configuration?: T;
   requiresAuth?: T;
   authProvider?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -901,8 +1240,11 @@ export interface ButtonsSelect<T extends boolean = true> {
   label?: T;
   icon?: T;
   otherAttributes?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -924,8 +1266,11 @@ export interface MessagesSelect<T extends boolean = true> {
   responseRate?: T;
   totalRecipients?: T;
   content?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -937,8 +1282,11 @@ export interface DivisionsSelect<T extends boolean = true> {
   description?: T;
   parentDivision?: T;
   isActive?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -950,8 +1298,11 @@ export interface UserGroupsSelect<T extends boolean = true> {
   criteria?: T;
   estimatedSize?: T;
   isActive?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -966,8 +1317,11 @@ export interface DeliveryRulesSelect<T extends boolean = true> {
   targetGroup?: T;
   priority?: T;
   description?: T;
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -989,8 +1343,75 @@ export interface MessageAnalyticsSelect<T extends boolean = true> {
         timestamp?: T;
         id?: T;
       };
-  updatedAt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
   createdAt?: T;
+  updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exports_select".
+ */
+export interface ExportsSelect<T extends boolean = true> {
+  name?: T;
+  format?: T;
+  limit?: T;
+  page?: T;
+  sort?: T;
+  sortOrder?: T;
+  drafts?: T;
+  selectionToUse?: T;
+  fields?: T;
+  collectionSlug?: T;
+  where?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "imports_select".
+ */
+export interface ImportsSelect<T extends boolean = true> {
+  collectionSlug?: T;
+  importMode?: T;
+  matchField?: T;
+  status?: T;
+  summary?:
+    | T
+    | {
+        imported?: T;
+        updated?: T;
+        total?: T;
+        issues?: T;
+        issueDetails?: T;
+      };
+  creator?: T;
+  updator?: T;
+  process?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -999,6 +1420,37 @@ export interface MessageAnalyticsSelect<T extends boolean = true> {
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1031,6 +1483,127 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-query-presets_select".
+ */
+export interface PayloadQueryPresetsSelect<T extends boolean = true> {
+  title?: T;
+  isShared?: T;
+  access?:
+    | T
+    | {
+        read?:
+          | T
+          | {
+              constraint?: T;
+              users?: T;
+            };
+        update?:
+          | T
+          | {
+              constraint?: T;
+              users?: T;
+            };
+        delete?:
+          | T
+          | {
+              constraint?: T;
+              users?: T;
+            };
+      };
+  where?: T;
+  columns?: T;
+  groupBy?: T;
+  relatedCollection?: T;
+  isTemp?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskCreateCollectionExport".
+ */
+export interface TaskCreateCollectionExport {
+  input: {
+    name?: string | null;
+    format?: ('csv' | 'json') | null;
+    limit?: number | null;
+    page?: number | null;
+    sort?: string | null;
+    sortOrder?: ('asc' | 'desc') | null;
+    drafts?: ('yes' | 'no') | null;
+    selectionToUse?: ('currentSelection' | 'currentFilters' | 'all') | null;
+    fields?: string[] | null;
+    collectionSlug: string;
+    where?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    userID?: string | null;
+    userCollection?: string | null;
+    exportsCollection?: string | null;
+  };
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskCreateCollectionImport".
+ */
+export interface TaskCreateCollectionImport {
+  input: {
+    collectionSlug:
+      | 'users'
+      | 'media'
+      | 'templates'
+      | 'branding'
+      | 'policies'
+      | 'variables'
+      | 'channels'
+      | 'buttons'
+      | 'messages'
+      | 'divisions'
+      | 'user-groups'
+      | 'delivery-rules'
+      | 'message-analytics'
+      | 'exports'
+      | 'imports';
+    importMode?: ('create' | 'update' | 'upsert') | null;
+    matchField?: string | null;
+    status?: ('pending' | 'completed' | 'partial' | 'failed') | null;
+    summary?: {
+      imported?: number | null;
+      updated?: number | null;
+      total?: number | null;
+      issues?: number | null;
+      issueDetails?:
+        | {
+            [k: string]: unknown;
+          }
+        | unknown[]
+        | string
+        | number
+        | boolean
+        | null;
+    };
+    user?: string | null;
+    userCollection?: string | null;
+    importsCollection?: string | null;
+    file?: {
+      data?: string | null;
+      mimetype?: string | null;
+      name?: string | null;
+    };
+    format?: ('csv' | 'json') | null;
+    debug?: boolean | null;
+  };
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
