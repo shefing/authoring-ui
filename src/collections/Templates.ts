@@ -24,13 +24,22 @@ export const Templates: CollectionConfig = {
     filterList: [['isActive' ,'messageType','templateType']],
   },
   admin: {
+    livePreview: {
+      url: ({ data }: { data: any }) => {
+        const url = new URL('/preview/template', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+        url.searchParams.set('id', data.id)
+        return url.toString()
+      },
+    },
     useAsTitle: 'name',
     // Opens your portal preview; replace path if needed
     preview: (doc) => {
       // Point to the co-located Operator UI root with query params.
       // We avoid non-existent /operator/preview/template route and undefined version.
-      const base = `/operator?templateId=${doc.id}`
-      return doc._status === 'draft' ? `${base}&draft=1` : base
+      const url = new URL('/preview/template', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+      url.searchParams.set('id', doc.id as string)
+      if (doc._status === 'draft') url.searchParams.set('draft', '1')
+      return url.toString()
     },
   },
   fields: [
@@ -106,15 +115,14 @@ export const Templates: CollectionConfig = {
           FixedToolbarFeature(),
           BlocksFeature({
             blocks: [
-              {
-                slug: 'image',
-                fields: [
-                  { name: 'asset', type: 'upload', relationTo: 'media', required: true },
-                  { name: 'alt', type: 'text' },
-                ],
-              },
             ],
             inlineBlocks: [
+                {
+                    slug: 'image',
+                    fields: [
+                        { name: 'asset', type: 'upload', relationTo: 'media', required: true },
+                    ],
+                },
               {
                 slug: 'var',
                 fields: [
