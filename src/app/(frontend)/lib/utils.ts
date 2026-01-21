@@ -14,10 +14,15 @@ export function resolveTailwindColor(colorName: string | undefined | null): stri
   const parts = colorName.split('-')
   if (parts.length < 2) return colorName
 
-  const category = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
-  const shade = parts[1]
+  const categoryInput = parts[0]
+  const shade = parts[parts.length - 1]
+
+  // Try to find the category in TailWindColors (case-insensitive)
+  const categoryKey = Object.keys(TailWindColors).find(
+    (key) => key.toLowerCase() === categoryInput.toLowerCase()
+  )
   
-  const colorArray = (TailWindColors as any)[category]
+  const colorArray = categoryKey ? (TailWindColors as any)[categoryKey] : null
   if (!colorArray) return colorName
 
   // shade is like 50, 100, 200, ..., 900, 950

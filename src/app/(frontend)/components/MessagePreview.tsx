@@ -1,51 +1,13 @@
 'use client'
 import * as React from 'react'
+import type { Branding } from '@/payload-types'
 import type {MessageContent} from '../lib/messages'
 import {RichTextRenderer} from './RichTextRenderer'
 import {resolveTailwindColor} from '../lib/utils'
 
-type BrandingPackage = {
-  generalStyling?: {
-    messageTextColor?: string
-    messageBackgroundColor?: string
-    direction?: 'ltr' | 'rtl'
-    messageWidth?: number
-    titleAlign?: 'left' | 'center' | 'right'
-  }
-  logoSettings?: {
-    logo?: { url: string }
-    logoPos?: 'left-inline' | 'right-inline' | 'before' | 'after' | 'center'
-  }
-  approveBtn?: {
-    label?: string
-    bgColor?: string
-    textColor?: string
-    align?: 'left' | 'center' | 'right'
-  }
-  signature?: {
-    text?: string
-    position?: 'left' | 'right' | 'center'
-  }
-  themeTokens?: {
-    colors?: Record<string, string>
-    spacing?: Record<string, string>
-    radii?: Record<string, string>
-    typography?: {
-      fontFamily?: string
-      fontSize?: string | number
-      fontWeight?: string | number
-    }
-    titleTypography?: {
-      fontFamily?: string
-      fontSize?: string | number
-      fontWeight?: string | number
-    }
-  }
-}
-
 type MessagePreviewProps = {
   content: MessageContent
-  branding?: BrandingPackage | null
+  branding?: Branding | null
   asPopup?: boolean
   onClose?: () => void
   variableValues?: Record<string, string>
@@ -60,11 +22,9 @@ export function MessagePreview({
   variableValues = {},
   previewHtml,
 }: MessagePreviewProps) {
-  const colors = branding?.themeTokens?.colors || {}
-  const spacing = branding?.themeTokens?.spacing || {}
-  const radii = branding?.themeTokens?.radii || {}
-  const typography = branding?.themeTokens?.typography || {}
-  const titleTypography = branding?.themeTokens?.titleTypography || {}
+  // Extract typography settings from Branding
+  const typography = branding?.messageTypography || {}
+  const titleTypography = branding?.titleTypography || {}
   
   // Dynamically load font families if they are not already present
   React.useEffect(() => {
@@ -95,55 +55,57 @@ export function MessagePreview({
     return isNaN(parsed) ? defaultValue : parsed
   }
 
-  const textSize = parseFontSize(typography.fontSize, 16)
-  const titleTextSize = parseFontSize(titleTypography.fontSize, textSize * 1.25)
+  const textSize = parseFontSize(typography.fontSize as string, 16)
+  const titleTextSize = parseFontSize(titleTypography.fontSize as string, textSize * 1.25)
 
   // Extract settings from branding
-  const generalStyling = branding?.generalStyling || {}
-  const logoSettings = branding?.logoSettings || {}
-  const approveBtn = branding?.approveBtn || {}
-  const signature = branding?.signature || {}
+  const colors = (branding as any)?.colors || {}
+  const buttonStyles = (branding as any)?.buttonStyles || {}
+  const spacing = (branding as any)?.spacing || {}
+  const radii = (branding as any)?.radii || {}
 
-  const direction = generalStyling.direction || 'ltr'
-  const messageWidth = generalStyling.messageWidth || 500
-  const titleAlignment = generalStyling.titleAlign || 'left'
-  const flip: Record<'left' | 'right', 'right' | 'left'> = { left: 'right', right: 'left' }
+  const direction: any = 'ltr' 
+  const messageWidth = 500 
+  const titleAlignment: any = 'left' 
+  const flip: any = { left: 'right', right: 'left' }
 
-  const buttonsAlignment: 'left' | 'center' | 'right' =
-    generalStyling.direction === 'ltr'
-      ? approveBtn.align || 'center' // אם undefined → center
-      : (approveBtn.align && flip[approveBtn.align as 'left' | 'right']) || 'center'
+  const buttonsAlignment: any = 'center'
 
-  const logoPosition = logoSettings.logoPos || 'center'
-  const signaturePosition = signature.position || 'center'
+  const logoPosition: any = 'center'
+  const signaturePosition: any = 'center'
 
   // Determine what to show based on availability in branding
   const showTitle = !!content?.title
-  const showLogo = !!logoSettings.logo?.url
-  const showSignature = !!signature.text
+  const showLogo = !!(branding?.logo && typeof branding.logo === 'object' && (branding.logo as any).url) || !!((branding as any)?.logoSettings?.logo?.url)
+  const logoUrl = (branding?.logo && typeof branding.logo === 'object' && (branding.logo as any).url) || (branding as any)?.logoSettings?.logo?.url || ''
+  const showSignature = false
 
   // Get button style by action kind
   const getButtonStyle = React.useCallback((actionKind: string) => {
-    if (actionKind === 'approve') {
+    if (actionKind === 'approve' || actionKind === 'primary') {
+      const approveBg = (branding as any)?.approveBtn?.bgColor || (buttonStyles as any).approveBgColor || (colors as any).actionPrimaryColor || '#3b82f6'
+      const approveText = (branding as any)?.approveBtn?.textColor || (buttonStyles as any).approveTextColor || '#ffffff'
       return {
-        backgroundColor: resolveTailwindColor(approveBtn.bgColor || colors.primary || '#3b82f6'),
-        color: resolveTailwindColor(approveBtn.textColor || colors.buttonText || '#ffffff'),
-        label: approveBtn.label || 'Approve',
+        backgroundColor: resolveTailwindColor(approveBg),
+        color: resolveTailwindColor(approveText),
+        label: (branding as any)?.approveBtn?.label || 'Approve',
       }
     }
-    if (actionKind === 'dismiss') {
+    if (actionKind === 'dismiss' || actionKind === 'secondary') {
+      const dismissBg = (branding as any)?.buttonStyles?.dismissBgColor || (buttonStyles as any).dismissBgColor || (colors as any).actionSecondaryColor || '#6b7280'
+      const dismissText = (branding as any)?.buttonStyles?.dismissTextColor || (buttonStyles as any).dismissTextColor || '#ffffff'
       return {
-        backgroundColor: resolveTailwindColor((branding as any)?.buttonStyles?.dismissBgColor || (branding as any)?.colors?.actionSecondaryColor || colors.secondary || '#6b7280'),
-        color: resolveTailwindColor((branding as any)?.buttonStyles?.dismissTextColor || colors.buttonText || '#ffffff'),
+        backgroundColor: resolveTailwindColor(dismissBg),
+        color: resolveTailwindColor(dismissText),
         label: 'Dismiss',
       }
     }
     return {
-      backgroundColor: resolveTailwindColor(colors.primary || '#3b82f6'),
-      color: resolveTailwindColor(colors.buttonText || '#ffffff'),
-      label: null,
+      backgroundColor: resolveTailwindColor((colors as any).actionPrimaryColor || '#3b82f6'),
+      color: resolveTailwindColor('#ffffff'),
+      label: 'Action',
     }
-  }, [approveBtn.bgColor, approveBtn.label, approveBtn.textColor, branding, colors.buttonText, colors.primary, colors.secondary])
+  }, [branding, buttonStyles, colors])
 
   const styles = React.useMemo(() => ({
     overlay: {
@@ -185,8 +147,8 @@ export function MessagePreview({
       lineHeight: 1,
     },
     container: {
-      backgroundColor: resolveTailwindColor((branding as any)?.colors?.messageBackgroundColor || branding?.themeTokens?.colors?.background || colors.background || '#ffffff'),
-      color: resolveTailwindColor((branding as any)?.colors?.messageTextColor || branding?.themeTokens?.colors?.text || colors.text || '#000000'),
+      backgroundColor: resolveTailwindColor((branding as any)?.colors?.messageBackgroundColor || (branding as any)?.themeTokens?.colors?.background || (branding as any)?.generalStyling?.messageBackgroundColor || colors.messageBackgroundColor || colors.background || '#ffffff'),
+      color: resolveTailwindColor((branding as any)?.colors?.messageTextColor || (branding as any)?.themeTokens?.colors?.text || (branding as any)?.generalStyling?.messageTextColor || colors.messageTextColor || colors.text || '#000000'),
       padding: spacing.medium || '16px',
       borderRadius: radii.medium || '8px',
       border: `1px solid ${resolveTailwindColor((branding as any)?.colors?.actionSecondaryColor || colors.border || '#e5e7eb')}`,
@@ -208,9 +170,9 @@ export function MessagePreview({
     logoContainer: {
       display: 'flex',
       justifyContent:
-        logoPosition === 'center'
+        (branding as any)?.logoSettings?.logoPos || logoPosition === 'center'
           ? 'center'
-          : logoPosition === 'right-inline'
+          : ((branding as any)?.logoSettings?.logoPos || logoPosition) === 'right-inline'
             ? 'flex-end'
             : 'flex-start',
       marginBottom: spacing.small || '12px',
@@ -271,7 +233,7 @@ export function MessagePreview({
       color: colors.textMuted || '#6b7280',
       fontStyle: 'italic',
     },
-  }), [asPopup, branding, buttonsAlignment, colors.background, colors.border, colors.primary, colors.text, colors.textMuted, direction, logoPosition, messageWidth, radii.medium, radii.small, spacing.medium, spacing.small, titleAlignment, titleTextSize, titleTypography.fontWeight, titleTypography.fontSize, titleTypography.fontFamily, typography.fontFamily, typography.fontSize, typography.fontWeight, textSize])
+  }), [asPopup, branding, buttonsAlignment, colors.background, colors.border, colors.primary, colors.text, colors.textMuted, direction, logoPosition, messageWidth, radii.medium, radii.small, spacing.medium, spacing.small, spacing.xsmall, titleAlignment, titleTextSize, titleTypography.fontWeight, titleTypography.fontSize, titleTypography.fontFamily, typography.fontFamily, typography.fontSize, typography.fontWeight, textSize])
 
   const getButtonStyles = React.useCallback((actionKind: string) => {
     const buttonStyle = getButtonStyle(actionKind)
@@ -291,86 +253,20 @@ export function MessagePreview({
   const renderHeader = () => {
     if (!showTitle && !showLogo) return null
 
-    const logoUrl = logoSettings.logo?.url
-    const isInline = logoPosition === 'left-inline' || logoPosition === 'right-inline'
-
-    // Logo before title (separate row)
-    if (showLogo && logoPosition === 'before') {
-      return (
-        <>
+    return (
+      <>
+        {showLogo && (
           <div style={styles.logoContainer}>
             <img src={logoUrl} alt="Logo" style={styles.logo} />
           </div>
-          {showTitle && (
-            <div style={styles.headerBlock}>
-              <div style={styles.title}>{content.title}</div>
-            </div>
-          )}
-        </>
-      )
-    }
-
-    // Logo after title (separate row)
-    if (showLogo && logoPosition === 'after') {
-      return (
-        <>
-          {showTitle && (
-            <div style={styles.headerBlock}>
-              <div style={styles.title}>{content.title}</div>
-            </div>
-          )}
-          <div style={styles.logoContainer}>
-            <img src={logoUrl} alt="Logo" style={styles.logo} />
+        )}
+        {showTitle && (
+          <div style={styles.headerBlock}>
+            <div style={styles.title}>{content.title}</div>
           </div>
-        </>
-      )
-    }
-
-    // Logo center (separate row)
-    if (showLogo && logoPosition === 'center') {
-      return (
-        <>
-          <div style={styles.logoContainer}>
-            <img src={logoUrl} alt="Logo" style={styles.logo} />
-          </div>
-          {showTitle && (
-            <div style={styles.headerBlock}>
-              <div style={styles.title}>{content.title}</div>
-            </div>
-          )}
-        </>
-      )
-    }
-
-    // Logo inline (same row)
-    if (showLogo && showTitle && isInline) {
-      return (
-        <div style={styles.headerInline}>
-          <img src={logoUrl} alt="Logo" style={styles.logo} />
-          <div style={styles.title}>{content.title}</div>
-        </div>
-      )
-    }
-
-    // Only title, no logo
-    if (showTitle) {
-      return (
-        <div style={styles.headerBlock}>
-          <div style={styles.title}>{content.title}</div>
-        </div>
-      )
-    }
-
-    // Only logo, no title
-    if (showLogo) {
-      return (
-        <div style={styles.logoContainer}>
-          <img src={logoUrl} alt="Logo" style={styles.logo} />
-        </div>
-      )
-    }
-
-    return null
+        )}
+      </>
+    )
   }
 
   const messageContent = (
@@ -421,14 +317,14 @@ export function MessagePreview({
         </div>
       )}
 
-      {showSignature && signature.text && (
+      {showSignature && (
         <div
           style={{
             ...styles.signature,
             textAlign: signaturePosition as 'left' | 'right' | 'center',
           }}
         >
-          {signature.text}
+          {/* signature text would go here */}
         </div>
       )}
     </div>

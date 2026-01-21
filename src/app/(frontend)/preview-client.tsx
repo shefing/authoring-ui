@@ -6,8 +6,10 @@ import {Label} from './components/ui/label'
 import {Select} from './components/ui/select'
 import {Card, CardContent, CardHeader, CardTitle} from './components/ui/card'
 import {coerceVarValue, extractInlineVarDefs, type VarDef} from './lib/vars'
-import type {TemplateSummary} from './lib/payload'
+import {cn} from './lib/utils'
+import type { Branding, Template } from '@/payload-types'
 import {MessagePreview} from './components/MessagePreview'
+import type { TemplateSummary } from './lib/payload-server'
 
 type Props = { templates: TemplateSummary[] }
 
@@ -21,7 +23,7 @@ export default function ClientComposer({
 }: Props & {
   initialTemplateId?: string
   initialDraft?: boolean
-  initialTemplateData?: any
+  initialTemplateData?: Template | null
 }) {
   const [templateId, setTemplateId] = React.useState<string>(initialTemplateId || '')
   const [draft, setDraft] = React.useState(!!initialDraft)
@@ -30,8 +32,16 @@ export default function ClientComposer({
   ])
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
-  const [preview, setPreview] = React.useState<any | null>(null)
-  const [tplJson, setTplJson] = React.useState<any | null>(initialTemplateData || null)
+  const [preview, setPreview] = React.useState<{
+    html: string
+    title?: string
+    device?: {
+      actions?: any[]
+      [key: string]: any
+    }
+    teams?: any
+  } | null>(null)
+  const [tplJson, setTplJson] = React.useState<Template | null>(initialTemplateData || null)
   const [inlineVars, setInlineVars] = React.useState<VarDef[]>(
     initialTemplateData ? extractInlineVarDefs(initialTemplateData) : [],
   )
@@ -44,7 +54,7 @@ export default function ClientComposer({
     }
     return init
   })
-  const [branding, setBranding] = React.useState<any | null>(null)
+  const [branding, setBranding] = React.useState<Branding | null>(null)
   const [showPopup, setShowPopup] = React.useState(false)
   const [validationErrors, setValidationErrors] = React.useState<Set<string>>(new Set())
 
@@ -52,17 +62,21 @@ export default function ClientComposer({
 
   // Load full template (depth=2) when selection changes to build dynamic var form
   React.useEffect(() => {
+    let active = true
     async function load() {
-      setTplJson(null)
-      setInlineVars([])
-      setInlineValues({})
-      setBranding(null)
-      if (!templateId) return
+      if (!templateId) {
+        setTplJson(null)
+        setInlineVars([])
+        setInlineValues({})
+        setBranding(null)
+        return
+      }
       try {
-        // const qs = new URLSearchParams({ draft: draft ? '1' : '0' }).toString()
         const res = await fetch(`/api/templates/${templateId}`, { cache: 'no-store' })
         const data = await res.json()
+        if (!active) return
         if (!res.ok) throw new Error(data?.error || 'failed to load template')
+        
         setTplJson(data)
         const defs = extractInlineVarDefs(data)
         setInlineVars(defs)
@@ -74,26 +88,30 @@ export default function ClientComposer({
         setInlineValues(init)
 
         // Fetch branding package if referenced
-        if (data.brandingRef) {
+        if (data.branding) {
           const brandingId =
-            typeof data.brandingRef === 'object' ? data.brandingRef.id : data.brandingRef
+            typeof data.branding === 'object' ? data.branding.id : data.branding
           if (brandingId) {
             const brandingRes = await fetch(`/api/branding-packages/${brandingId}`, {
               cache: 'no-store',
             })
             if (brandingRes.ok) {
               const brandingData = await brandingRes.json()
-              setBranding(brandingData)
+              if (active) setBranding(brandingData)
             }
           }
+        } else {
+          setBranding(null)
         }
       } catch (e: any) {
         console.error(e)
-        setError(e?.message || 'Failed to load template')
+        if (active) setError(e?.message || 'Failed to load template')
       }
     }
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      active = false
+    }
   }, [templateId, draft])
 
   function addRow() {
@@ -232,15 +250,7 @@ export default function ClientComposer({
                                 })
                               }
                             }}
-                            style={
-                              hasError
-                                ? {
-                                    borderColor: '#dc2626',
-                                    borderWidth: '2px',
-                                    outline: 'none',
-                                  }
-                                : undefined
-                            }
+                            className={cn(hasError && 'border-red-600 border-2 outline-none')}
                           >
                             <option value="">Select…</option>
                             {v.enumOptions.map((opt, i) => (
@@ -287,15 +297,7 @@ export default function ClientComposer({
                                 })
                               }
                             }}
-                            style={
-                              hasError
-                                ? {
-                                    borderColor: '#dc2626',
-                                    borderWidth: '2px',
-                                    outline: 'none',
-                                  }
-                                : undefined
-                            }
+                            className={cn(hasError && 'border-red-600 border-2 outline-none')}
                           />
                         )}
                       </div>

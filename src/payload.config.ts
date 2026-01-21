@@ -129,7 +129,7 @@ export default buildConfig({
     addAuthorsFields({
       excludedCollections: [],
       excludedGlobals: [],
-      usernameField: 'name',
+      usernameField: 'email',
     }),
     CollectionQuickFilterPlugin({}),
     CollectionResetPreferencesPlugin({

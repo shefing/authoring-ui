@@ -6,10 +6,15 @@ import config from '@/payload.config'
 import ClientComposer from '../preview-client'
 import {Card, CardContent, CardHeader, CardTitle} from '../components/ui/card'
 import {getTemplateByIdServer, listPublishedTemplatesServer} from '../lib/payload-server'
+import type { Template } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
-export default async function OperatorPage({ searchParams }: { searchParams?: any }) {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function OperatorPage({ searchParams }: PageProps) {
   // Check if user is authenticated
   const payload = await getPayload({ config })
   const requestHeaders = await headers()
@@ -23,18 +28,13 @@ export default async function OperatorPage({ searchParams }: { searchParams?: an
     return []
   })
 
-  // Next.js (newer versions) pass searchParams as an async dynamic API (a Promise).
-  // Support both Promise and plain object to be compatible across versions.
-  const sp =
-    searchParams && typeof searchParams.then === 'function'
-      ? await searchParams
-      : searchParams || {}
+  const sp = await searchParams
 
   const templateIdParam = (sp?.templateId as string) || ''
   const draftParam = (sp?.draft as string) || ''
   const initialDraft = draftParam === '1' || draftParam === 'true'
 
-  let initialTemplateData = null
+  let initialTemplateData: Template | null = null
   if (templateIdParam) {
     try {
       initialTemplateData = await getTemplateByIdServer(templateIdParam, { draft: initialDraft })
