@@ -78,11 +78,11 @@ export default buildConfig({
     },
   },
   collections: [
-    Users,
-    Media,
     Templates,
     Branding,
     Policies,
+      Users,
+      Media,
     Variables,
     Channels,
     Buttons,

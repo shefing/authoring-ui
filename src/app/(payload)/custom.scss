@@ -154,7 +154,12 @@
   .popup__content {
     left: 0;
   }
+
 }
+.live-preview-window{
+  width: 50% !important;
+}
+
 .payload__modal-container.payload__modal-container--enterDone ,.payload__modal-container--appear, .payload__modal-container--appearDone, .payload__modal-container--enter, .payload__modal-container--enterDone, .payload__modal-container--exit{
   z-index: 0 !important;
   /*

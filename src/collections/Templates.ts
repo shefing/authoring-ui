@@ -51,6 +51,11 @@ export const Templates: CollectionConfig = {
               fields: [
                 { name: 'name', type: 'text', required: true },
                 slugField({ fieldToUse: 'name' }),
+                  {
+                      name: 'isActive',
+                      type: 'checkbox',
+                      defaultValue: true,
+                  },
               ],
             },
             {
@@ -81,6 +86,12 @@ export const Templates: CollectionConfig = {
                   ],
                   defaultValue: 'custom',
                 },
+              {
+                  name: 'branding',
+                  type: 'relationship',
+                  relationTo: 'branding',
+              },
+
               ],
             },
             {
@@ -121,11 +132,6 @@ export const Templates: CollectionConfig = {
                 ],
               }),
             },
-            {
-              name: 'isActive',
-              type: 'checkbox',
-              defaultValue: true,
-            },
           ],
         },
         {
@@ -138,11 +144,6 @@ export const Templates: CollectionConfig = {
                   name: 'division',
                   type: 'relationship',
                   relationTo: 'divisions',
-                },
-                {
-                  name: 'branding',
-                  type: 'relationship',
-                  relationTo: 'branding',
                 },
               ],
             },

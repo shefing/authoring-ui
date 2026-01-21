@@ -68,11 +68,11 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
     templates: Template;
     branding: Branding;
     policies: Policy;
+    users: User;
+    media: Media;
     variables: Variable;
     channels: Channel;
     buttons: Button;
@@ -92,11 +92,11 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     templates: TemplatesSelect<false> | TemplatesSelect<true>;
     branding: BrandingSelect<false> | BrandingSelect<true>;
     policies: PoliciesSelect<false> | PoliciesSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     variables: VariablesSelect<false> | VariablesSelect<true>;
     channels: ChannelsSelect<false> | ChannelsSelect<true>;
     buttons: ButtonsSelect<false> | ButtonsSelect<true>;
@@ -156,30 +156,99 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "templates".
  */
-export interface User {
+export interface Template {
   id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  isActive?: boolean | null;
+  description?: string | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  templateType?: ('pre-defined' | 'custom') | null;
+  branding?: (string | null) | Branding;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  division?: (string | null) | Division;
+  channels?: (string | Channel)[] | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
   updatedAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branding".
+ */
+export interface Branding {
+  id: string;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  isActive?: boolean | null;
+  logo?: (string | null) | Media;
+  colors?: {
+    actionPrimaryColor?: string | null;
+    actionSecondaryColor?: string | null;
+    messageBackgroundColor?: string | null;
+    messageTextColor?: string | null;
+  };
+  titleTypography?: {
+    fontFamily?: string | null;
+    fontSize?: string | null;
+    fontWeight?: string | null;
+  };
+  messageTypography?: {
+    fontFamily?: string | null;
+    fontSize?: string | null;
+    fontWeight?: string | null;
+  };
+  buttonStyles?: {
+    approveBgColor?: string | null;
+    approveTextColor?: string | null;
+    dismissBgColor?: string | null;
+    dismissTextColor?: string | null;
+  };
+  scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
+  scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
+  division?: (string | null) | Division;
+  messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
+  /**
+   * Advanced CSS customization
+   */
+  customCSS?: string | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -205,49 +274,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "templates".
- */
-export interface Template {
-  id: string;
-  name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  templateType?: ('pre-defined' | 'custom') | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  isActive?: boolean | null;
-  division?: (string | null) | Division;
-  branding?: (string | null) | Branding;
-  channels?: (string | Channel)[] | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  publishDate?: string | null;
-  publisher?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "divisions".
  */
 export interface Division {
@@ -262,59 +288,6 @@ export interface Division {
   process?: string | null;
   createdAt: string;
   updatedAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "branding".
- */
-export interface Branding {
-  id: string;
-  name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
-  scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
-  isActive?: boolean | null;
-  division?: (string | null) | Division;
-  messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
-  colors?: {
-    actionPrimaryColor?: string | null;
-    actionSecondaryColor?: string | null;
-    messageBackgroundColor?: string | null;
-    messageTextColor?: string | null;
-  };
-  logo?: (string | null) | Media;
-  titleTypography?: {
-    fontFamily?: string | null;
-    fontSize?: string | null;
-    fontWeight?: string | null;
-  };
-  messageTypography?: {
-    fontFamily?: string | null;
-    fontSize?: string | null;
-    fontWeight?: string | null;
-  };
-  buttonStyles?: {
-    approveBgColor?: string | null;
-    approveTextColor?: string | null;
-    dismissBgColor?: string | null;
-    dismissTextColor?: string | null;
-  };
-  /**
-   * Advanced CSS customization
-   */
-  customCSS?: string | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  publishDate?: string | null;
-  publisher?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -436,6 +409,33 @@ export interface Policy {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -856,14 +856,6 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: string | Media;
-      } | null)
-    | ({
         relationTo: 'templates';
         value: string | Template;
       } | null)
@@ -874,6 +866,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'policies';
         value: string | Policy;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'variables';
@@ -991,11 +991,11 @@ export interface PayloadQueryPreset {
     | null;
   groupBy?: string | null;
   relatedCollection:
-    | 'users'
-    | 'media'
     | 'templates'
     | 'branding'
     | 'policies'
+    | 'users'
+    | 'media'
     | 'variables'
     | 'channels'
     | 'buttons'
@@ -1013,65 +1013,19 @@ export interface PayloadQueryPreset {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  creator?: T;
-  updator?: T;
-  process?: T;
-  createdAt?: T;
-  updatedAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  creator?: T;
-  updator?: T;
-  process?: T;
-  createdAt?: T;
-  updatedAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "templates_select".
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
+  isActive?: T;
   description?: T;
   messageType?: T;
   templateType?: T;
-  body?: T;
-  isActive?: T;
-  division?: T;
   branding?: T;
+  body?: T;
+  division?: T;
   channels?: T;
   creator?: T;
   updator?: T;
@@ -1090,11 +1044,8 @@ export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
-  scope?: T;
-  scopeType?: T;
   isActive?: T;
-  division?: T;
-  messageType?: T;
+  logo?: T;
   colors?:
     | T
     | {
@@ -1103,7 +1054,6 @@ export interface BrandingSelect<T extends boolean = true> {
         messageBackgroundColor?: T;
         messageTextColor?: T;
       };
-  logo?: T;
   titleTypography?:
     | T
     | {
@@ -1126,6 +1076,10 @@ export interface BrandingSelect<T extends boolean = true> {
         dismissBgColor?: T;
         dismissTextColor?: T;
       };
+  scope?: T;
+  scopeType?: T;
+  division?: T;
+  messageType?: T;
   customCSS?: T;
   creator?: T;
   updator?: T;
@@ -1197,6 +1151,52 @@ export interface PoliciesSelect<T extends boolean = true> {
   createdAt?: T;
   updatedAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  creator?: T;
+  updator?: T;
+  process?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1575,11 +1575,11 @@ export interface TaskCreateCollectionExport {
 export interface TaskCreateCollectionImport {
   input: {
     collectionSlug:
-      | 'users'
-      | 'media'
       | 'templates'
       | 'branding'
       | 'policies'
+      | 'users'
+      | 'media'
       | 'variables'
       | 'channels'
       | 'buttons'
