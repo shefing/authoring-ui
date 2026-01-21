@@ -41,105 +41,120 @@ export const Templates: CollectionConfig = {
   },
   fields: [
     {
-      type: 'row',
-      fields: [
-        { name: 'name', type: 'text', required: true },
-        slugField({ fieldToUse: 'name' }),
-      ],
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-    },
-    {
-      type: 'row',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'messageType',
-          type: 'select',
-          options: [
-            { label: 'Survey', value: 'survey' },
-            { label: 'Confirmation', value: 'confirmation' },
-            { label: 'Notification', value: 'notification' },
-            { label: 'Reminder', value: 'reminder' },
-            { label: 'Self-Service', value: 'self-service' },
-          ],
-          required: true,
-        },
-        {
-          name: 'templateType',
-          type: 'select',
-          options: [
-            { label: 'Pre-defined', value: 'pre-defined' },
-            { label: 'Custom', value: 'custom' },
-          ],
-          defaultValue: 'custom',
-        },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        {
-          name: 'division',
-          type: 'relationship',
-          relationTo: 'divisions',
-        },
-        {
-          name: 'branding',
-          type: 'relationship',
-          relationTo: 'branding',
-        },
-      ],
-    },
-    {
-      name: 'channels',
-      type: 'relationship',
-      relationTo: 'channels',
-      hasMany: true,
-    },
-    {
-      name: 'body',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: () => [
-          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
-          LinkFeature(),
-          BlockquoteFeature(),
-          BoldFeature(),
-          ItalicFeature(),
-          UnderlineFeature(),
-          FixedToolbarFeature(),
-          BlocksFeature({
-            blocks: [
-            ],
-            inlineBlocks: [
+          label: 'Basic',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'name', type: 'text', required: true },
+                slugField({ fieldToUse: 'name' }),
+              ],
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+            },
+            {
+              type: 'row',
+              fields: [
                 {
-                    slug: 'image',
-                    fields: [
-                        { name: 'asset', type: 'upload', relationTo: 'media', required: true },
-                    ],
+                  name: 'messageType',
+                  type: 'select',
+                  options: [
+                    { label: 'Survey', value: 'survey' },
+                    { label: 'Confirmation', value: 'confirmation' },
+                    { label: 'Notification', value: 'notification' },
+                    { label: 'Reminder', value: 'reminder' },
+                    { label: 'Self-Service', value: 'self-service' },
+                  ],
+                  required: true,
                 },
-              {
-                slug: 'var',
-                fields: [
-                  {
-                    name: 'variable',
-                    type: 'relationship',
-                    relationTo: 'variables',
-                    required: true,
-                  },
+                {
+                  name: 'templateType',
+                  type: 'select',
+                  options: [
+                    { label: 'Pre-defined', value: 'pre-defined' },
+                    { label: 'Custom', value: 'custom' },
+                  ],
+                  defaultValue: 'custom',
+                },
+              ],
+            },
+            {
+              name: 'body',
+              type: 'richText',
+              editor: lexicalEditor({
+                features: () => [
+                  HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
+                  LinkFeature(),
+                  BlockquoteFeature(),
+                  BoldFeature(),
+                  ItalicFeature(),
+                  UnderlineFeature(),
+                  FixedToolbarFeature(),
+                  BlocksFeature({
+                    blocks: [
+                    ],
+                    inlineBlocks: [
+                      {
+                        slug: 'image',
+                        fields: [
+                          { name: 'asset', type: 'upload', relationTo: 'media', required: true },
+                        ],
+                      },
+                      {
+                        slug: 'var',
+                        fields: [
+                          {
+                            name: 'variable',
+                            type: 'relationship',
+                            relationTo: 'variables',
+                            required: true,
+                          },
+                        ],
+                      },
+                    ],
+                  }),
                 ],
-              },
-            ],
-          }),
-        ],
-      }),
-    },
-    {
-      name: 'isActive',
-      type: 'checkbox',
-      defaultValue: true,
+              }),
+            },
+            {
+              name: 'isActive',
+              type: 'checkbox',
+              defaultValue: true,
+            },
+          ],
+        },
+        {
+          label: 'Advanced',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'division',
+                  type: 'relationship',
+                  relationTo: 'divisions',
+                },
+                {
+                  name: 'branding',
+                  type: 'relationship',
+                  relationTo: 'branding',
+                },
+              ],
+            },
+            {
+              name: 'channels',
+              type: 'relationship',
+              relationTo: 'channels',
+              hasMany: true,
+            },
+          ],
+        },
+      ],
     },
   ],
 }

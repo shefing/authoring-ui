@@ -218,9 +218,6 @@ export interface Template {
   description?: string | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   templateType?: ('pre-defined' | 'custom') | null;
-  division?: (string | null) | Division;
-  branding?: (string | null) | Branding;
-  channels?: (string | Channel)[] | null;
   body?: {
     root: {
       type: string;
@@ -237,6 +234,9 @@ export interface Template {
     [k: string]: unknown;
   } | null;
   isActive?: boolean | null;
+  division?: (string | null) | Division;
+  branding?: (string | null) | Branding;
+  channels?: (string | Channel)[] | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -280,6 +280,13 @@ export interface Branding {
   isActive?: boolean | null;
   division?: (string | null) | Division;
   messageType?: ('survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service') | null;
+  colors?: {
+    actionPrimaryColor?: string | null;
+    actionSecondaryColor?: string | null;
+    messageBackgroundColor?: string | null;
+    messageTextColor?: string | null;
+  };
+  logo?: (string | null) | Media;
   titleTypography?: {
     fontFamily?: string | null;
     fontSize?: string | null;
@@ -290,19 +297,12 @@ export interface Branding {
     fontSize?: string | null;
     fontWeight?: string | null;
   };
-  colors?: {
-    actionPrimaryColor?: string | null;
-    actionSecondaryColor?: string | null;
-    messageBackgroundColor?: string | null;
-    messageTextColor?: string | null;
-  };
   buttonStyles?: {
     approveBgColor?: string | null;
     approveTextColor?: string | null;
     dismissBgColor?: string | null;
     dismissTextColor?: string | null;
   };
-  logo?: (string | null) | Media;
   /**
    * Advanced CSS customization
    */
@@ -1068,11 +1068,11 @@ export interface TemplatesSelect<T extends boolean = true> {
   description?: T;
   messageType?: T;
   templateType?: T;
+  body?: T;
+  isActive?: T;
   division?: T;
   branding?: T;
   channels?: T;
-  body?: T;
-  isActive?: T;
   creator?: T;
   updator?: T;
   process?: T;
@@ -1095,6 +1095,15 @@ export interface BrandingSelect<T extends boolean = true> {
   isActive?: T;
   division?: T;
   messageType?: T;
+  colors?:
+    | T
+    | {
+        actionPrimaryColor?: T;
+        actionSecondaryColor?: T;
+        messageBackgroundColor?: T;
+        messageTextColor?: T;
+      };
+  logo?: T;
   titleTypography?:
     | T
     | {
@@ -1109,14 +1118,6 @@ export interface BrandingSelect<T extends boolean = true> {
         fontSize?: T;
         fontWeight?: T;
       };
-  colors?:
-    | T
-    | {
-        actionPrimaryColor?: T;
-        actionSecondaryColor?: T;
-        messageBackgroundColor?: T;
-        messageTextColor?: T;
-      };
   buttonStyles?:
     | T
     | {
@@ -1125,7 +1126,6 @@ export interface BrandingSelect<T extends boolean = true> {
         dismissBgColor?: T;
         dismissTextColor?: T;
       };
-  logo?: T;
   customCSS?: T;
   creator?: T;
   updator?: T;
