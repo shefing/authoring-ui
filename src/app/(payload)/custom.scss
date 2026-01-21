@@ -166,3 +166,53 @@
   pointer-events: none;
   */
 }
+
+/* Broadcast-inspired Payload theme overrides */
+:root {
+  /* Base elevations / surfaces */
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: #f8fafc;
+  --theme-elevation-100: #f1f5f9;
+  --theme-elevation-150: #e2e8f0;
+  --theme-elevation-200: #cbd5f5;
+
+  /* Text */
+  --theme-text: #0f172a;          /* main text */
+  --theme-text-subtle: #64748b;   /* muted / helper text */
+
+  /* Primary / accent (buttons, links, focus) */
+  --theme-primary-500: #4f46e5;   /* indigo primary */
+  --theme-primary-600: #4338ca;
+  --theme-primary-700: #3730a3;
+
+  /* Success / error */
+  --theme-success-500: #16a34a;   /* slightly deeper green */
+  --theme-error-500: #ef4444;
+
+  /* Borders & dividers */
+  --theme-border-subtle: #e2e8f0;
+  --theme-border-strong: #cbd5e1;
+
+  /* Inputs & cards */
+  --theme-input-bg: #ffffff;
+  --theme-input-border: #cbd5e1;
+  --theme-card-bg: #ffffff;
+
+  /* Radii & shadows (used by some Payload components if exposed) */
+  --theme-radius-s: 6px;
+  --theme-radius-m: 8px;
+  --theme-radius-l: 12px;
+  --theme-shadow-s: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --theme-shadow-m: 0 4px 8px rgba(15, 23, 42, 0.08);
+
+  /* Typography */
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+:root {
+  --theme-bg: #f8fafc;            /* app shell background */
+  --theme-link: #4f46e5;
+  --theme-link-hover: #3730a3;
+  --theme-focus-ring: 0 0 0 1px #e0e7ff, 0 0 0 4px rgba(79, 70, 229, 0.4);
+}
