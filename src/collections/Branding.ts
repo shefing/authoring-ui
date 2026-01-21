@@ -26,7 +26,7 @@ export const Branding: CollectionConfig = {
             type: 'tabs',
             tabs: [
                 {
-                    label: 'Design',
+                    label: 'Basic',
                     fields: [
                         {
                             type: 'row',
@@ -111,6 +111,35 @@ export const Branding: CollectionConfig = {
                             ],
                         },
                         {
+                            name: 'colors',
+                            type: 'group',
+                            label: 'Brand Colors',
+                            fields: [
+                                {
+                                    type: 'row',
+                                    fields: [
+                                        createColorField({name: 'actionPrimaryColor', label: 'Title Text'}),
+                                        createColorField({name: 'actionSecondaryColor', label: 'Border'}),
+                                        createBackgroundColorField({
+                                            name: 'messageBackgroundColor',
+                                            label: 'Message Background'
+                                        }),
+                                        createColorField({name: 'messageTextColor', label: 'Message Text'}),
+                                    ],
+                                },
+                            ],
+                        },
+                        {
+                            name: 'logo',
+                            type: 'relationship',
+                            relationTo: 'media',
+                        },
+                    ],
+                },
+                {
+                    label: 'Advanced',
+                    fields: [
+                        {
                             name: 'titleTypography',
                             type: 'group',
                             label: 'Title Typography',
@@ -140,26 +169,6 @@ export const Branding: CollectionConfig = {
                                 },
                             ],
                         },
-
-                        {
-                            name: 'colors',
-                            type: 'group',
-                            label: 'Brand Colors',
-                            fields: [
-                                {
-                                    type: 'row',
-                                    fields: [
-                                        createColorField({name: 'actionPrimaryColor', label: 'Title Text'}),
-                                        createColorField({name: 'actionSecondaryColor', label: 'Border'}),
-                                        createBackgroundColorField({
-                                            name: 'messageBackgroundColor',
-                                            label: 'Message Background'
-                                        }),
-                                        createColorField({name: 'messageTextColor', label: 'Message Text'}),
-                                    ],
-                                },
-                            ],
-                        },
                         {
                             name: 'buttonStyles',
                             type: 'group',
@@ -179,16 +188,6 @@ export const Branding: CollectionConfig = {
                                 },
                             ],
                         },
-                    ],
-                },
-                {
-                    label: 'Assets & CSS',
-                    fields: [
-                        {
-                            name: 'logo',
-                            type: 'relationship',
-                            relationTo: 'media',
-                        },
                         {
                             name: 'customCSS',
                             type: 'code',
@@ -199,7 +198,6 @@ export const Branding: CollectionConfig = {
                         },
                     ],
                 },
-
             ],
         },
     ],
