@@ -25,27 +25,27 @@ export const Branding: CollectionConfig = {
     },
     fields: [
         {
-            type: 'row',
-            fields: [
-                {
-                    name: 'name',
-                    type: 'text',
-                    required: true,
-                    admin: {
-                        style: {
-                            marginRight: '10px',
-                        },
-                    },
-                },
-                slugField({fieldToUse: 'name'}),
-            ],
-        },
-        {
             type: 'tabs',
             tabs: [
                 {
                     label: 'Design',
                     fields: [
+                        {
+                            type: 'row',
+                            fields: [
+                                {
+                                    name: 'name',
+                                    type: 'text',
+                                    required: true,
+                                    admin: {
+                                        style: {
+                                            marginRight: '10px',
+                                        },
+                                    },
+                                },
+                                slugField({fieldToUse: 'name'}),
+                            ],
+                        },
                         {
                             type: 'row',
                             fields: [
