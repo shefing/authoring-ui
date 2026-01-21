@@ -1,12 +1,14 @@
+import type { Variable } from '@/payload-types'
+
 export type VarDef = {
   id: string
   key: string
   label?: string
-  type?: string
+  type?: Variable['type']
   required?: boolean
-  enumOptions?: Array<{ value: string; label?: string }>
-  formatHint?: string
-  sampleValue?: string
+  enumOptions?: Variable['enumOptions']
+  formatHint?: string | null
+  sampleValue?: string | null
 }
 
 function collectNodes(node: any, out: any[]) {
@@ -37,29 +39,29 @@ export function extractInlineVarDefs(template: any): VarDef[] {
       const fields = (n as any).fields || n
       const rel = fields?.variable
       let id: string | undefined
-      let doc: any | undefined
+      let doc: Variable | undefined
       if (rel && typeof rel === 'object') {
         if ('value' in rel && (typeof rel.value === 'string' || typeof rel.value === 'number')) {
           id = String(rel.value)
           // when depth>=2, rel.value can be populated object as well
           if (typeof rel.value === 'object' && rel.value) {
-            doc = rel.value
-            id = String(doc.id || doc._id || id)
+            doc = rel.value as Variable
+            id = String(doc.id || id)
           }
         } else if ('id' in rel) {
           id = String(rel.id)
-          doc = rel
+          doc = rel as Variable
         }
       } else if (typeof rel === 'string') {
         id = rel
       }
 
       if (id && !seen.has(id)) {
-        const key = doc?.key || doc?.slug || doc?.name || id
+        const key = doc?.key || id
         seen.set(id, {
           id,
           key,
-          label: doc?.label,
+          label: doc?.label || undefined,
           type: doc?.type,
           required: !!doc?.required,
           enumOptions: doc?.enumOptions,
@@ -74,7 +76,7 @@ export function extractInlineVarDefs(template: any): VarDef[] {
 }
 
 /** Coerce string input values to typed values based on Variable type. */
-export function coerceVarValue(type: string | undefined, value: string) {
+export function coerceVarValue(type: Variable['type'] | undefined, value: string) {
   switch (type) {
     case 'number': {
       const n = Number(value)

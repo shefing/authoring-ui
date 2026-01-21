@@ -1,5 +1,6 @@
 'use client'
 import * as React from 'react'
+import {resolveTailwindColor} from '../lib/utils'
 
 type LexicalNode = {
   type: string
@@ -18,7 +19,7 @@ type LexicalContent = {
 }
 
 type RichTextRendererProps = {
-  content: any
+  content: LexicalContent | string | null | undefined
   textSize?: number | string
   colors?: Record<string, string>
   spacing?: Record<string, string>
@@ -47,14 +48,14 @@ export function RichTextRenderer({
     const customButton = customButtons.find((btn) => btn.kind === actionKind)
     if (customButton) {
       return {
-        backgroundColor: customButton.backgroundColor,
-        color: customButton.textColor,
+        backgroundColor: resolveTailwindColor(customButton.backgroundColor),
+        color: resolveTailwindColor(customButton.textColor),
         label: customButton.label,
       }
     }
     return {
-      backgroundColor: colors.primary || '#3b82f6',
-      color: colors.buttonText || '#ffffff',
+      backgroundColor: resolveTailwindColor(colors.primary || '#3b82f6'),
+      color: resolveTailwindColor(colors.buttonText || '#ffffff'),
       label: null,
     }
   }, [colors.buttonText, colors.primary, customButtons])
@@ -149,7 +150,7 @@ export function RichTextRenderer({
             fontSize: headingSizes[HeadingTag] || `${baseSize * 1.5}px`,
             fontWeight: 600,
             margin: `${spacing.medium || '16px'} 0 ${spacing.small || '12px'} 0`,
-            color: colors.text || '#374151',
+            color: resolveTailwindColor(colors.text || '#374151'),
           },
         },
         node.children?.map((child, idx) => renderFn(child, idx, renderFn)),
@@ -162,11 +163,11 @@ export function RichTextRenderer({
         <blockquote
           key={index}
           style={{
-            borderLeft: `4px solid ${colors.primary || '#3b82f6'}`,
+            borderLeft: `4px solid ${resolveTailwindColor(colors.primary || '#3b82f6')}`,
             paddingLeft: spacing.medium || '16px',
             margin: `${spacing.medium || '16px'} 0`,
             fontStyle: 'italic',
-            color: colors.textMuted || '#6b7280',
+            color: resolveTailwindColor(colors.textMuted || '#6b7280'),
           }}
         >
           {node.children?.map((child, idx) => renderFn(child, idx, renderFn))}
@@ -187,7 +188,7 @@ export function RichTextRenderer({
           target={newTab ? '_blank' : undefined}
           rel={newTab ? 'noopener noreferrer' : undefined}
           style={{
-            color: colors.primary || '#3b82f6',
+            color: resolveTailwindColor(colors.primary || '#3b82f6'),
             textDecoration: 'underline',
           }}
         >
@@ -237,7 +238,7 @@ export function RichTextRenderer({
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: colors.primary || '#3b82f6',
+                color: resolveTailwindColor(colors.primary || '#3b82f6'),
                 textDecoration: 'underline',
               }}
             >
@@ -253,7 +254,7 @@ export function RichTextRenderer({
               key={index}
               href={`mailto:${displayText}`}
               style={{
-                color: colors.primary || '#3b82f6',
+                color: resolveTailwindColor(colors.primary || '#3b82f6'),
                 textDecoration: 'underline',
               }}
             >
