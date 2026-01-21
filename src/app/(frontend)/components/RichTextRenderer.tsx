@@ -174,6 +174,28 @@ export function RichTextRenderer({
       )
     }
 
+    // Link node
+    if (node.type === 'link') {
+      const fields = node.fields || {}
+      const url = fields.url || '#'
+      const newTab = fields.newTab
+
+      return (
+        <a
+          key={index}
+          href={url}
+          target={newTab ? '_blank' : undefined}
+          rel={newTab ? 'noopener noreferrer' : undefined}
+          style={{
+            color: colors.primary || '#3b82f6',
+            textDecoration: 'underline',
+          }}
+        >
+          {node.children?.map((child, idx) => renderFn(child, idx, renderFn))}
+        </a>
+      )
+    }
+
     // Block node (for images and other blocks)
     if (node.type === 'inlineBlock' || node.type === 'block') {
       const { fields } = node
@@ -189,8 +211,9 @@ export function RichTextRenderer({
               maxWidth: '100%',
               height: 'auto',
               borderRadius: radii.small || '4px',
-              margin: `${spacing.small || '12px'} 0`,
-              display: 'block',
+              margin: `0 4px`,
+              display: 'inline-block',
+              verticalAlign: 'middle',
             }}
           />
         )
@@ -203,7 +226,7 @@ export function RichTextRenderer({
 
         // Use the actual value from variableValues if available, otherwise use textToDisplay or variable name
         const displayText =
-          variableValues[varKey] || fields.textToDisplay || fields.variable.name || 'variable'
+          variableValues[varKey] || fields.textToDisplay || fields.variable.name || fields.variable.label || 'variable'
 
         // URL - render as actual link
         if (varType === 'url') {
