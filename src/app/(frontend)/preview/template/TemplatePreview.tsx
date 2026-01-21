@@ -7,7 +7,7 @@ import { MessagePreview } from '@/app/(frontend)/components/MessagePreview'
 
 export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialData }) => {
   const { data } = useLivePreview<Template>({
-    serverURL: process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000',
+    serverURL: process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'),
     depth: 2,
     initialData: initialData,
   })

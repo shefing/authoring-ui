@@ -11,9 +11,7 @@ export const Branding: CollectionConfig = {
         useAsTitle: 'name',
         livePreview: {
             url: ({ data }: { data: any }) => {
-                const url = new URL('/preview/branding', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
-                url.searchParams.set('id', data.id)
-                return url.toString()
+                return `/preview/branding?id=${data.id}`
             },
         },
     },

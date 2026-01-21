@@ -26,9 +26,7 @@ export const Templates: CollectionConfig = {
   admin: {
     livePreview: {
       url: ({ data }: { data: any }) => {
-        const url = new URL('/preview/template', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
-        url.searchParams.set('id', data.id)
-        return url.toString()
+        return `/preview/template?id=${data.id}`
       },
     },
     useAsTitle: 'name',
@@ -36,10 +34,9 @@ export const Templates: CollectionConfig = {
     preview: (doc) => {
       // Point to the co-located Operator UI root with query params.
       // We avoid non-existent /operator/preview/template route and undefined version.
-      const url = new URL('/preview/template', process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
-      url.searchParams.set('id', doc.id as string)
-      if (doc._status === 'draft') url.searchParams.set('draft', '1')
-      return url.toString()
+      let url = `/preview/template?id=${doc.id}`
+      if (doc._status === 'draft') url += '&draft=1'
+      return url
     },
   },
   fields: [
