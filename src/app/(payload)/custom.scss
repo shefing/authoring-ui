@@ -144,6 +144,10 @@
     padding: 10px 20px;
     list-style: none;
   }
+  .field-type.group-field.group-field--top-level.group-field--within-tab {
+    margin: 5px !important;
+    padding: 10px !important;
+  }
 }
 
 .array-field__header-action {

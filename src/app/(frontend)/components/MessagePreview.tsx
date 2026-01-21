@@ -232,8 +232,8 @@ export function MessagePreview({
       marginBottom: spacing.medium || '16px',
     },
     logo: {
-      width: '40px',
-      height: '40px',
+      width: 'auto',
+      height: 'fit-content',
       objectFit: 'cover' as const,
       borderRadius: radii.small || '4px',
     },
