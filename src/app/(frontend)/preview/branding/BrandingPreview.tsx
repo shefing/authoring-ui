@@ -121,16 +121,17 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
       style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#f4f4f4', minHeight: '100vh', color: '#000' }}
     >
       <div style={{ width: '100%', maxWidth: '800px' }}>
-        <div style={{ 
+        <h2 style={{ 
           textAlign: 'center', 
           marginBottom: '20px', 
           color: 'inherit', 
-          fontSize: brandingData.titleTypography?.fontSize || '24px',
-          fontWeight: brandingData.titleTypography?.fontWeight || 'bold',
-          fontFamily: brandingData.titleTypography?.fontFamily ? `${brandingData.titleTypography.fontFamily}, system-ui, sans-serif` : 'inherit' 
+          fontSize: '24px',
+          fontWeight: 'bold',
+          fontFamily: 'system-ui, sans-serif',
+          margin: '0 0 20px 0'
         }}>
             Branding: {brandingData.name}
-        </div>
+        </h2>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MessagePreview 
                 content={sampleContent as any} 

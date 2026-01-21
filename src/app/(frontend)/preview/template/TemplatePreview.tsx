@@ -105,16 +105,17 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
       style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#f4f4f4', minHeight: '100vh', color: '#000' }}
     >
       <div style={{ width: '100%', maxWidth: '800px' }}>
-        <div style={{ 
+        <h2 style={{ 
           textAlign: 'center', 
           marginBottom: '20px', 
           color: 'inherit', 
           fontSize: '24px',
           fontWeight: 'bold',
-          fontFamily: 'system-ui, sans-serif' 
+          fontFamily: 'system-ui, sans-serif',
+          margin: '0 0 20px 0'
         }}>
             Template Preview: {templateData.name}
-        </div>
+        </h2>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MessagePreview 
                 content={messageContent as any} 
