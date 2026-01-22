@@ -27,13 +27,17 @@ import {UserGroups} from './collections/UserGroups'
 import {DeliveryRules} from './collections/DeliveryRules'
 import {MessageAnalytics} from './collections/MessageAnalytics'
 import {seed} from './seed'
+import {en} from "@payloadcms/translations/languages/en";
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   debug: process.env.NODE_ENV === 'development',
-  admin: {
+    i18n: {
+        supportedLanguages: {en},
+    },
+    admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
