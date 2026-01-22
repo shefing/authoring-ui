@@ -66,9 +66,12 @@
 
 
 :root {
-  --nav-width: 200px;
+  --nav-width: 220px;
 }
 
+.card__title{
+  font-size: 18px;
+}
 .nav-group__label{
   font-size: 16px;
   font-weight: 500;

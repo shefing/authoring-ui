@@ -84,8 +84,8 @@ export default buildConfig({
   },
   collections: [
     Branding,
-    Messages,
       Templates,
+    Messages,
       Policies,
     Media,
     Channels,

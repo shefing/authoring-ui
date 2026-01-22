@@ -69,8 +69,8 @@ export interface Config {
   blocks: {};
   collections: {
     branding: Branding;
-    messages: Message;
     templates: Template;
+    messages: Message;
     policies: Policy;
     media: Media;
     channels: Channel;
@@ -93,8 +93,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     branding: BrandingSelect<false> | BrandingSelect<true>;
-    messages: MessagesSelect<false> | MessagesSelect<true>;
     templates: TemplatesSelect<false> | TemplatesSelect<true>;
+    messages: MessagesSelect<false> | MessagesSelect<true>;
     policies: PoliciesSelect<false> | PoliciesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     channels: ChannelsSelect<false> | ChannelsSelect<true>;
@@ -248,50 +248,6 @@ export interface Division {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "messages".
- */
-export interface Message {
-  id: string;
-  name: string;
-  description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  template?: (string | null) | Template;
-  targetGroup?: (string | null) | UserGroup;
-  channel?: (string | null) | Channel;
-  deliveryRules?: (string | DeliveryRule)[] | null;
-  deliveryMode?: ('intrusive' | 'non-intrusive') | null;
-  status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
-  priority?: ('normal' | 'high' | 'urgent') | null;
-  deliverySchedule?: ('immediate' | 'scheduled') | null;
-  scheduledDate?: string | null;
-  /**
-   * Calculated response rate percentage
-   */
-  responseRate?: number | null;
-  totalRecipients?: number | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "templates".
  */
 export interface Template {
@@ -360,6 +316,50 @@ export interface Channel {
     | null;
   requiresAuth?: boolean | null;
   authProvider?: string | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages".
+ */
+export interface Message {
+  id: string;
+  name: string;
+  description?: string | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  template?: (string | null) | Template;
+  targetGroup?: (string | null) | UserGroup;
+  channel?: (string | null) | Channel;
+  deliveryRules?: (string | DeliveryRule)[] | null;
+  deliveryMode?: ('intrusive' | 'non-intrusive') | null;
+  status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
+  priority?: ('normal' | 'high' | 'urgent') | null;
+  deliverySchedule?: ('immediate' | 'scheduled') | null;
+  scheduledDate?: string | null;
+  /**
+   * Calculated response rate percentage
+   */
+  responseRate?: number | null;
+  totalRecipients?: number | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -860,12 +860,12 @@ export interface PayloadLockedDocument {
         value: string | Branding;
       } | null)
     | ({
-        relationTo: 'messages';
-        value: string | Message;
-      } | null)
-    | ({
         relationTo: 'templates';
         value: string | Template;
+      } | null)
+    | ({
+        relationTo: 'messages';
+        value: string | Message;
       } | null)
     | ({
         relationTo: 'policies';
@@ -992,8 +992,8 @@ export interface PayloadQueryPreset {
   groupBy?: string | null;
   relatedCollection:
     | 'branding'
-    | 'messages'
     | 'templates'
+    | 'messages'
     | 'policies'
     | 'media'
     | 'channels'
@@ -1067,6 +1067,31 @@ export interface BrandingSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "templates_select".
+ */
+export interface TemplatesSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  isActive?: T;
+  description?: T;
+  messageType?: T;
+  templateType?: T;
+  branding?: T;
+  body?: T;
+  division?: T;
+  channels?: T;
+  creator?: T;
+  updator?: T;
+  process?: T;
+  publishDate?: T;
+  publisher?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "messages_select".
  */
 export interface MessagesSelect<T extends boolean = true> {
@@ -1090,31 +1115,6 @@ export interface MessagesSelect<T extends boolean = true> {
   process?: T;
   createdAt?: T;
   updatedAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "templates_select".
- */
-export interface TemplatesSelect<T extends boolean = true> {
-  name?: T;
-  generateSlug?: T;
-  slug?: T;
-  isActive?: T;
-  description?: T;
-  messageType?: T;
-  templateType?: T;
-  branding?: T;
-  body?: T;
-  division?: T;
-  channels?: T;
-  creator?: T;
-  updator?: T;
-  process?: T;
-  publishDate?: T;
-  publisher?: T;
-  createdAt?: T;
-  updatedAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1576,8 +1576,8 @@ export interface TaskCreateCollectionImport {
   input: {
     collectionSlug:
       | 'branding'
-      | 'messages'
       | 'templates'
+      | 'messages'
       | 'policies'
       | 'media'
       | 'channels'
