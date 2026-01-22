@@ -2,8 +2,13 @@ import type {CollectionConfig} from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: '👥 User',
+    plural: '👥 Users',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Organization',
     useAsTitle: 'email',
   },
   auth: true,

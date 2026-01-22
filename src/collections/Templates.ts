@@ -14,6 +14,10 @@ import {
 
 export const Templates: CollectionConfig = {
   slug: 'templates',
+  labels: {
+    singular: '📑 Template',
+    plural: '📑 Templates',
+  },
   enableQueryPresets: true,
   versions: { drafts: true, maxPerDoc: 50 },
   access: {
@@ -24,6 +28,7 @@ export const Templates: CollectionConfig = {
     filterList: [['isActive' ,'messageType','templateType']],
   },
   admin: {
+    group: 'Content',
     livePreview: {
       url: ({ data }: { data: any }) => {
         return `/preview/template?id=${data.id}`

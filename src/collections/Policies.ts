@@ -4,9 +4,14 @@ const isType = (expected: string) => ({ siblingData }: { siblingData: any }) => 
 
 export const Policies: CollectionConfig = {
   slug: 'policies',
+  labels: {
+    singular: '📜 Policy',
+    plural: '📜 Policies',
+  },
   versions: { drafts: true, maxPerDoc: 50 },
   enableQueryPresets: true,
   admin: {
+    group: 'Content',
     useAsTitle: 'name',
   },
   custom: {

@@ -2,8 +2,13 @@ import {CollectionConfig} from 'payload'
 
 export const Buttons: CollectionConfig = {
   slug: 'buttons',
+  labels: {
+    singular: '🔘 Button',
+    plural: '🔘 Buttons',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Configuration',
     useAsTitle: 'name',
   },
   access: {

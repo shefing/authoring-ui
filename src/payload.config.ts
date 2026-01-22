@@ -12,6 +12,7 @@ import CollectionQuickFilterPlugin from '@shefing/quickfilter'
 import {openapi, swaggerUI} from 'payload-oapi'
 import {CollectionResetPreferencesPlugin} from '@shefing/reset-list-view'
 import versionsPlugin from '@shefing/custom-version-view'
+import DynamicFieldOverrides from '@shefing/field-type-component-override'
 
 import {Users} from './collections/Users'
 import {Media} from './collections/Media'
@@ -82,19 +83,19 @@ export default buildConfig({
     },
   },
   collections: [
-    Templates,
     Branding,
-    Policies,
-      Users,
-      Media,
-    Variables,
-    Channels,
-    Buttons,
     Messages,
+      Templates,
+      Policies,
+    Media,
+    Channels,
+    DeliveryRules,
+    Buttons,
+    Variables,
+    MessageAnalytics,
+    Users,
     Divisions,
     UserGroups,
-    DeliveryRules,
-    MessageAnalytics,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -110,21 +111,34 @@ export default buildConfig({
     }
   },
   plugins: [
+      DynamicFieldOverrides({
+          overrides: [
+              {
+                  fieldTypes: ['checkbox'],
+                  overrides: {
+                      admin: {
+                          components: {
+                              Cell: '/admincomponents/cell/YesNoCell',
+                          },
+                      },
+                  },
+              },
+        ]}),
     importExportPlugin({
       collections: [
-        Users.slug,
-        Media.slug,
-        Templates.slug,
         Branding.slug,
         Policies.slug,
-        Variables.slug,
-        Channels.slug,
-        Buttons.slug,
         Messages.slug,
+        Media.slug,
+        Templates.slug,
+        Channels.slug,
+        DeliveryRules.slug,
+        Buttons.slug,
+        Variables.slug,
+        MessageAnalytics.slug,
+        Users.slug,
         Divisions.slug,
         UserGroups.slug,
-        DeliveryRules.slug,
-        MessageAnalytics.slug,
       ].map((item)=>{ return {slug:item as CollectionSlug,export:true,import:true}}) ,
     }),
     payloadCloudPlugin(),

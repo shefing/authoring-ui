@@ -12,9 +12,14 @@ const validateKey: FieldHook = async ({ value }) => {
 
 export const Variables: CollectionConfig = {
   slug: 'variables',
+  labels: {
+    singular: '🛠️ Variable',
+    plural: '🛠️ Variables',
+  },
   enableQueryPresets: true,
   versions: { drafts: true, maxPerDoc: 50 },
   admin: {
+    group: 'Configuration',
     useAsTitle: 'key',
   },
   custom: {

@@ -2,8 +2,13 @@ import {CollectionConfig} from 'payload'
 
 export const DeliveryRules: CollectionConfig = {
   slug: 'delivery-rules',
+  labels: {
+    singular: '🚚 Delivery Rule',
+    plural: '🚚 Delivery Rules',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Configuration',
     useAsTitle: 'name',
   },
   access: {

@@ -5,9 +5,14 @@ import {createFontFamilyField, createFontSizeField, createFontWeightField} from 
 
 export const Branding: CollectionConfig = {
     slug: 'branding',
+    labels: {
+        singular: '🎨 Brand',
+        plural: '🎨 Brands',
+    },
     versions: {drafts: true, maxPerDoc: 50},
     enableQueryPresets: true,
     admin: {
+        group: 'Content',
         useAsTitle: 'name',
         livePreview: {
             url: ({ data }: { data: any }) => {

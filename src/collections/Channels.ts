@@ -2,8 +2,13 @@ import {CollectionConfig} from 'payload'
 
 export const Channels: CollectionConfig = {
   slug: 'channels',
+  labels: {
+    singular: '🔌 Channel',
+    plural: '🔌 Channels',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Configuration',
     useAsTitle: 'name',
   },
   access: {

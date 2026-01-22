@@ -66,9 +66,14 @@
 
 
 :root {
-  --nav-width: 180px;
+  --nav-width: 200px;
 }
 
+.nav-group__label{
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+}
 
 .field-type.textarea textarea {
   min-height: 42px;
@@ -135,12 +140,12 @@
     text-align: right !important;
   }
   .dashboard__group {
-    float: right;
+    float: left;
     width: 100%;
   }
   .dashboard__group li{
     width: 20%;
-    float: right;
+    float: left;
     padding: 10px 20px;
     list-style: none;
   }

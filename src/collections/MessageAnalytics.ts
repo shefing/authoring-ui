@@ -2,8 +2,13 @@ import {CollectionConfig} from 'payload'
 
 export const MessageAnalytics: CollectionConfig = {
   slug: 'message-analytics',
+  labels: {
+    singular: '📊 Message Analytics',
+    plural: '📊 Message Analytics',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Analytics',
     useAsTitle: 'message',
   },
   access: {

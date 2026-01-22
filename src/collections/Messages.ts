@@ -11,8 +11,13 @@ import {
 
 export const Messages: CollectionConfig = {
   slug: 'messages',
+  labels: {
+    singular: '💬 Message',
+    plural: '💬 Messages',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Content',
     useAsTitle: 'name',
     defaultColumns: ['name', 'messageType', 'channel', 'deliveryMode', 'status', 'responseRate'],
   },

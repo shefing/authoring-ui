@@ -2,8 +2,13 @@ import {CollectionConfig} from 'payload'
 
 export const Divisions: CollectionConfig = {
   slug: 'divisions',
+  labels: {
+    singular: '🏢 Division',
+    plural: '🏢 Divisions',
+  },
   enableQueryPresets: true,
   admin: {
+    group: 'Organization',
     useAsTitle: 'name',
   },
   access: {
