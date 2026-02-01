@@ -437,6 +437,56 @@
   width: 50% !important;
 }
 
+/* Live preview toggler enhancement */
+.live-preview-toggler {
+  background-color: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--primary) !important;
+  border-radius: var(--radius-sm) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+
+  .icon {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: var(--primary) !important;
+    
+    path {
+      stroke: var(--primary) !important;
+    }
+  }
+
+  &:hover {
+    background-color: var(--primary-highlight) !important;
+    border-color: var(--primary) !important;
+  }
+
+  &--active {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    border-color: var(--primary) !important;
+
+    .icon {
+      stroke: var(--primary-foreground) !important;
+      
+      path {
+        stroke: var(--primary-foreground) !important;
+      }
+    }
+
+    &:hover {
+      background-color: #4c1d95 !important;
+      border-color: #4c1d95 !important;
+    }
+  }
+}
+
 /* Modal container z-index */
 .payload__modal-container.payload__modal-container--enterDone,
 .payload__modal-container--appear,
@@ -559,7 +609,7 @@ select,
   color: var(--foreground) !important;
   font-size: var(--text-base) !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-  min-height: 40px !important;
+/*  min-height: 40px !important;*/
   margin-bottom: 0 !important; /* Ensure the input itself doesn't have a margin */
   
   &::placeholder {
@@ -688,7 +738,6 @@ select,
         background-color: rgba(0, 0, 0, 0.02) !important;
       }
     }
-
     /* Prevent any hover background on the card itself from being purple */
     &:hover {
       background-color: var(--card) !important;
@@ -752,12 +801,17 @@ select,
    ---------------------------------------- */
 
 .pill,
-.tag {
+.tag,
+.pill-version-count {
   background-color: var(--primary-highlight) !important;
   color: var(--primary) !important;
   border-radius: var(--radius) !important;
   font-size: var(--text-sm) !important;
   font-weight: var(--font-weight-medium) !important;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Status badges */
