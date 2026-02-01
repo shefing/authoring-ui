@@ -1,0 +1,416 @@
+{
+  "metadata": {
+    "name": "Riverbed Unified Communication Platform",
+    "version": "1.0.0",
+    "primaryColor": "#581c87",
+    "exportDate": "2026-01-31T20:57:38.373Z"
+  },
+  "colors": {
+    "primary": [
+      {
+        "name": "Primary",
+        "variable": "--primary",
+        "value": "#581c87",
+        "description": "Main brand color - Purple"
+      },
+      {
+        "name": "Primary Foreground",
+        "variable": "--primary-foreground",
+        "value": "#ffffff",
+        "description": "Text on primary background"
+      },
+      {
+        "name": "Primary Highlight",
+        "variable": "--primary-highlight",
+        "value": "#f3e8ff",
+        "description": "Light background for primary color (auto-computed)",
+        "readOnly": true
+      }
+    ],
+    "semantic": [
+      {
+        "name": "Background",
+        "variable": "--background",
+        "value": "#ffffff",
+        "description": "Main background color"
+      },
+      {
+        "name": "Foreground",
+        "variable": "--foreground",
+        "value": "#252525",
+        "description": "Main text color"
+      },
+      {
+        "name": "Muted",
+        "variable": "--muted",
+        "value": "#ececf0",
+        "description": "Muted backgrounds"
+      },
+      {
+        "name": "Muted Foreground",
+        "variable": "--muted-foreground",
+        "value": "#717182",
+        "description": "Muted text"
+      },
+      {
+        "name": "Accent",
+        "variable": "--accent",
+        "value": "#e9ebef",
+        "description": "Accent backgrounds"
+      },
+      {
+        "name": "Accent Foreground",
+        "variable": "--accent-foreground",
+        "value": "#030213",
+        "description": "Text on accent"
+      }
+    ],
+    "status": [
+      {
+        "name": "Information",
+        "variable": "--info",
+        "value": "#2563eb",
+        "description": "Informational states"
+      },
+      {
+        "name": "Information Foreground",
+        "variable": "--info-foreground",
+        "value": "#ffffff",
+        "description": "Text on information background"
+      },
+      {
+        "name": "Success",
+        "variable": "--success",
+        "value": "#16a34a",
+        "description": "Success/completion states"
+      },
+      {
+        "name": "Success Foreground",
+        "variable": "--success-foreground",
+        "value": "#ffffff",
+        "description": "Text on success background"
+      },
+      {
+        "name": "Warning",
+        "variable": "--warning",
+        "value": "#d97706",
+        "description": "Warning/caution states"
+      },
+      {
+        "name": "Warning Foreground",
+        "variable": "--warning-foreground",
+        "value": "#ffffff",
+        "description": "Text on warning background"
+      },
+      {
+        "name": "Destructive",
+        "variable": "--destructive",
+        "value": "#d4183d",
+        "description": "Error/danger states"
+      },
+      {
+        "name": "Destructive Foreground",
+        "variable": "--destructive-foreground",
+        "value": "#ffffff",
+        "description": "Text on destructive"
+      }
+    ],
+    "ui": [
+      {
+        "name": "Card",
+        "variable": "--card",
+        "value": "#ffffff",
+        "description": "Card backgrounds"
+      },
+      {
+        "name": "Border",
+        "variable": "--border",
+        "value": "#e6e6e6",
+        "description": "Border color"
+      },
+      {
+        "name": "Input",
+        "variable": "--input",
+        "value": "#d4d4d4",
+        "description": "Input border"
+      },
+      {
+        "name": "Input Background",
+        "variable": "--input-background",
+        "value": "#f3f3f5",
+        "description": "Input background"
+      },
+      {
+        "name": "Ring",
+        "variable": "--ring",
+        "value": "#b5b5b5",
+        "description": "Focus ring"
+      }
+    ],
+    "header": [
+      {
+        "name": "Header Gradient Start",
+        "variable": "--header-gradient-start",
+        "value": "#ffffff",
+        "description": "Header gradient start color"
+      },
+      {
+        "name": "Header Gradient End",
+        "variable": "--header-gradient-end",
+        "value": "#000000",
+        "description": "Header gradient end color"
+      },
+      {
+        "name": "Header Control Background",
+        "variable": "--header-control-bg",
+        "value": "rgba(255, 255, 255, 0.1)",
+        "description": "Header control background"
+      },
+      {
+        "name": "Header Control Hover",
+        "variable": "--header-control-bg-hover",
+        "value": "rgba(255, 255, 255, 0.2)",
+        "description": "Header control hover state"
+      },
+      {
+        "name": "Header Control Border",
+        "variable": "--header-control-border",
+        "value": "rgba(255, 255, 255, 0.3)",
+        "description": "Header control border"
+      },
+      {
+        "name": "Header Control Border Active",
+        "variable": "--header-control-border-active",
+        "value": "#ffffff",
+        "description": "Active header control border"
+      }
+    ],
+    "brand": [
+      {
+        "name": "Brand Violet",
+        "variable": "--brand-violet",
+        "value": "#4E4FA9",
+        "description": "Brand palette - Violet"
+      },
+      {
+        "name": "Brand Purple",
+        "variable": "--brand-purple",
+        "value": "#A831D6",
+        "description": "Brand palette - Purple"
+      },
+      {
+        "name": "Brand Fuchsia",
+        "variable": "--brand-fuchsia",
+        "value": "#E10098",
+        "description": "Brand palette - Fuchsia"
+      },
+      {
+        "name": "Brand Orange",
+        "variable": "--brand-orange",
+        "value": "#FF7354",
+        "description": "Brand palette - Orange"
+      },
+      {
+        "name": "Brand Yellow",
+        "variable": "--brand-yellow",
+        "value": "#FFB84C",
+        "description": "Brand palette - Yellow"
+      },
+      {
+        "name": "Brand Gray",
+        "variable": "--brand-gray",
+        "value": "#EBEBEB",
+        "description": "Brand palette - Gray"
+      },
+      {
+        "name": "Brand Black",
+        "variable": "--brand-black",
+        "value": "#000000",
+        "description": "Brand palette - Black"
+      }
+    ],
+    "overlay": [
+      {
+        "name": "Overlay Background",
+        "variable": "--overlay-background",
+        "value": "rgba(0, 0, 0, 0.5)",
+        "description": "Modal/dialog overlay"
+      },
+      {
+        "name": "Overlay Card Background",
+        "variable": "--overlay-card-bg",
+        "value": "#ffffff",
+        "description": "Overlay content background"
+      },
+      {
+        "name": "Overlay Hover Background",
+        "variable": "--overlay-hover-bg",
+        "value": "#f3f4f6",
+        "description": "Hover state in overlays"
+      }
+    ]
+  },
+  "typography": {
+    "fontFamily": "System Default (Inter, -apple-system, etc.)",
+    "baseFontSize": "16px",
+    "fontWeights": [
+      {
+        "name": "Normal",
+        "variable": "--font-weight-normal",
+        "value": "400"
+      },
+      {
+        "name": "Medium",
+        "variable": "--font-weight-medium",
+        "value": "500"
+      },
+      {
+        "name": "Heavy",
+        "variable": "--font-weight-heavy",
+        "value": "700"
+      }
+    ],
+    "textStyles": [
+      {
+        "element": "h1",
+        "fontSize": "var(--text-2xl)",
+        "fontWeight": "var(--font-weight-medium)",
+        "lineHeight": "1.5"
+      },
+      {
+        "element": "h2",
+        "fontSize": "var(--text-xl)",
+        "fontWeight": "var(--font-weight-medium)",
+        "lineHeight": "1.5"
+      },
+      {
+        "element": "h3",
+        "fontSize": "var(--text-lg)",
+        "fontWeight": "var(--font-weight-medium)",
+        "lineHeight": "1.5"
+      },
+      {
+        "element": "h4",
+        "fontSize": "var(--text-base)",
+        "fontWeight": "var(--font-weight-medium)",
+        "lineHeight": "1.5"
+      },
+      {
+        "element": "p",
+        "fontSize": "var(--text-base)",
+        "fontWeight": "var(--font-weight-normal)",
+        "lineHeight": "1.5"
+      },
+      {
+        "element": "label",
+        "fontSize": "var(--text-base)",
+        "fontWeight": "var(--font-weight-medium)",
+        "lineHeight": "1.5"
+      }
+    ]
+  },
+  "spacing": {
+    "scale": [
+      {
+        "name": "xs",
+        "value": "0.25rem",
+        "pixels": "4px"
+      },
+      {
+        "name": "sm",
+        "value": "0.5rem",
+        "pixels": "8px"
+      },
+      {
+        "name": "md",
+        "value": "1rem",
+        "pixels": "16px"
+      },
+      {
+        "name": "lg",
+        "value": "1.5rem",
+        "pixels": "24px"
+      },
+      {
+        "name": "xl",
+        "value": "2rem",
+        "pixels": "32px"
+      },
+      {
+        "name": "2xl",
+        "value": "3rem",
+        "pixels": "48px"
+      },
+      {
+        "name": "3xl",
+        "value": "4rem",
+        "pixels": "64px"
+      }
+    ]
+  },
+  "borderRadius": {
+    "values": [
+      {
+        "name": "Base",
+        "variable": "--radius",
+        "value": "0.625rem",
+        "pixels": "10px"
+      },
+      {
+        "name": "Small",
+        "variable": "--radius-sm",
+        "value": "calc(var(--radius) - 4px)",
+        "pixels": "6px"
+      },
+      {
+        "name": "Medium",
+        "variable": "--radius-md",
+        "value": "calc(var(--radius) - 2px)",
+        "pixels": "8px"
+      },
+      {
+        "name": "Large",
+        "variable": "--radius-lg",
+        "value": "var(--radius)",
+        "pixels": "10px"
+      },
+      {
+        "name": "Extra Large",
+        "variable": "--radius-xl",
+        "value": "calc(var(--radius) + 4px)",
+        "pixels": "14px"
+      }
+    ]
+  },
+  "components": {
+    "button": {
+      "variants": [
+        "default",
+        "destructive",
+        "outline",
+        "secondary",
+        "ghost",
+        "link"
+      ],
+      "sizes": [
+        "default",
+        "sm",
+        "lg",
+        "icon"
+      ]
+    },
+    "badge": {
+      "variants": [
+        "default",
+        "secondary",
+        "destructive",
+        "outline"
+      ]
+    },
+    "card": {
+      "borderRadius": "rounded-xl",
+      "padding": "p-6",
+      "gap": "gap-6"
+    }
+  }
+}

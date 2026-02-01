@@ -1,5 +1,5 @@
 import {NextRequest} from 'next/server'
-import {getTemplateByIdServer} from '../../lib/payload-server'
+import {getMessageByIdServer, getTemplateByIdServer} from '../../lib/payload-server'
 import {buildPreview} from '../../lib/render'
 import { Template } from '@/payload-types'
 
@@ -49,11 +49,11 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json().catch(() => ({}))
-    const { templateId, draft, variables } = body || {}
+    const { templateId, messageId, draft, variables } = body || {}
 
     // Input validation
-    if (!templateId || typeof templateId !== 'string') {
-      return new Response(JSON.stringify({ error: 'templateId (string) is required' }), { status: 400 })
+    if (!templateId && !messageId) {
+      return new Response(JSON.stringify({ error: 'templateId or messageId is required' }), { status: 400 })
     }
     if (draft != null && typeof draft !== 'boolean') {
       return new Response(JSON.stringify({ error: 'draft must be boolean when provided' }), { status: 400 })
@@ -62,14 +62,20 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'variables must be an object map' }), { status: 400 })
     }
 
-    // Fetch template and build preview
+    // Fetch template/message and build preview
     let tpl: Template
     try {
-      tpl = (await getTemplateByIdServer(templateId, { draft: !!draft })) as unknown as Template
+      if (messageId) {
+        const msg = await getMessageByIdServer(messageId, { draft: !!draft })
+        if (!msg) throw new Error('message not found')
+        tpl = msg.template as unknown as Template
+      } else {
+        tpl = (await getTemplateByIdServer(templateId, { draft: !!draft })) as unknown as Template
+      }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e)
       const status = /\b404\b/.test(msg) ? 404 : 502
-      return new Response(JSON.stringify({ error: 'template_fetch_failed', detail: msg }), { status })
+      return new Response(JSON.stringify({ error: 'fetch_failed', detail: msg }), { status })
     }
 
     const preview = buildPreview({ template: tpl, variables: variables || {} })
@@ -89,7 +95,7 @@ export async function GET() {
   return new Response(
     JSON.stringify({
       ok: true,
-      usage: 'POST /api/preview with JSON body { templateId: string, draft?: boolean, variables?: Record<string, any> }',
+      usage: 'POST /api/preview with JSON body { templateId?: string, messageId?: string, draft?: boolean, variables?: Record<string, any> }',
       note: 'This route is meant for POST requests from the Operator UI.',
     }),
     { status: 200, headers: { 'Content-Type': 'application/json' } }

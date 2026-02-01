@@ -1,9 +1,183 @@
 @import './../styles/payloadStyles.css';
 
-.field-type.checkbox .checkbox-input {
-  padding-top: 34px;
+/* ============================================
+   RIVERBED DESIGN SYSTEM - PAYLOAD ADMIN THEME
+   ============================================ */
+
+/* Task 1: Global Theme Variables
+   Maps Riverbed Design System tokens to Payload's native CSS variables
+   for consistent branding across the admin shell (sidebar, navigation, background)
+*/
+
+:root {
+  /* ----------------------------------------
+     RIVERBED DESIGN TOKENS (Source of Truth)
+     ---------------------------------------- */
+  
+  /* Primary Colors */
+  --primary: #581c87;
+  --primary-foreground: #ffffff;
+  --primary-highlight: #f3e8ff;
+  
+  /* Semantic Colors */
+  --background: #ffffff;
+  --foreground: #252525;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  
+  /* Status Colors */
+  --info: #2563eb;
+  --info-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  
+  /* UI Colors */
+  --card: #ffffff;
+  --border: #e6e6e6;
+  --input: #d4d4d4;
+  --input-background: #f3f3f5;
+  --ring: #b5b5b5;
+  
+  /* Border Radius */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Typography */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-heavy: 700;
+  
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  /* ----------------------------------------
+     PAYLOAD CSS VARIABLE MAPPINGS
+     ---------------------------------------- */
+  
+  /* Navigation */
+  --nav-width: 220px;
+  
+  /* Base Surfaces / Elevations */
+  --theme-bg: var(--background);
+  --theme-elevation-0: var(--background);
+  --theme-elevation-50: #f8fafc;
+  --theme-elevation-100: var(--muted);
+  --theme-elevation-150: var(--accent);
+  --theme-elevation-200: #dde1e6;
+  --theme-elevation-250: #d1d5db;
+  --theme-elevation-300: #c4c9d0;
+  --theme-elevation-350: #b8bdc5;
+  --theme-elevation-400: #9ca3af;
+  --theme-elevation-450: #8b929b;
+  --theme-elevation-500: #6b7280;
+  --theme-elevation-550: #5a6170;
+  --theme-elevation-600: #4b5563;
+  --theme-elevation-650: #3d4451;
+  --theme-elevation-700: #374151;
+  --theme-elevation-750: #2d3440;
+  --theme-elevation-800: var(--primary);
+  --theme-elevation-850: #4c1d95;
+  --theme-elevation-900: #3b0764;
+  --theme-elevation-950: #2e1065;
+  --theme-elevation-1000: #1e0a43;
+  
+  /* Text Colors */
+  --theme-text: var(--foreground);
+  --theme-text-subtle: var(--muted-foreground);
+  
+  /* Status Colors */
+  --theme-success-50: #f0fdf4;
+  --theme-success-100: #dcfce7;
+  --theme-success-200: #bbf7d0;
+  --theme-success-300: #86efac;
+  --theme-success-400: #4ade80;
+  --theme-success-500: var(--success);
+  --theme-success-600: #15803d;
+  --theme-success-700: #166534;
+  
+  --theme-error-50: #fef2f2;
+  --theme-error-100: #fee2e2;
+  --theme-error-200: #fecaca;
+  --theme-error-300: #fca5a5;
+  --theme-error-400: #f87171;
+  --theme-error-500: var(--destructive);
+  --theme-error-600: #b91c1c;
+  --theme-error-700: #991b1b;
+  
+  --theme-warning-50: #fffbeb;
+  --theme-warning-100: #fef3c7;
+  --theme-warning-200: #fde68a;
+  --theme-warning-300: #fcd34d;
+  --theme-warning-400: #fbbf24;
+  --theme-warning-500: var(--warning);
+  --theme-warning-600: #b45309;
+  --theme-warning-700: #92400e;
+  
+  /* Input & Form Elements */
+  --theme-input-bg: var(--input-background);
+  --theme-input-border: var(--input);
+  --theme-input-focus-border: var(--primary);
+  --theme-input-error-border: var(--destructive);
+  
+  /* Card & Container */
+  --theme-card-bg: var(--card);
+  --theme-card-border: var(--border);
+  
+  /* Border & Dividers */
+  --theme-border-subtle: var(--border);
+  --theme-border-strong: #cbd5e1;
+  
+  /* Links */
+  --theme-link: var(--primary);
+  --theme-link-hover: #3b0764;
+  
+  /* Focus Ring */
+  --theme-focus-ring: 0 0 0 2px var(--primary-highlight), 0 0 0 4px rgba(88, 28, 135, 0.4);
+  
+  /* Shadows */
+  --theme-shadow-s: 0 1px 2px rgba(37, 37, 37, 0.06);
+  --theme-shadow-m: 0 4px 8px rgba(37, 37, 37, 0.08);
+  --theme-shadow-l: 0 8px 16px rgba(37, 37, 37, 0.1);
+  
+  /* Border Radius (Payload naming) */
+  --theme-radius-s: var(--radius-sm);
+  --theme-radius-m: var(--radius-md);
+  --theme-radius-l: var(--radius-lg);
+  
+  /* Typography */
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
+/* ----------------------------------------
+   COMPONENT-SPECIFIC OVERRIDES
+   ---------------------------------------- */
+
+/* Checkbox field alignment */
+.field-type.checkbox .checkbox-input,
+.field-type-checkbox .flex.items-start {
+  padding-top: 32px;
+}
+
+.render-fields--margins-none .field-type-checkbox .flex.items-start {
+  padding-top: 32px !important;
+}
+
+/* Relationship link styling */
 .link-from-relation {
   padding-top: 0;
   display: inline-flex;
@@ -25,6 +199,7 @@
   }
 }
 
+/* Icon link styling */
 .icon-link {
   padding-top: 0;
   display: inline-flex;
@@ -49,35 +224,108 @@
   }
 }
 
-.field-type.relationship .relationship--multi-value-label__content {
-  max-width: 300px;
+/* Relationship field width and visibility fixes */
+.field-type.relationship {
+  .relationship--multi-value-label__content {
+    max-width: 100% !important; /* Allow more space */
+    padding-left: 4px !important; /* Ensure text isn't cut off at the start */
+    overflow: visible !important;
+  }
+  
+  .relationship--single-value__label {
+    padding-left: 8px !important;
+    text-overflow: ellipsis;
+  }
+
+  /* Fix for the internal box/line issue in relationship/select fields */
+  .rs__control::before {
+    display: none !important;
+  }
+  
+  /* Fix for the box/line shown in the relationship wrap */
+  .relationship__wrap .rs__control::before,
+  .relationship__wrap .rs__control::after {
+    display: none !important;
+  }
+  
+  /* Additional fix for relationship field alignment and the "box" before text */
+  .rs__control {
+    padding-left: 0 !important;
+    margin-bottom: 0 !important; /* Ensure internal control doesn't add extra margin if it's nested */
+  }
+
+  /* Ensure selected values are visible and aligned */
+  .rs__single-value,
+  .rs__placeholder {
+    position: absolute !important;
+    left: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    max-width: calc(100% - 40px) !important;
+    padding-left: 0 !important; /* Reset internal padding since we use left: 12px */
+    margin-left: 0 !important;
+  }
+
+  /* When focused/searching, we hide the single value/placeholder to allow typing without overlap */
+  .rs__control--is-focused .rs__single-value,
+  .rs__control--is-focused .rs__placeholder {
+    display: none !important;
+  }
+
+  .rs__input-container {
+    padding: 0 12px !important;
+    margin: 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .rs__input {
+    width: 100% !important;
+    min-width: 2px !important;
+  }
+
+  /* When there is a value, the input should be minimized or hidden to prevent overlap */
+  .rs__control--has-value .rs__input-container {
+    visibility: hidden !important;
+  }
+  
+  /* Reset visibility on focus to allow typing */
+  .rs__control--is-focused .rs__input-container {
+    visibility: visible !important;
+  }
+
+  /* Hide the persistent box/line (often the input-container or its siblings) */
+  .rs__input {
+    color: var(--foreground) !important;
+  }
 }
 
+/* Upload field width */
 .field-type.upload.invitationDocument {
   max-width: 300px;
 }
 
-@layer payload-default {
-  .collection-list {
-    overflow: auto;
-  }
-}
-
-
-
-:root {
-  --nav-width: 220px;
-}
-
-.card__title{
+/* Card title styling */
+.card__title {
   font-size: 18px;
-}
-.nav-group__label{
-  font-size: 16px;
-  font-weight: 500;
-  color: black;
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
 }
 
+/* Navigation group label */
+.nav-group__label {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+}
+
+/* Textarea field */
 .field-type.textarea textarea {
   min-height: 42px;
   padding: 0;
@@ -85,9 +333,18 @@
   box-sizing: border-box;
 }
 
+/* ----------------------------------------
+   PAYLOAD DEFAULT LAYER OVERRIDES
+   ---------------------------------------- */
 
 @layer payload-default {
-  .collection-list{
+  /* Collection list overflow */
+  .collection-list {
+    overflow: auto;
+  }
+  
+  /* Collection list specific styles */
+  .collection-list {
     .query-preset-bar {
       width: auto;
       position: absolute;
@@ -97,13 +354,13 @@
       padding-right: 20px;
     }
 
-    .icon.icon--search{
+    .icon.icon--search {
       padding-left: 19px;
     }
 
     .table {
-      max-height: calc(100vh - 260px); /* 100vh - (header + footer heights) */
-      overflow-y: auto !important; /* Enable vertical scrolling */
+      max-height: calc(100vh - 260px);
+      overflow-y: auto !important;
       display: block !important;
       margin-top: 2px;
     }
@@ -121,106 +378,349 @@
     th {
       position: sticky !important;
       top: 0 !important;
-      z-index: 2 !important; /* Ensure headers stay above content */
+      z-index: 2 !important;
       background: var(--theme-input-bg) !important;
     }
 
-    .condition{
+    .condition {
       z-index: 3;
     }
 
-    .search-bar{
+    .search-bar {
       z-index: 3;
     }
-    .payload__modal-container.payload__modal-container--enterDone ,.payload__modal-container--appear, .payload__modal-container--appearDone, .payload__modal-container--enter, .payload__modal-container--enterDone, .payload__modal-container--exit{
+    
+    .payload__modal-container.payload__modal-container--enterDone,
+    .payload__modal-container--appear,
+    .payload__modal-container--appearDone,
+    .payload__modal-container--enter,
+    .payload__modal-container--enterDone,
+    .payload__modal-container--exit {
       z-index: 0 !important;
     }
-
-
   }
 
-  .popup-button-list.popup-button-list__text-align--left.popup-button-list__button-size--default > button{
+  /* Popup button alignment */
+  .popup-button-list.popup-button-list__text-align--left.popup-button-list__button-size--default > button {
     text-align: right !important;
   }
+  
+  /* Dashboard group layout */
   .dashboard__group {
     float: left;
     width: 100%;
   }
-  .dashboard__group li{
+  
+  .dashboard__group li {
     width: 20%;
     float: left;
     padding: 10px 20px;
     list-style: none;
   }
+  
+  /* Group field styling */
   .field-type.group-field.group-field--top-level.group-field--within-tab {
     margin: 5px !important;
     padding: 10px !important;
   }
 }
 
+/* Array field header popup */
 .array-field__header-action {
   .popup__content {
     left: 0;
   }
-
 }
-.live-preview-window{
+
+/* Live preview window */
+.live-preview-window {
   width: 50% !important;
 }
 
-.payload__modal-container.payload__modal-container--enterDone ,.payload__modal-container--appear, .payload__modal-container--appearDone, .payload__modal-container--enter, .payload__modal-container--enterDone, .payload__modal-container--exit{
+/* Modal container z-index */
+.payload__modal-container.payload__modal-container--enterDone,
+.payload__modal-container--appear,
+.payload__modal-container--appearDone,
+.payload__modal-container--enter,
+.payload__modal-container--enterDone,
+.payload__modal-container--exit {
   z-index: 0 !important;
-  /*
-  pointer-events: none;
-  */
 }
 
-/* Broadcast-inspired Payload theme overrides */
-:root {
-  /* Base elevations / surfaces */
-  --theme-elevation-0: #ffffff;
-  --theme-elevation-50: #f8fafc;
-  --theme-elevation-100: #f1f5f9;
-  --theme-elevation-150: #e2e8f0;
-  --theme-elevation-200: #cbd5f5;
-
-  /* Text */
-  --theme-text: #0f172a;          /* main text */
-  --theme-text-subtle: #64748b;   /* muted / helper text */
-
-  /* Primary / accent (buttons, links, focus) */
-  --theme-primary-500: #4f46e5;   /* indigo primary */
-  --theme-primary-600: #4338ca;
-  --theme-primary-700: #3730a3;
-
-  /* Success / error */
-  --theme-success-500: #16a34a;   /* slightly deeper green */
-  --theme-error-500: #ef4444;
-
-  /* Borders & dividers */
-  --theme-border-subtle: #e2e8f0;
-  --theme-border-strong: #cbd5e1;
-
-  /* Inputs & cards */
-  --theme-input-bg: #ffffff;
-  --theme-input-border: #cbd5e1;
-  --theme-card-bg: #ffffff;
-
-  /* Radii & shadows (used by some Payload components if exposed) */
-  --theme-radius-s: 6px;
-  --theme-radius-m: 8px;
-  --theme-radius-l: 12px;
-  --theme-shadow-s: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --theme-shadow-m: 0 4px 8px rgba(15, 23, 42, 0.08);
-
-  /* Typography */
-  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+/* Collection-specific collapsible styling */
+.collection-templates .field-type-collapsible,
+.collection-messages .field-type-collapsible {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-:root {
-  --theme-bg: #f8fafc;            /* app shell background */
-  --theme-link: #4f46e5;
-  --theme-link-hover: #3730a3;
-  --theme-focus-ring: 0 0 0 1px #e0e7ff, 0 0 0 4px rgba(79, 70, 229, 0.4);
+/* Collection-specific container styling */
+.collection-templates .payload-admin-ui-container,
+.collection-messages .payload-admin-ui-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 40px;
+}
+
+/* Modal header padding */
+.payload-admin-ui-modal-header {
+  padding-top: 24px;
+}
+
+/* ----------------------------------------
+   BUTTON STYLING (Riverbed Design System)
+   ---------------------------------------- */
+
+/* Primary button */
+.btn,
+button[type="submit"],
+.btn--style-primary {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-radius: var(--radius) !important;
+  font-weight: var(--font-weight-medium) !important;
+  transition: background-color 0.2s ease !important;
+  
+  &:hover:not(:disabled) {
+    background-color: #4c1d95 !important;
+  }
+  
+  &:focus-visible {
+    box-shadow: var(--theme-focus-ring) !important;
+    outline: none !important;
+  }
+  
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+/* Secondary/Ghost button */
+.btn--style-secondary,
+.btn--style-pill {
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--accent) !important;
+  }
+}
+
+/* ----------------------------------------
+   INPUT FIELD STYLING (Riverbed Design System)
+   ---------------------------------------- */
+
+/* Fix: Missing margins between fields */
+.render-fields .field-type,
+.render-fields [class*="field-type"],
+.field-type,
+.useTw.field-type,
+[class*="field-type"],
+[class*="width-"],
+.field-type.select,
+.field-type.relationship,
+.field-type--select,
+.field-type--relationship,
+.select,
+.relationship {
+  margin-bottom: 24px !important;
+  
+  /* Horizontal spacing for row fields */
+  &[class*="width-"],
+  &.column,
+  .row__fields & {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    
+    &:first-child {
+      padding-left: 0 !important;
+    }
+    
+    &:last-child {
+      padding-right: 0 !important;
+    }
+  }
+}
+
+/* Base input styling */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select,
+.rs__control { /* Payload Select/Relationship controls */
+  background-color: var(--input-background) !important;
+  border: 1px solid var(--input) !important;
+  border-radius: var(--radius) !important;
+  color: var(--foreground) !important;
+  font-size: var(--text-base) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  min-height: 40px !important;
+  margin-bottom: 0 !important; /* Ensure the input itself doesn't have a margin */
+  
+  &::placeholder {
+    color: var(--muted-foreground) !important;
+  }
+  
+  &:focus,
+  &:focus-within,
+  &.rs__control--is-focused {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px var(--primary-highlight) !important;
+    outline: none !important;
+    background-color: #ffffff !important;
+  }
+  
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    background-color: var(--muted) !important;
+  }
+}
+
+.rs__value-container {
+  padding: 0 12px !important;
+  margin-left: 0 !important;
+}
+
+/* Ensure no elements before value container cause misalignment */
+.rs__control > *:first-child {
+  margin-left: 0 !important;
+}
+
+/* Error state for inputs */
+.field-type--has-error {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select,
+  .rs__control {
+    border-color: var(--destructive) !important;
+    
+    &:focus,
+    &:focus-within,
+    &.rs__control--is-focused {
+      box-shadow: 0 0 0 2px var(--theme-error-200) !important;
+    }
+  }
+}
+
+/* ----------------------------------------
+   SIDEBAR & NAVIGATION STYLING
+   ---------------------------------------- */
+
+/* Nav styling */
+.nav {
+  background-color: var(--background) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+/* Nav links */
+.nav__link {
+  color: var(--foreground) !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color 0.2s ease !important;
+  
+  &:hover {
+    background-color: var(--accent) !important;
+  }
+  
+  &.active,
+  &--active {
+    background-color: var(--primary-highlight) !important;
+    color: var(--primary) !important;
+  }
+}
+
+/* ----------------------------------------
+   CARD & PANEL STYLING
+   ---------------------------------------- */
+
+.card,
+.document-fields {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--theme-shadow-s) !important;
+}
+
+/* ----------------------------------------
+   TABLE STYLING
+   ---------------------------------------- */
+
+.table {
+  th {
+    background-color: var(--muted) !important;
+    color: var(--foreground) !important;
+    font-weight: var(--font-weight-medium) !important;
+  }
+  
+  td {
+    border-bottom: 1px solid var(--border) !important;
+  }
+  
+  tr:hover td {
+    background-color: var(--accent) !important;
+  }
+}
+
+/* ----------------------------------------
+   BADGE/TAG STYLING
+   ---------------------------------------- */
+
+.pill,
+.tag {
+  background-color: var(--primary-highlight) !important;
+  color: var(--primary) !important;
+  border-radius: var(--radius) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+/* Status badges */
+.pill--style-success,
+.status--published {
+  background-color: var(--theme-success-100) !important;
+  color: var(--success) !important;
+}
+
+.pill--style-error,
+.status--draft {
+  background-color: var(--theme-error-100) !important;
+  color: var(--destructive) !important;
+}
+
+.pill--style-warning {
+  background-color: var(--theme-warning-100) !important;
+  color: var(--warning) !important;
+}
+
+/* ----------------------------------------
+   LABEL STYLING
+   ---------------------------------------- */
+
+.field-label,
+label {
+  color: var(--foreground) !important;
+  font-size: var(--text-base) !important;
+  font-weight: var(--font-weight-medium) !important;
+  line-height: 1.5 !important;
+}
+
+/* Required indicator */
+.field-label__required,
+label .text-destructive {
+  color: var(--destructive) !important;
+}
+
+/* Field description */
+.field-description {
+  color: var(--muted-foreground) !important;
+  font-size: var(--text-sm) !important;
+}
+
+/* Error message */
+.field-error {
+  color: var(--destructive) !important;
+  font-size: var(--text-sm) !important;
 }

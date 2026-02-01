@@ -161,11 +161,6 @@ export interface UserAuthOperations {
 export interface Branding {
   id: string;
   name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
   isActive?: boolean | null;
   logo?: (string | null) | Media;
   colors?: {
@@ -253,15 +248,12 @@ export interface Division {
 export interface Template {
   id: string;
   name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
+  priority?: ('normal' | 'high' | 'urgent') | null;
   isActive?: boolean | null;
   description?: string | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   templateType?: ('pre-defined' | 'custom') | null;
+  category?: ('security' | 'hr' | 'it' | 'general') | null;
   branding?: (string | null) | Branding;
   body?: {
     root: {
@@ -278,6 +270,18 @@ export interface Template {
     };
     [k: string]: unknown;
   } | null;
+  showHeader?: boolean | null;
+  showDescription?: boolean | null;
+  showBody?: boolean | null;
+  title?: string | null;
+  messageDescription?: string | null;
+  buttons?:
+    | {
+        button: string | Button;
+        type?: ('primary' | 'secondary' | 'tertiary') | null;
+        id?: string | null;
+      }[]
+    | null;
   division?: (string | null) | Division;
   channels?: (string | Channel)[] | null;
   creator?: string | null;
@@ -288,6 +292,30 @@ export interface Template {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons".
+ */
+export interface Button {
+  id: string;
+  name: string;
+  label?: string | null;
+  icon?: string | null;
+  otherAttributes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -330,21 +358,17 @@ export interface Message {
   id: string;
   name: string;
   description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  priority?: ('normal' | 'high' | 'urgent') | null;
   template?: (string | null) | Template;
   targetGroup?: (string | null) | UserGroup;
   channel?: (string | null) | Channel;
-  deliveryRules?: (string | DeliveryRule)[] | null;
-  deliveryMode?: ('intrusive' | 'non-intrusive') | null;
   status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
-  priority?: ('normal' | 'high' | 'urgent') | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   deliverySchedule?: ('immediate' | 'scheduled') | null;
   scheduledDate?: string | null;
   /**
-   * Calculated response rate percentage
+   * Overrides the template content if provided.
    */
-  responseRate?: number | null;
-  totalRecipients?: number | null;
   content?: {
     root: {
       type: string;
@@ -360,6 +384,13 @@ export interface Message {
     };
     [k: string]: unknown;
   } | null;
+  deliveryRules?: (string | DeliveryRule)[] | null;
+  deliveryMode?: ('intrusive' | 'non-intrusive') | null;
+  /**
+   * Calculated response rate percentage
+   */
+  responseRate?: number | null;
+  totalRecipients?: number | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -439,11 +470,6 @@ export interface Policy {
   id: string;
   name: string;
   type: 'fatigue' | 'sequencing' | 'vip' | 'quietHours' | 'routing' | 'dndExceptions';
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
   fatigue?: {
     maxSurveysPerWeek: number;
     minDaysBetweenSurveys: number;
@@ -518,30 +544,6 @@ export interface Policy {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buttons".
- */
-export interface Button {
-  id: string;
-  name: string;
-  label?: string | null;
-  icon?: string | null;
-  otherAttributes?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  createdAt: string;
-  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -625,6 +627,8 @@ export interface MessageAnalytic {
  */
 export interface User {
   id: string;
+  isAdmin?: boolean | null;
+  isSupport?: boolean | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -1017,8 +1021,6 @@ export interface PayloadQueryPreset {
  */
 export interface BrandingSelect<T extends boolean = true> {
   name?: T;
-  generateSlug?: T;
-  slug?: T;
   isActive?: T;
   logo?: T;
   colors?:
@@ -1071,14 +1073,26 @@ export interface BrandingSelect<T extends boolean = true> {
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
-  generateSlug?: T;
-  slug?: T;
+  priority?: T;
   isActive?: T;
   description?: T;
   messageType?: T;
   templateType?: T;
+  category?: T;
   branding?: T;
   body?: T;
+  showHeader?: T;
+  showDescription?: T;
+  showBody?: T;
+  title?: T;
+  messageDescription?: T;
+  buttons?:
+    | T
+    | {
+        button?: T;
+        type?: T;
+        id?: T;
+      };
   division?: T;
   channels?: T;
   creator?: T;
@@ -1097,19 +1111,19 @@ export interface TemplatesSelect<T extends boolean = true> {
 export interface MessagesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  messageType?: T;
+  priority?: T;
   template?: T;
   targetGroup?: T;
   channel?: T;
-  deliveryRules?: T;
-  deliveryMode?: T;
   status?: T;
-  priority?: T;
+  messageType?: T;
   deliverySchedule?: T;
   scheduledDate?: T;
+  content?: T;
+  deliveryRules?: T;
+  deliveryMode?: T;
   responseRate?: T;
   totalRecipients?: T;
-  content?: T;
   creator?: T;
   updator?: T;
   process?: T;
@@ -1123,8 +1137,6 @@ export interface MessagesSelect<T extends boolean = true> {
 export interface PoliciesSelect<T extends boolean = true> {
   name?: T;
   type?: T;
-  generateSlug?: T;
-  slug?: T;
   fatigue?:
     | T
     | {
@@ -1313,6 +1325,8 @@ export interface MessageAnalyticsSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  isAdmin?: T;
+  isSupport?: T;
   creator?: T;
   updator?: T;
   process?: T;

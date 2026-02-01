@@ -4,7 +4,17 @@ import {mongooseAdapter} from '@payloadcms/db-mongodb'
 import {payloadCloudPlugin} from '@payloadcms/payload-cloud'
 import {importExportPlugin} from '@payloadcms/plugin-import-export'
 import {addAuthorsFields} from '@shefing/authors-info'
-import {lexicalEditor} from '@payloadcms/richtext-lexical'
+import {
+    lexicalEditor,
+    HeadingFeature,
+    LinkFeature,
+    BoldFeature,
+    ItalicFeature,
+    UnderlineFeature,
+    FixedToolbarFeature,
+    BlockquoteFeature,
+    BlocksFeature
+} from '@payloadcms/richtext-lexical'
 import path from 'path'
 import {buildConfig, CollectionSlug} from 'payload'
 import {fileURLToPath} from 'url'
@@ -97,7 +107,44 @@ export default buildConfig({
     Divisions,
     UserGroups,
   ],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: () => [
+      HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3'] }),
+      LinkFeature(),
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      BlockquoteFeature(),
+      FixedToolbarFeature(),
+      BlocksFeature({
+        blocks: [],
+        inlineBlocks: [
+          {
+            slug: 'image',
+            fields: [
+              {
+                name: 'asset',
+                type: 'upload',
+                relationTo: 'media',
+                required: true,
+              },
+            ],
+          },
+          {
+            slug: 'var',
+            fields: [
+              {
+                name: 'variable',
+                type: 'relationship',
+                relationTo: 'variables',
+                required: true,
+              },
+            ],
+          },
+        ],
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

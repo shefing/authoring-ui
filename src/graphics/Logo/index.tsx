@@ -4,13 +4,14 @@ import logoImage from './riverbed-logo.png' // Import the image file
 
 const Logo = () => {
   return (
-    <div>
+    <div className="flex items-center gap-4">
       <Image
         src={logoImage} // Use the imported image file
-        width={300}
-        height={138}
+        width={200}
+        height={92}
         alt="Riverbed"
       />
+      <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#581c87' }}></span>
     </div>
   )
 }

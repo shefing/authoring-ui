@@ -1,5 +1,4 @@
 import type {CollectionConfig} from 'payload'
-import {slugField} from 'payload'
 import {createBackgroundColorField, createColorField} from '@/components/color-picker/index'
 import {createFontFamilyField, createFontSizeField, createFontWeightField} from '@/components/font-picker/index'
 
@@ -46,7 +45,6 @@ export const Branding: CollectionConfig = {
                                         },
                                     },
                                 },
-                                slugField({fieldToUse: 'name'}),
                                 {
                                     name: 'isActive',
                                     type: 'checkbox',

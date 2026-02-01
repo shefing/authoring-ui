@@ -1,4 +1,4 @@
-import {CollectionConfig, slugField} from 'payload'
+import {CollectionConfig} from 'payload'
 
 const isType = (expected: string) => ({ siblingData }: { siblingData: any }) => siblingData?.type === expected
 
@@ -37,7 +37,6 @@ export const Policies: CollectionConfig = {
                   ],
                   required: true,
               },
-              slugField({fieldToUse: 'name'}),
           ]
       },
     // Fatigue policy

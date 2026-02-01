@@ -203,7 +203,7 @@ export default function ClientComposer({
               <option value="">Select a template…</option>
               {templates.map((t) => (
                 <option key={t.id} value={t.id}>
-                  {t.name || t.slug} {t._status === 'draft' ? '(Draft)' : ''}
+                  {t.name} {t._status === 'draft' ? '(Draft)' : ''}
                 </option>
               ))}
             </Select>

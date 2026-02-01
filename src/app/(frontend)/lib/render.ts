@@ -11,7 +11,7 @@ export function buildPreview({ template, variables }: PreviewInput) {
   const text = extractPlainText(body, variables)
   const html = extractHtml(body, variables)
 
-  const title = template?.name || template?.slug || 'Preview'
+  const title = template?.name || 'Preview'
 
   const device = {
     kind: template?.messageType === 'confirmation' ? 'confirm' : 'info',

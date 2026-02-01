@@ -246,7 +246,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'branding', draft: false,
       data: {
         name: 'Corporate Default',
-        slug: slugify('Corporate Default'),
         scope: 'all',
         scopeType: 'global',
         colors: {
@@ -262,7 +261,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'branding', draft: false,
       data: {
         name: 'Security Alert Theme',
-        slug: slugify('Security Alert Theme'),
         scope: 'urgent',
         scopeType: 'urgency',
         colors: {
@@ -278,7 +276,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'branding', draft: false,
       data: {
         name: 'Engineering Division',
-        slug: slugify('Engineering Division'),
         scope: 'division',
         scopeType: 'division',
         division: divisions[2].id,
@@ -295,7 +292,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'branding', draft: false,
       data: {
         name: 'Remediation Confirmation',
-        slug: slugify('Remediation Confirmation'),
         scope: 'message-type',
         scopeType: 'message-type',
         messageType: 'confirmation',
@@ -312,7 +308,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'branding', draft: false,
       data: {
         name: 'Executive VIP Theme',
-        slug: slugify('Executive VIP Theme'),
         scope: 'division',
         scopeType: 'division',
         colors: {
@@ -332,7 +327,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Multi-step Survey',
-        slug: slugify('Multi-step Survey'),
         description: 'Interactive multi-step survey template for comprehensive feedback collection',
         messageType: 'survey',
         templateType: 'pre-defined',
@@ -345,7 +339,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Remediation Confirmation',
-        slug: slugify('Remediation Confirmation'),
         description: 'Confirmation template for IT remediation actions',
         messageType: 'confirmation',
         templateType: 'pre-defined',
@@ -358,7 +351,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Success Notification',
-        slug: slugify('Success Notification'),
         description: 'Generic success notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -371,7 +363,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Remediation Reminder',
-        slug: slugify('Remediation Reminder'),
         description: 'Reminder template for pending remediation actions',
         messageType: 'reminder',
         templateType: 'pre-defined',
@@ -384,7 +375,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Chat Interface',
-        slug: slugify('Chat Interface'),
         description: 'Interactive chat interface for self-service support',
         messageType: 'self-service',
         templateType: 'pre-defined',
@@ -397,7 +387,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Security Alert - Engineering',
-        slug: slugify('Security Alert - Engineering'),
         description: 'Security alert template for Engineering division',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -410,7 +399,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Annual Survey',
-        slug: slugify('Annual Survey'),
         description: 'Annual employee satisfaction survey',
         messageType: 'survey',
         templateType: 'pre-defined',
@@ -423,7 +411,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Urgent Confirmation',
-        slug: slugify('Urgent Confirmation'),
         description: 'Urgent action confirmation template',
         messageType: 'confirmation',
         templateType: 'pre-defined',
@@ -436,7 +423,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'System Notification',
-        slug: slugify('System Notification'),
         description: 'Generic system notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
@@ -449,7 +435,6 @@ export const seed = async (payload: Payload): Promise<void> => {
       collection: 'templates', draft: false,
       data: {
         name: 'Scheduled Reminder',
-        slug: slugify('Scheduled Reminder'),
         description: 'Scheduled reminder template for recurring notifications',
         messageType: 'reminder',
         templateType: 'pre-defined',
