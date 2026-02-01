@@ -627,8 +627,6 @@ export interface MessageAnalytic {
  */
 export interface User {
   id: string;
-  isAdmin?: boolean | null;
-  isSupport?: boolean | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -1325,8 +1323,6 @@ export interface MessageAnalyticsSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  isAdmin?: T;
-  isSupport?: T;
   creator?: T;
   updator?: T;
   process?: T;
