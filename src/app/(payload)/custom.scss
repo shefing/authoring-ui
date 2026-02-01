@@ -89,11 +89,11 @@
   --theme-elevation-650: #3d4451;
   --theme-elevation-700: #374151;
   --theme-elevation-750: #2d3440;
-  --theme-elevation-800: var(--primary);
-  --theme-elevation-850: #4c1d95;
-  --theme-elevation-900: #3b0764;
-  --theme-elevation-950: #2e1065;
-  --theme-elevation-1000: #1e0a43;
+  --theme-elevation-800: #262626;
+  --theme-elevation-850: #1f1f1f;
+  --theme-elevation-900: #171717;
+  --theme-elevation-950: #0a0a0a;
+  --theme-elevation-1000: #000000;
   
   /* Text Colors */
   --theme-text: var(--foreground);
@@ -472,9 +472,12 @@
    ---------------------------------------- */
 
 /* Primary button */
-.btn,
-button[type="submit"],
-.btn--style-primary {
+.btn:not(.card__click):not(.card__actions .btn),
+button[type="submit"]:not(.card__click):not(.card__actions .btn),
+.btn--style-primary:not(.card__click):not(.card__actions .btn),
+.btn:not(.card__click):not([class*="card__click"]):not(.card__actions .btn),
+button[type="submit"]:not(.card__click):not([class*="card__click"]),
+.btn--style-primary:not(.card__click):not([class*="card__click"]):not(.card__actions .btn) {
   background-color: var(--primary) !important;
   color: var(--primary-foreground) !important;
   border-radius: var(--radius) !important;
@@ -637,11 +640,91 @@ select,
    ---------------------------------------- */
 
 .card,
-.document-fields {
+.document-fields,
+.dashboard__group li,
+.dashboard__group li *,
+.card__click,
+[class*="card__click"] {
+  background-color: transparent;
+}
+
+.card,
+.document-fields,
+.dashboard__group li {
   background-color: var(--card) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--theme-shadow-s) !important;
+}
+
+.dashboard__group li,
+.dashboard__group li:hover {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.card,
+.document-fields {
+  /* Dashboard card specific overrides */
+  &.card-branding,
+  &[class*="card-"],
+  &[id^="card-"],
+  &.card--has-onclick {
+    background-color: var(--card) !important;
+
+    .card__title {
+      color: var(--foreground) !important;
+    }
+    
+    .card__click,
+    & .card__click,
+    [class*="card__click"],
+    & [class*="card__click"] {
+      background-color: transparent !important;
+      color: inherit !important;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.02) !important;
+      }
+    }
+
+    /* Prevent any hover background on the card itself from being purple */
+    &:hover {
+      background-color: var(--card) !important;
+      border-color: var(--primary) !important;
+      
+      .card__click,
+      & .card__click,
+      [class*="card__click"],
+      & [class*="card__click"] {
+        background-color: rgba(0, 0, 0, 0.02) !important;
+      }
+    }
+
+    /* Fix for plus icon buttons in card actions */
+    .card__actions {
+      .btn {
+        background-color: transparent !important;
+        border: 0px solid var(--border) !important;
+        color: var(--primary) !important;
+        
+        &:hover {
+          background-color: var(--primary-highlight) !important;
+          border-color: var(--primary) !important;
+        }
+
+        .icon {
+          color: var(--primary) !important;
+          stroke: var(--primary) !important;
+          
+          path {
+            stroke: var(--primary) !important;
+          }
+        }
+      }
+    }
+  }
 }
 
 /* ----------------------------------------

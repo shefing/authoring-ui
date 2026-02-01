@@ -50,6 +50,11 @@ export default buildConfig({
     },
     admin: {
     user: Users.slug,
+        autoLogin:
+            {
+                email: 'tsemachh@shefing.com',
+                password: 'tsemachh@shefing.com',
+            },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -166,6 +171,16 @@ export default buildConfig({
                       admin: {
                           components: {
                               Cell: '/admincomponents/cell/YesNoCell',
+                          },
+                      },
+                  },
+              },
+              {
+                  fieldTypes: ['select'],
+                  overrides: {
+                      admin: {
+                          components: {
+                              Field: '/components/admin/fields/SelectField',
                           },
                       },
                   },
