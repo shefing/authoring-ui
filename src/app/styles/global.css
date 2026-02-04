@@ -1,6 +1,10 @@
+/* Tailwind directives removed to prevent global style leakage into Payload Admin UI.
+   If needed, use them only in scoped contexts. */
+/*
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+*/
 @layer base {
   :root {
     --radius: 0.5rem;

@@ -32,7 +32,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   return (
     <div
       className={cn(
-        'useTw field-type mb-6',
+        'twp field-type mb-6',
         showError && 'field-type--has-error',
         className
       )}
