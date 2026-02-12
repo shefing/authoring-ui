@@ -115,7 +115,7 @@ export const SelectField: React.FC<SelectFieldClientProps> = (props) => {
             // Base styles
             'useTw flex h-10 w-full items-center justify-between rounded-lg px-3 py-2 text-base',
             // Background and border
-            'bg-[var(--input-background)] border border-[var(--input)]',
+            'bg-[var(--input-background)] border-0 border-[var(--input)]',
             // Text
             'text-foreground',
             // Placeholder

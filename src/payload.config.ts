@@ -62,7 +62,7 @@ export default buildConfig({
       graphics: {
         Logo: '/graphics/Logo',
       },
-      Nav: '@shefing/quickfilter/nav',
+     beforeNavLinks :['/components/Nav'],
       views: {
         dashboard: {
           Component: '@shefing/quickfilter/Dashboard',
@@ -180,7 +180,9 @@ export default buildConfig({
                   overrides: {
                       admin: {
                           components: {
+/*
                               Field: '/components/admin/fields/SelectField',
+*/
                           },
                       },
                   },

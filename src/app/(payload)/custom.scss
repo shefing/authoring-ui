@@ -86,7 +86,6 @@
   /* Box-sizing and basic resets for all elements within .twp */
   &, & * {
     box-sizing: border-box;
-    border-style: solid;
     border-color: var(--border, currentColor);
   }
 
@@ -725,12 +724,12 @@
    ---------------------------------------- */
 
 /* Primary button */
-.btn:not(.card__click):not(.card__actions .btn),
-button[type="submit"]:not(.card__click):not(.card__actions .btn),
-.btn--style-primary:not(.card__click):not(.card__actions .btn),
-.btn:not(.card__click):not([class*="card__click"]):not(.card__actions .btn),
-button[type="submit"]:not(.card__click):not([class*="card__click"]),
-.btn--style-primary:not(.card__click):not([class*="card__click"]):not(.card__actions .btn) {
+.btn:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+button[type="submit"]:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+.btn--style-primary:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+.btn:not(.card__click):not([class*="card__click"]):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+button[type="submit"]:not(.card__click):not([class*="card__click"]):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+.btn--style-primary:not(.card__click):not([class*="card__click"]):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]) {
   background-color: var(--primary) !important;
   color: var(--primary-foreground) !important;
   border-radius: var(--radius) !important;

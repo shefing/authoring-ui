@@ -4,7 +4,6 @@ import { SelectColorBackground as SelectColorBackground_e0f5be1d6287c601bb047e81
 import { ActionFont as ActionFont_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
 import { ActionFontSize as ActionFontSize_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
 import { ActionFontStyle as ActionFontStyle_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
-import { default as default_bce321553fb52aae35099fbbccc644a2 } from '../../../components/admin/fields/SelectField'
 import { CreatedAtCell as CreatedAtCell_9dfaaf04648a02116882e3167fe3e264 } from '@shefing/authors-info/client'
 import { UpdatedAtCell as UpdatedAtCell_9dfaaf04648a02116882e3167fe3e264 } from '@shefing/authors-info/client'
 import { ExportListMenuItem as ExportListMenuItem_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
@@ -41,11 +40,11 @@ import { QueryPresetsColumnsCell as QueryPresetsColumnsCell_3817bf644402e67bfe65
 import { QueryPresetsColumnField as QueryPresetsColumnField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
 import { QueryPresetsGroupByCell as QueryPresetsGroupByCell_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
 import { QueryPresetsGroupByField as QueryPresetsGroupByField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
-import { default as default_a5852a3a735d9299b693b4d2e7b266de } from '@shefing/quickfilter/nav'
 import { default as default_18511c0cf9cf95761601ec48f5703bd5 } from '../../../graphics/Logo'
+import { default as default_576d6fffb75fcb081ff863baa2ca974a } from '../../../components/Nav'
 import { ImportExportProvider as ImportExportProvider_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
-import { Dashboard as Dashboard_b39f2d96c5778d5698b3c9e7777aa63a } from '@/components/Dashboard'
+import { default as default_f828cce1950382b69f94d117f188940f } from '@shefing/quickfilter/Dashboard'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
@@ -55,7 +54,6 @@ export const importMap = {
   "/components/font-picker/FontActions#ActionFont": ActionFont_60743c5858c0abf56b6430f8ff699141,
   "/components/font-picker/FontActions#ActionFontSize": ActionFontSize_60743c5858c0abf56b6430f8ff699141,
   "/components/font-picker/FontActions#ActionFontStyle": ActionFontStyle_60743c5858c0abf56b6430f8ff699141,
-  "/components/admin/fields/SelectField#default": default_bce321553fb52aae35099fbbccc644a2,
   "@shefing/authors-info/client#CreatedAtCell": CreatedAtCell_9dfaaf04648a02116882e3167fe3e264,
   "@shefing/authors-info/client#UpdatedAtCell": UpdatedAtCell_9dfaaf04648a02116882e3167fe3e264,
   "@payloadcms/plugin-import-export/rsc#ExportListMenuItem": ExportListMenuItem_cdf7e044479f899a31f804427d568b36,
@@ -92,10 +90,10 @@ export const importMap = {
   "@payloadcms/ui#QueryPresetsColumnField": QueryPresetsColumnField_3817bf644402e67bfe6577f60ef982de,
   "@payloadcms/ui#QueryPresetsGroupByCell": QueryPresetsGroupByCell_3817bf644402e67bfe6577f60ef982de,
   "@payloadcms/ui#QueryPresetsGroupByField": QueryPresetsGroupByField_3817bf644402e67bfe6577f60ef982de,
-  "@shefing/quickfilter/nav#default": default_a5852a3a735d9299b693b4d2e7b266de,
   "/graphics/Logo#default": default_18511c0cf9cf95761601ec48f5703bd5,
+  "/components/Nav#default": default_576d6fffb75fcb081ff863baa2ca974a,
   "@payloadcms/plugin-import-export/rsc#ImportExportProvider": ImportExportProvider_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
-  "@/components/Dashboard#Dashboard": Dashboard_b39f2d96c5778d5698b3c9e7777aa63a,
+  "@shefing/quickfilter/Dashboard#default": default_f828cce1950382b69f94d117f188940f,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }

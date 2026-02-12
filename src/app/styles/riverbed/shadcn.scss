@@ -1,0 +1,195 @@
+.twp ,.useTw{
+  /* Box-sizing and basic resets for all elements within .twp */
+  &, & * {
+    box-sizing: border-box;
+    border-color: var(--border, currentColor);
+  }
+
+  /* Typography resets within scope */
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+
+  button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  button, select {
+    text-transform: none;
+  }
+
+  button, [type='button'], [type='reset'], [type='submit'] {
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+  }
+
+  /* shadcn/Radix specific overrides */
+  [data-radix-popper-content-wrapper] {
+    z-index: 1000 !important;
+  }
+
+  [data-radix-popover-content-transform-origin] {
+    z-index: 1000 !important;
+  }
+
+  /* Manual Tailwind Utility Mappings for shadcn components */
+  &.bg-background, .bg-background { background-color: var(--background) !important; }
+  &.bg-muted, .bg-muted { background-color: var(--muted) !important; }
+  &.bg-accent, .bg-accent { background-color: var(--accent) !important; }
+  &.bg-primary, .bg-primary { background-color: var(--primary) !important; }
+  &.bg-popover, .bg-popover { background-color: var(--popover) !important; }
+
+  &.text-foreground, .text-foreground { color: var(--foreground) !important; }
+  &.text-muted-foreground, .text-muted-foreground { color: var(--muted-foreground) !important; }
+  &.text-accent-foreground, .text-accent-foreground { color: var(--accent-foreground) !important; }
+  &.text-primary-foreground, .text-primary-foreground { color: var(--primary-foreground) !important; }
+  &.text-popover-foreground, .text-popover-foreground { color: var(--popover-foreground) !important; }
+  &.text-destructive, .text-destructive { color: var(--destructive) !important; }
+
+  &.border-border, .border-border { border-color: var(--border) !important; }
+  &.border-input, .border-input { border-color: var(--input) !important; }
+  &.border-muted, .border-muted { border-color: var(--muted) !important; }
+  &.border-muted-muted, .border-muted-muted { border-color: var(--muted) !important; } /* Handling the typo from the snippet */
+  &.border-primary, .border-primary { border-color: var(--primary) !important; }
+
+  &.ring-ring, .ring-ring { --tw-ring-color: var(--ring) !important; }
+  &.focus-visible\:ring-ring:focus-visible { 
+    outline: 2px solid transparent !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring) !important;
+  }
+
+  /* Hover states */
+  .hover\:bg-muted:hover { background-color: var(--muted) !important; }
+  .hover\:bg-accent:hover { background-color: var(--accent) !important; }
+  .hover\:text-accent-foreground:hover { color: var(--accent-foreground) !important; }
+
+  /* Utilities found in the snippet */
+  .shadow-sm { box-shadow: var(--shadow-sm) !important; }
+  .rounded-md { border-radius: var(--radius-md) !important; }
+  .rounded-lg { border-radius: var(--radius-lg) !important; }
+  .whitespace-nowrap { white-space: nowrap !important; }
+  .font-medium { font-weight: var(--font-weight-medium) !important; }
+  .text-xs { font-size: var(--text-xs) !important; }
+  .text-sm { font-size: var(--text-sm) !important; }
+  .h-full { height: 100% !important; }
+  .h-8 { height: 2rem !important; }
+  .h-9 { height: 2.25rem !important; }
+  .px-3 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+  .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .py-1 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+  .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+  .gap-2 { gap: 0.5rem !important; }
+  .flex { display: flex !important; }
+  .items-center { align-items: center !important; }
+  .justify-between { justify-content: space-between !important; }
+  .truncate { overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+  .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem !important; }
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem !important; }
+  .mb-4 { margin-bottom: 1rem !important; }
+  .mr-2 { margin-right: 0.5rem !important; }
+  .mx-2 { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
+  .flex-wrap { flex-wrap: wrap !important; }
+  .gap-6 { gap: 1.5rem !important; }
+  .p-4 { padding: 1rem !important; }
+  .pb-2 { padding-bottom: 0.5rem !important; }
+  .relative { position: relative !important; }
+  .absolute { position: absolute !important; }
+  .w-full { width: 100% !important; }
+  .opacity-50 { opacity: 0.5 !important; }
+  .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke !important; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important; transition-duration: 150ms !important; }
+  .cursor-default { cursor: default !important; }
+  .select-none { user-select: none !important; }
+  .outline-none { outline: 2px solid transparent !important; outline-offset: 2px !important; }
+  .overflow-y-auto { overflow-y: auto !important; }
+  .overflow-x-hidden { overflow-x: hidden !important; }
+  .flex-col { flex-direction: column !important; }
+
+  /* Handling nested SVG colors which shadcn often sets to currentColor */
+  svg {
+    color: inherit;
+    &.lucide {
+      stroke: currentColor;
+    }
+  }
+
+  /* Specific fix for Quick Filter typo/custom class border-muted-muted */
+  .border-muted-muted { border-color: var(--muted) !important; }
+
+  /* Add border-l, border-r, etc if needed */
+  .border-l { border-left-width: 1px !important; }
+  .border-r { border-right-width: 1px !important; }
+  .border-t { border-top-width: 1px !important; }
+  .border-b { border-bottom-width: 1px !important; }
+  .border-0 { border-width: 0 !important; }
+  .border { border-width: 1px !important; }
+  .overflow-hidden { overflow: hidden !important; }
+  .shrink-0 { flex-shrink: 0 !important; }
+  .size-4 { width: 1rem !important; height: 1rem !important; }
+  .w-4 { width: 1rem !important; }
+  .h-4 { height: 1rem !important; }
+  .w-80 { width: 20rem !important; }
+  .inline-flex { display: inline-flex !important; }
+  .rounded-none { border-radius: 0 !important; }
+  .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important; }
+  
+  /* Additional layout utilities */
+  .z-50 { z-index: 50 !important; }
+  .max-h-96 { max-height: 24rem !important; }
+  .min-w-\[8rem\] { min-width: 8rem !important; }
+  .max-h-\[300px\] { max-height: 300px !important; }
+  .p-0 { padding: 0 !important; }
+  .p-1 { padding: 0.25rem !important; }
+  .px-1 { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+  .px-2 { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+  .py-1\.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+  .mt-1 { margin-top: 0.25rem !important; }
+  .mb-2 { margin-bottom: 0.5rem !important; }
+  .block { display: block !important; }
+  .inline-block { display: inline-block !important; }
+  .w-230px, [style*="width: 230px"] { width: 230px !important; }
+
+  /* Command Menu (cmdk) styles */
+  [cmdk-root] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  [cmdk-group-heading] {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+  [cmdk-item] {
+    &[data-selected='true'] {
+      background-color: var(--accent) !important;
+      color: var(--accent-foreground) !important;
+    }
+  }
+
+  /* Peer utilities for checkbox/labels */
+  .peer:disabled ~ .peer-disabled\:cursor-not-allowed {
+    cursor: not-allowed !important;
+  }
+  .peer:disabled ~ .peer-disabled\:opacity-70 {
+    opacity: 0.7 !important;
+  }
+}

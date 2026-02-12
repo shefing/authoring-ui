@@ -1,0 +1,166 @@
+.twp ,.useTw {
+  /* Button Styling */
+  .btn:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+  button[type="submit"]:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+  .btn--style-primary:not(.card__click):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+  .btn:not(.card__click):not([class*="card__click"]):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+  button[type="submit"]:not(.card__click):not([class*="card__click"]):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]),
+  .btn--style-primary:not(.card__click):not([class*="card__click"]):not(.card__actions .btn):not([class*="LexicalEditorTheme"]):not([class*="upload-relationship-details"]) {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    border-radius: var(--radius-lg) !important; /* Matches design site better than DEFAULT */
+    font-weight: var(--font-weight-medium) !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--primary-800) !important;
+    }
+    
+    &:focus-visible {
+      box-shadow: var(--theme-focus-ring) !important;
+      outline: none !important;
+    }
+    
+    &:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+    }
+  }
+
+  /* Secondary/Ghost button */
+  .btn--style-secondary,
+  .btn--style-pill {
+    background-color: transparent !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--accent) !important;
+    }
+  }
+
+  /* Input Field Styling */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select,
+  .rs__control {
+    background-color: var(--input-background) !important;
+    border: 1px solid transparent !important; /* Hide border by default as per design site */
+    border-radius: var(--radius-lg) !important;
+    color: var(--foreground) !important;
+    font-size: var(--text-base) !important;
+    transition: all 0.2s ease !important;
+    margin-bottom: 0 !important;
+    
+    &::placeholder {
+      color: var(--muted-foreground) !important;
+    }
+    
+    &:hover:not(:disabled) {
+      border-color: var(--primary-200) !important;
+    }
+
+    &:focus,
+    &:focus-within,
+    &.rs__control--is-focused {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 2px var(--primary-100) !important;
+      outline: none !important;
+      background-color: #ffffff !important;
+    }
+    
+    &:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+      background-color: var(--muted) !important;
+    }
+  }
+
+  /* Field Spacing */
+  &.render-fields .field-type,
+  &.render-fields [class*="field-type"],
+  &.field-type,
+  &[class*="field-type"],
+  &[class*="width-"],
+  &.field-type.select,
+  &.field-type.relationship,
+  &.field-type--select,
+  &.field-type--relationship,
+  &.select,
+  &.relationship,
+  & .render-fields .field-type,
+  & .render-fields [class*="field-type"],
+  & .field-type,
+  & .useTw.field-type,
+  & [class*="field-type"],
+  & [class*="width-"],
+  & .field-type.select,
+  & .field-type.relationship,
+  & .field-type--select,
+  & .field-type--relationship,
+  & .select,
+  & .relationship {
+    margin-bottom: 24px !important;
+    
+    &[class*="width-"],
+    &.column,
+    .row__fields & {
+      padding-left: 12px !important;
+      padding-right: 12px !important;
+      
+      &:first-child {
+        padding-left: 0 !important;
+      }
+      
+      &:last-child {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  /* Card & Panel Styling */
+  &.card,
+  &.document-fields,
+  & .card,
+  & .document-fields {
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--theme-shadow-s) !important;
+  }
+
+  &.card-branding,
+  &[class*="card-"],
+  &[id^="card-"],
+  &.card--has-onclick,
+  & .card-branding,
+  & [class*="card-"],
+  & [id^="card-"],
+  & .card--has-onclick {
+    background-color: var(--card) !important;
+
+    .card__title {
+      color: var(--foreground) !important;
+    }
+    
+    .card__click,
+    & .card__click,
+    [class*="card__click"],
+    & [class*="card__click"] {
+      background-color: transparent !important;
+      color: inherit !important;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.02) !important;
+      }
+    }
+    
+    &:hover {
+      background-color: var(--card) !important;
+      border-color: var(--primary) !important;
+    }
+  }
+}

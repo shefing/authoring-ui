@@ -1,6 +1,6 @@
 /* Tailwind 4 directives are handled in custom.scss */
 
-.twp {
+.twp , .useTw {
     --radius: 0.5rem;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
