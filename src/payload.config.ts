@@ -44,12 +44,28 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  debug: process.env.NODE_ENV === 'development',
+    debug: process.env.NODE_ENV === 'development',
     i18n: {
         supportedLanguages: {en},
     },
     admin: {
-    user: Users.slug,
+        livePreview: {
+            breakpoints: [
+                {
+                    label: 'Mobile',
+                    name: 'mobile',
+                    width: 375,
+                    height: 667
+                },
+                {
+                    label: 'Tablet',
+                    name: 'tablet',
+                    width: 768,
+                    height: 1024
+                },
+            ]
+        },
+        user: Users.slug,
         autoLogin:
             {
                 email: 'tsemachh@shefing.com',

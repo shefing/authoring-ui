@@ -10,3 +10,60 @@
   transform: rotate(180deg);
   right: 20px;
 }
+
+@layer payload-default {
+
+  .collection-list{
+    .query-preset-bar {
+      width: auto;
+      position: absolute;
+      z-index: 4;
+      margin-left: 20px;
+      left: 245px;
+      padding-left: 20px;
+    }
+
+    .icon.icon--search{
+      padding-left: 19px;
+    }
+
+    .table {
+      max-height: calc(100vh - 260px); /* 100vh - (header + footer heights) */
+      overflow-y: auto !important; /* Enable vertical scrolling */
+      display: block !important;
+      margin-top: 2px;
+    }
+
+    .table th, .table td {
+      padding: calc(var(--base) * .2);
+      min-width: 10px;
+    }
+
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+    }
+
+    th {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 2 !important; /* Ensure headers stay above content */
+      background: var(--theme-input-bg) !important;
+    }
+
+    .condition{
+      z-index: 3;
+    }
+
+    .search-bar{
+      z-index: 3;
+    }
+    .payload__modal-container.payload__modal-container--enterDone ,.payload__modal-container--appear, .payload__modal-container--appearDone, .payload__modal-container--enter, .payload__modal-container--enterDone, .payload__modal-container--exit{
+      z-index: 0 !important;
+    }
+  }
+  .field-type.checkbox {
+    margin-top: 35px;
+  }
+
+}
