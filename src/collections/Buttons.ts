@@ -1,4 +1,5 @@
 import {CollectionConfig} from 'payload'
+import {createIconSelectField} from "@/components/icon-select";
 
 export const Buttons: CollectionConfig = {
   slug: 'buttons',
@@ -14,20 +15,25 @@ export const Buttons: CollectionConfig = {
   access: {
     read: () => true,
   },
-  fields: [
+  fields:[
+    {type:'row',fields:[
     {
       name: 'name',
       type: 'text',
+      admin:{
+        width :'33%',
+      },
       required: true,
     },
     {
       name: 'label',
       type: 'text',
+      admin:{
+        width :'33%',
+      },
     },
-    {
-      name: 'icon',
-      type: 'text',
-    },
+    createIconSelectField({name:'icon',label:'Icon'}),
+      ]},
     {
       name: 'otherAttributes',
       type: 'json',

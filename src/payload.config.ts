@@ -145,6 +145,13 @@ export default buildConfig({
                 required: true,
               },
             ],
+              admin: {
+                  components: {
+                      Label: {
+                          path: '/components/CustomInlineBlockLabel',
+                      },
+                  },
+              },
           },
         ],
       }),

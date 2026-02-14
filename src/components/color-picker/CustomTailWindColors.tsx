@@ -103,7 +103,7 @@ export const SelectColor: React.FC<Props> = (props) => {
           <Button
             variant={'outline'}
             className={cn(
-              'comp w-[220px] justify-start text-left font-normal',
+              'comp w-[130px] justify-start text-left font-normal',
               !selectColor && 'text-muted-foreground ',
             )}
             style={{ backgroundColor: backgroundColor }}
