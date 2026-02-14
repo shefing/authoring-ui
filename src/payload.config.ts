@@ -63,6 +63,7 @@ export default buildConfig({
         Logo: '/graphics/Logo',
       },
      beforeNavLinks :['/components/Nav'],
+/*
       views: {
         dashboard: {
           Component: '@shefing/quickfilter/Dashboard',
@@ -70,6 +71,7 @@ export default buildConfig({
           exact: true,
         },
       },
+*/
     },
     meta: {
       title: 'Riverbed',
