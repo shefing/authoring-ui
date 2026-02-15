@@ -218,7 +218,7 @@
 
 /* Collapsible Toggle */
 .collapsible--style-default > .collapsible__toggle-wrap .collapsible__toggle {
-  background-color: var(--theme-elevation-50);
+  background-color: transparent;
 }
 
 /* Collapsible Style Default */
