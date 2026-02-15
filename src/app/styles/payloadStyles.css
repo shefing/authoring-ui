@@ -1,6 +1,260 @@
 /* PayloadCMS custom styles - non-Tailwind only */
 /* All Tailwind/shadcn CSS variables are in custom.scss */
 
+/* ============================================
+   Payload Admin Theme - Riverbed Style Guide
+   Colors extracted from riverbed-style-guide
+   ============================================ */
+:root {
+  /* Variables */
+  --theme-bg: var(--theme-elevation-0);
+  --theme-input-bg: var(--theme-elevation-0);
+  --theme-text: var(--theme-elevation-800);
+  --theme-overlay: rgba(0, 0, 0, 0.5);
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: monospace;
+  --font-serif: serif;
+  --style-radius-s: 6px;
+  --style-radius-m: 8px;
+  --style-radius-l: 10px;
+  --nav-width: 275px;
+
+  /* Color Shades - Base (from primary #581c87) */
+  --color-base-0: #ffffff;
+  --color-base-50: #faf5ff;
+  --color-base-100: #f3e8ff;
+  --color-base-150: #e9d5ff;
+  --color-base-200: #d8b4fe;
+  --color-base-250: #c084fc;
+  --color-base-300: #a855f7;
+  --color-base-350: #9333ea;
+  --color-base-400: #7e22ce;
+  --color-base-450: #6b21a8;
+  --color-base-500: #581c87;
+  --color-base-550: #4e1a79;
+  --color-base-600: #44176b;
+  --color-base-650: #3b145d;
+  --color-base-700: #31114f;
+  --color-base-750: #270e41;
+  --color-base-800: #1e0b33;
+  --color-base-850: #140825;
+  --color-base-900: #0a0517;
+  --color-base-950: #050209;
+
+  /* Color Shades - Success (from #16a34a) */
+  --color-success-0: #ffffff;
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-150: #bbf7d0;
+  --color-success-200: #86efac;
+  --color-success-250: #4ade80;
+  --color-success-300: #22c55e;
+  --color-success-350: #1cb950;
+  --color-success-400: #19ae49;
+  --color-success-450: #16a34a;
+  --color-success-500: #16a34a;
+  --color-success-550: #149243;
+  --color-success-600: #12823b;
+  --color-success-650: #107134;
+  --color-success-700: #0e612c;
+  --color-success-750: #0c5125;
+  --color-success-800: #0a401d;
+  --color-success-850: #083016;
+  --color-success-900: #06200e;
+  --color-success-950: #041007;
+
+  /* Color Shades - Warning (from #d97706) */
+  --color-warning-0: #ffffff;
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-150: #fde68a;
+  --color-warning-200: #fcd34d;
+  --color-warning-250: #fbbf24;
+  --color-warning-300: #f59e0b;
+  --color-warning-350: #e88f08;
+  --color-warning-400: #d97706;
+  --color-warning-450: #ca6d05;
+  --color-warning-500: #d97706;
+  --color-warning-550: #c46c06;
+  --color-warning-600: #b06105;
+  --color-warning-650: #9b5605;
+  --color-warning-700: #864b04;
+  --color-warning-750: #714003;
+  --color-warning-800: #5c3503;
+  --color-warning-850: #472a02;
+  --color-warning-900: #331f01;
+  --color-warning-950: #1e1401;
+
+  /* Color Shades - Error/Destructive (from #d4183d) */
+  --color-error-0: #ffffff;
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-150: #fecaca;
+  --color-error-200: #fca5a5;
+  --color-error-250: #f87171;
+  --color-error-300: #ef4444;
+  --color-error-350: #e23040;
+  --color-error-400: #d4183d;
+  --color-error-450: #c51638;
+  --color-error-500: #d4183d;
+  --color-error-550: #bf1637;
+  --color-error-600: #ab1331;
+  --color-error-650: #96112b;
+  --color-error-700: #810e25;
+  --color-error-750: #6d0c1f;
+  --color-error-800: #580a19;
+  --color-error-850: #430713;
+  --color-error-900: #2e050d;
+  --color-error-950: #1a0207;
+
+  /* Color Shades - Accent (from primary #581c87) */
+  --color-accent-0: #ffffff;
+  --color-accent-50: #faf5ff;
+  --color-accent-100: #f3e8ff;
+  --color-accent-150: #e9d5ff;
+  --color-accent-200: #d8b4fe;
+  --color-accent-250: #c084fc;
+  --color-accent-300: #a855f7;
+  --color-accent-350: #9333ea;
+  --color-accent-400: #7e22ce;
+  --color-accent-450: #6b21a8;
+  --color-accent-500: #581c87;
+  --color-accent-550: #4e1a79;
+  --color-accent-600: #44176b;
+  --color-accent-650: #3b145d;
+  --color-accent-700: #31114f;
+  --color-accent-750: #270e41;
+  --color-accent-800: #1e0b33;
+  --color-accent-850: #140825;
+  --color-accent-900: #0a0517;
+  --color-accent-950: #050209;
+
+  /* Theme Accent Colors */
+  --theme-accent-0: var(--color-accent-0);
+  --theme-accent-50: var(--color-accent-50);
+  --theme-accent-100: var(--color-accent-100);
+  --theme-accent-150: var(--color-accent-150);
+  --theme-accent-200: var(--color-accent-200);
+  --theme-accent-250: var(--color-accent-250);
+  --theme-accent-300: var(--color-accent-300);
+  --theme-accent-350: var(--color-accent-350);
+  --theme-accent-400: var(--color-accent-400);
+  --theme-accent-450: var(--color-accent-450);
+  --theme-accent-500: var(--color-accent-500);
+  --theme-accent-550: var(--color-accent-550);
+  --theme-accent-600: var(--color-accent-600);
+  --theme-accent-650: var(--color-accent-650);
+  --theme-accent-700: var(--color-accent-700);
+  --theme-accent-750: var(--color-accent-750);
+  --theme-accent-800: var(--color-accent-800);
+  --theme-accent-850: var(--color-accent-850);
+  --theme-accent-900: var(--color-accent-900);
+  --theme-accent-950: var(--color-accent-950);
+  --theme-accent-1000: var(--color-accent-950);
+}
+
+/* Nav Button */
+.hamburger__wrapper {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+}
+.hamburger:before {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+}
+.hamburger:after {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+}
+
+/* Nav Group Icon */
+.nav-group__indicator svg .stroke {
+  stroke: var(--theme-elevation-700);
+}
+
+/* Nav Group Label */
+.nav-group__label {
+  color: var(--theme-elevation-700);
+}
+
+/* Nav */
+.nav {
+  background-color: var(--theme-elevation-100);
+}
+
+/* Dashboard Card */
+.card {
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
+}
+
+/* Primary Button */
+.btn--style-primary {
+  background-color: #581c87;
+  color: #ffffff;
+}
+
+/* Disabled Primary Button - ensure text remains visible */
+.btn--style-primary.btn--disabled {
+  background-color: #581c87;
+  color: #ffffff;
+  opacity: 0.5;
+}
+
+/* Input Field */
+.field-type.text:not(.has-many) input {
+  border: 1px solid var(--theme-elevation-200);
+}
+
+/* Collapsible */
+.collapsible {
+  border-radius: 4px;
+}
+
+/* Collapsible Content */
+.collapsible__content {
+  background-color: var(--theme-elevation-0);
+}
+
+/* Collapsible Toggle */
+.collapsible--style-default > .collapsible__toggle-wrap .collapsible__toggle {
+  background-color: var(--theme-elevation-50);
+}
+
+/* Collapsible Style Default */
+.collapsible--style-default {
+  border: 1px solid var(--theme-elevation-200);
+}
+
+/* Table Row Odd */
+.table tbody tr:nth-child(odd) {
+  background-color: var(--theme-elevation-50);
+}
+
+/* Dark Theme */
+html[data-theme='dark'] {
+  --theme-accent-0: var(--color-accent-900);
+  --theme-accent-50: var(--color-accent-850);
+  --theme-accent-100: var(--color-accent-800);
+  --theme-accent-150: var(--color-accent-750);
+  --theme-accent-200: var(--color-accent-700);
+  --theme-accent-250: var(--color-accent-650);
+  --theme-accent-300: var(--color-accent-600);
+  --theme-accent-350: var(--color-accent-550);
+  --theme-accent-400: var(--color-accent-450);
+  --theme-accent-450: var(--color-accent-400);
+  --theme-accent-550: var(--color-accent-350);
+  --theme-accent-600: var(--color-accent-300);
+  --theme-accent-650: var(--color-accent-250);
+  --theme-accent-700: var(--color-accent-200);
+  --theme-accent-750: var(--color-accent-150);
+  --theme-accent-800: var(--color-accent-100);
+  --theme-accent-850: var(--color-accent-50);
+  --theme-accent-900: var(--color-accent-0);
+  --theme-accent-950: var(--color-accent-0);
+  --theme-accent-1000: var(--color-accent-0);
+}
+
 /* RTL date picker navigation fixes */
 [dir="rtl"] .react-datepicker__navigation--next {
   transform: rotate(180deg);
