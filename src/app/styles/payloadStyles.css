@@ -264,7 +264,9 @@ html[data-theme='dark'] {
   transform: rotate(180deg);
   right: 20px;
 }
-
+:root {
+  --nav-width: 220px;
+}
 @layer payload-default {
 
   .collection-list{
@@ -322,5 +324,6 @@ html[data-theme='dark'] {
   .group-field--within-tab {
     padding-bottom: 0;
   }
+
 
 }
