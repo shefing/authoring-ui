@@ -2,8 +2,8 @@ import { default as default_5afd0140fc7ba52afd83ccfe6007c5d5 } from '../../../ad
 import { SelectColorFont as SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { SelectColorBackground as SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { ActionFont as ActionFont_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
-import { ActionFontSize as ActionFontSize_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
 import { ActionFontStyle as ActionFontStyle_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
+import { ActionFontSize as ActionFontSize_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
 import { CreatedAtCell as CreatedAtCell_9dfaaf04648a02116882e3167fe3e264 } from '@shefing/authors-info/client'
 import { UpdatedAtCell as UpdatedAtCell_9dfaaf04648a02116882e3167fe3e264 } from '@shefing/authors-info/client'
 import { ExportListMenuItem as ExportListMenuItem_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
@@ -53,8 +53,8 @@ export const importMap = {
   "/components/color-picker/CustomTailWindColors#SelectColorFont": SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3,
   "/components/color-picker/CustomTailWindColors#SelectColorBackground": SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3,
   "/components/font-picker/FontActions#ActionFont": ActionFont_60743c5858c0abf56b6430f8ff699141,
-  "/components/font-picker/FontActions#ActionFontSize": ActionFontSize_60743c5858c0abf56b6430f8ff699141,
   "/components/font-picker/FontActions#ActionFontStyle": ActionFontStyle_60743c5858c0abf56b6430f8ff699141,
+  "/components/font-picker/FontActions#ActionFontSize": ActionFontSize_60743c5858c0abf56b6430f8ff699141,
   "@shefing/authors-info/client#CreatedAtCell": CreatedAtCell_9dfaaf04648a02116882e3167fe3e264,
   "@shefing/authors-info/client#UpdatedAtCell": UpdatedAtCell_9dfaaf04648a02116882e3167fe3e264,
   "@payloadcms/plugin-import-export/rsc#ExportListMenuItem": ExportListMenuItem_cdf7e044479f899a31f804427d568b36,

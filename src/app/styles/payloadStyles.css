@@ -319,5 +319,8 @@ html[data-theme='dark'] {
   .field-type.checkbox {
     margin-top: 35px;
   }
+  .group-field--within-tab {
+    padding-bottom: 0;
+  }
 
 }

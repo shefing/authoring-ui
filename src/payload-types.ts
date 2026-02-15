@@ -171,13 +171,13 @@ export interface Branding {
   };
   titleTypography?: {
     fontFamily?: string | null;
-    fontSize?: string | null;
     fontWeight?: string | null;
+    fontSize?: string | null;
   };
   messageTypography?: {
     fontFamily?: string | null;
-    fontSize?: string | null;
     fontWeight?: string | null;
+    fontSize?: string | null;
   };
   buttonStyles?: {
     approveBgColor?: string | null;
@@ -1033,15 +1033,15 @@ export interface BrandingSelect<T extends boolean = true> {
     | T
     | {
         fontFamily?: T;
-        fontSize?: T;
         fontWeight?: T;
+        fontSize?: T;
       };
   messageTypography?:
     | T
     | {
         fontFamily?: T;
-        fontSize?: T;
         fontWeight?: T;
+        fontSize?: T;
       };
   buttonStyles?:
     | T

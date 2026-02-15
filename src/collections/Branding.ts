@@ -92,8 +92,8 @@ export const Branding: CollectionConfig = {
                                             type: 'row',
                                             fields: [
                                                 createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
-                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
                                                 createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
+                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
                                             ],
                                         },
                                     ],
@@ -107,8 +107,8 @@ export const Branding: CollectionConfig = {
                                             type: 'row',
                                             fields: [
                                                 createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
-                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
                                                 createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
+                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
                                             ],
                                         },
                                     ],
