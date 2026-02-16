@@ -28,6 +28,7 @@ export const Messages: CollectionConfig = {
     plural: '💬 Messages',
   },
   enableQueryPresets: true,
+  versions: {drafts: true, maxPerDoc: 50},
   admin: {
     group: 'Content',
     useAsTitle: 'name',
@@ -113,12 +114,14 @@ export const Messages: CollectionConfig = {
                   name: 'status',
                   type: 'select',
                   options: [
-                    { label: 'Draft', value: 'draft' },
-                    { label: 'Active', value: 'active' },
-                    { label: 'Scheduled', value: 'scheduled' },
-                    { label: 'Completed', value: 'completed' },
+                    { label: 'Draft', value: 'Draft' },
+                    { label: 'Active', value: 'Active' },
+                    { label: 'Triggered', value: 'Triggered' },
+                    { label: 'Rendered', value: 'Rendered' },
+                    { label: 'Acknowledged', value: 'Acknowledged' },
+                    { label: 'Expired', value: 'Expired' },
                   ],
-                  defaultValue: 'draft',
+                  defaultValue: 'Draft',
                   admin: { width: '33.33%' },
                 },
                 {
@@ -154,6 +157,10 @@ export const Messages: CollectionConfig = {
               },
             },
             {
+              name: 'title',
+              type: 'richText',
+            },
+            {
               name: 'content',
               type: 'richText',
               hooks: {
@@ -161,6 +168,21 @@ export const Messages: CollectionConfig = {
               },
               admin: {
                 description: 'Overrides the template content if provided.',
+              },
+            },
+            {
+              name: 'buttonsText',
+              type: 'json',
+              admin: {
+                description: 'Button text overrides — e.g. [{ "buttonText": "OK" }, { "buttonText": "Dismiss" }]',
+              },
+            },
+            {
+              name: 'isHidden',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                description: 'Visibility flag — hidden messages are not shown to end users',
               },
             },
           ],

@@ -15,6 +15,7 @@ export const createFontFamilyField = ({
   type: 'text',
   label,
   admin: {
+    width : '25%',
     components: {
       Field: {
         path: '/components/font-picker/FontActions#ActionFont',
@@ -34,6 +35,7 @@ export const createFontSizeField = ({
   type: 'text',
   label,
   admin: {
+    width : '25%',
     components: {
       Field: '/components/font-picker/FontActions#ActionFontSize',
     },
@@ -48,6 +50,7 @@ export const createFontWeightField = ({
   type: 'text',
   label,
   admin: {
+    width : '25%',
     components: {
       Field: '/components/font-picker/FontActions#ActionFontStyle',
     },

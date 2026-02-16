@@ -248,11 +248,11 @@ export const seed = async (payload: Payload): Promise<void> => {
         name: 'Corporate Default',
         scope: 'all',
         scopeType: 'global',
-        colors: {
-          actionPrimaryColor: '#581c87',
-          actionSecondaryColor: '#c084fc',
-          messageBackgroundColor: '#ffffff',
-          messageTextColor: '#1e293b',
+        general: { messageBackgroundColor: '#ffffff' },
+        message: { textColor: '#1e293b' },
+        actions: {
+          primaryBackground: '#581c87',
+          secondaryBackground: '#c084fc',
         },
         isActive: true,
       },
@@ -263,11 +263,11 @@ export const seed = async (payload: Payload): Promise<void> => {
         name: 'Security Alert Theme',
         scope: 'urgent',
         scopeType: 'urgency',
-        colors: {
-          actionPrimaryColor: '#dc2626',
-          actionSecondaryColor: '#f59e0b',
-          messageBackgroundColor: '#ffffff',
-          messageTextColor: '#7f1d1d',
+        general: { messageBackgroundColor: '#ffffff' },
+        message: { textColor: '#7f1d1d' },
+        actions: {
+          primaryBackground: '#dc2626',
+          secondaryBackground: '#f59e0b',
         },
         isActive: true,
       },
@@ -278,12 +278,11 @@ export const seed = async (payload: Payload): Promise<void> => {
         name: 'Engineering Division',
         scope: 'division',
         scopeType: 'division',
-        division: divisions[2].id,
-        colors: {
-          actionPrimaryColor: '#7c3aed',
-          actionSecondaryColor: '#a78bfa',
-          messageBackgroundColor: '#ffffff',
-          messageTextColor: '#1e293b',
+        general: { messageBackgroundColor: '#ffffff' },
+        message: { textColor: '#1e293b' },
+        actions: {
+          primaryBackground: '#7c3aed',
+          secondaryBackground: '#a78bfa',
         },
         isActive: true,
       },
@@ -295,11 +294,11 @@ export const seed = async (payload: Payload): Promise<void> => {
         scope: 'message-type',
         scopeType: 'message-type',
         messageType: 'confirmation',
-        colors: {
-          actionPrimaryColor: '#16a34a',
-          actionSecondaryColor: '#86efac',
-          messageBackgroundColor: '#ffffff',
-          messageTextColor: '#1e293b',
+        general: { messageBackgroundColor: '#ffffff' },
+        message: { textColor: '#1e293b' },
+        actions: {
+          primaryBackground: '#16a34a',
+          secondaryBackground: '#86efac',
         },
         isActive: true,
       },
@@ -310,11 +309,11 @@ export const seed = async (payload: Payload): Promise<void> => {
         name: 'Executive VIP Theme',
         scope: 'division',
         scopeType: 'division',
-        colors: {
-          actionPrimaryColor: '#0f172a',
-          actionSecondaryColor: '#475569',
-          messageBackgroundColor: '#ffffff',
-          messageTextColor: '#1e293b',
+        general: { messageBackgroundColor: '#ffffff' },
+        message: { textColor: '#1e293b' },
+        actions: {
+          primaryBackground: '#0f172a',
+          secondaryBackground: '#475569',
         },
         isActive: true,
       },
@@ -330,8 +329,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Interactive multi-step survey template for comprehensive feedback collection',
         messageType: 'survey',
         templateType: 'pre-defined',
-        division: divisions[0].id, // Corporate
-        channels: [channels[0].id, channels[1].id],
         isActive: true,
       },
     }),
@@ -342,8 +339,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Confirmation template for IT remediation actions',
         messageType: 'confirmation',
         templateType: 'pre-defined',
-        division: divisions[1].id, // IT Operations
-        channels: [channels[0].id],
         isActive: true,
       },
     }),
@@ -354,8 +349,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Generic success notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
-        division: divisions[0].id, // Corporate
-        channels: [channels[0].id, channels[1].id, channels[3].id],
         isActive: true,
       },
     }),
@@ -366,8 +359,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Reminder template for pending remediation actions',
         messageType: 'reminder',
         templateType: 'pre-defined',
-        division: divisions[1].id, // IT Operations
-        channels: [channels[0].id],
         isActive: true,
       },
     }),
@@ -378,8 +369,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Interactive chat interface for self-service support',
         messageType: 'self-service',
         templateType: 'pre-defined',
-        division: divisions[3].id, // Support
-        channels: [channels[1].id, channels[2].id],
         isActive: true,
       },
     }),
@@ -390,8 +379,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Security alert template for Engineering division',
         messageType: 'notification',
         templateType: 'pre-defined',
-        division: divisions[2].id, // Engineering
-        channels: [channels[0].id, channels[1].id],
         isActive: true,
       },
     }),
@@ -402,8 +389,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Annual employee satisfaction survey',
         messageType: 'survey',
         templateType: 'pre-defined',
-        division: divisions[0].id, // Corporate
-        channels: [channels[3].id],
         isActive: true,
       },
     }),
@@ -414,8 +399,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Urgent action confirmation template',
         messageType: 'confirmation',
         templateType: 'pre-defined',
-        division: divisions[1].id, // IT Operations
-        channels: [channels[2].id],
         isActive: true,
       },
     }),
@@ -426,8 +409,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Generic system notification template',
         messageType: 'notification',
         templateType: 'pre-defined',
-        division: divisions[1].id, // IT Operations
-        channels: [channels[0].id],
         isActive: true,
       },
     }),
@@ -438,8 +419,6 @@ export const seed = async (payload: Payload): Promise<void> => {
         description: 'Scheduled reminder template for recurring notifications',
         messageType: 'reminder',
         templateType: 'pre-defined',
-        division: divisions[0].id, // Corporate
-        channels: [channels[3].id],
         isActive: true,
       },
     }),
@@ -476,7 +455,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[0].id, // All Employees
         channel: channels[0].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 74,
@@ -516,7 +495,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[1].id, // Engineering Department
         channel: channels[0].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 83,
@@ -556,7 +535,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[2].id, // Remote Workers
         channel: channels[1].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 92,
@@ -596,7 +575,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[5].id, // Sales Department
         channel: channels[0].id,
         deliveryMode: 'intrusive',
-        status: 'scheduled',
+        status: 'Triggered',
         priority: 'normal',
         deliverySchedule: 'scheduled',
         scheduledDate: new Date().toISOString(),
@@ -637,7 +616,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[3].id, // VIP Users
         channel: channels[1].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 100,
@@ -677,7 +656,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[0].id, // All Employees
         channel: channels[3].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 67,
@@ -717,7 +696,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[4].id, // IT Security Team
         channel: channels[2].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'high',
         deliverySchedule: 'immediate',
         responseRate: 100,
@@ -757,7 +736,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[12].id, // All Users
         channel: channels[0].id,
         deliveryMode: 'non-intrusive',
-        status: 'scheduled',
+        status: 'Triggered',
         priority: 'normal',
         deliverySchedule: 'scheduled',
         scheduledDate: new Date().toISOString(),
@@ -798,7 +777,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[6].id, // Finance Department
         channel: channels[3].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 82,
@@ -838,7 +817,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[0].id, // All Employees
         channel: channels[0].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 75,
@@ -878,7 +857,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[7].id, // Marketing Department
         channel: channels[1].id,
         deliveryMode: 'intrusive',
-        status: 'completed',
+        status: 'Acknowledged',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 85,
@@ -918,7 +897,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[8].id, // New Hires
         channel: channels[3].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 78,
@@ -958,7 +937,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[9].id, // Development Team
         channel: channels[2].id,
         deliveryMode: 'non-intrusive',
-        status: 'completed',
+        status: 'Acknowledged',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 100,
@@ -998,7 +977,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[10].id, // IT Managers
         channel: channels[1].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'high',
         deliverySchedule: 'immediate',
         responseRate: 83,
@@ -1038,7 +1017,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[2].id, // Remote Workers
         channel: channels[2].id,
         deliveryMode: 'non-intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 81,
@@ -1078,7 +1057,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[0].id, // All Employees
         channel: channels[2].id,
         deliveryMode: 'non-intrusive',
-        status: 'draft',
+        status: 'Draft',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 0,
@@ -1118,7 +1097,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[11].id, // Data Owners
         channel: channels[1].id,
         deliveryMode: 'non-intrusive',
-        status: 'scheduled',
+        status: 'Triggered',
         priority: 'normal',
         deliverySchedule: 'scheduled',
         scheduledDate: new Date().toISOString(),
@@ -1159,7 +1138,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[12].id, // All Users
         channel: channels[0].id,
         deliveryMode: 'intrusive',
-        status: 'active',
+        status: 'Active',
         priority: 'urgent',
         deliverySchedule: 'immediate',
         responseRate: 96,
@@ -1199,7 +1178,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[1].id, // Engineering Department
         channel: channels[2].id,
         deliveryMode: 'non-intrusive',
-        status: 'completed',
+        status: 'Acknowledged',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 92,
@@ -1239,7 +1218,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         targetGroup: userGroups[5].id, // Sales Department
         channel: channels[3].id,
         deliveryMode: 'non-intrusive',
-        status: 'draft',
+        status: 'Draft',
         priority: 'normal',
         deliverySchedule: 'immediate',
         responseRate: 0,

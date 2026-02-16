@@ -19,8 +19,8 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
   React.useEffect(() => {
     if (!brandingData) return
     const fontsToLoad = new Set<string>()
-    if (brandingData.messageTypography?.fontFamily) fontsToLoad.add(brandingData.messageTypography.fontFamily)
-    if (brandingData.titleTypography?.fontFamily) fontsToLoad.add(brandingData.titleTypography.fontFamily)
+    if (brandingData.message?.fontFamily) fontsToLoad.add(brandingData.message.fontFamily)
+    if (brandingData.title?.fontFamily) fontsToLoad.add(brandingData.title.fontFamily)
     
     fontsToLoad.forEach(font => {
       if (font && !['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', '-apple-system'].includes(font.toLowerCase())) {
@@ -34,37 +34,41 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
         }
       }
     })
-  }, [brandingData?.messageTypography?.fontFamily, brandingData?.titleTypography?.fontFamily])
+  }, [brandingData?.message?.fontFamily, brandingData?.title?.fontFamily])
   
   const mappedBranding = React.useMemo(() => {
     if (!brandingData) return null
 
     return {
-        titleTypography: brandingData.titleTypography,
-        messageTypography: brandingData.messageTypography,
+        titleTypography: brandingData.title,
+        messageTypography: brandingData.message,
+        general: brandingData.general,
+        title: brandingData.title,
+        message: brandingData.message,
+        actions: brandingData.actions,
         themeTokens: {
           colors: {
-            primary: brandingData.colors?.actionPrimaryColor || '',
-            secondary: brandingData.colors?.actionSecondaryColor || '',
-            text: brandingData.colors?.messageTextColor || '',
-            background: brandingData.colors?.messageBackgroundColor || '',
-            border: brandingData.colors?.actionSecondaryColor || '',
+            primary: brandingData.actions?.primaryBackground || '',
+            secondary: brandingData.actions?.secondaryBackground || '',
+            text: brandingData.message?.textColor || '',
+            background: brandingData.general?.messageBackgroundColor || '',
+            border: brandingData.general?.borderColor || '',
             buttonText: '#ffffff',
           },
           typography: {
-            fontFamily: brandingData.messageTypography?.fontFamily || '',
-            fontSize: brandingData.messageTypography?.fontSize || '',
-            fontWeight: brandingData.messageTypography?.fontWeight || '',
+            fontFamily: brandingData.message?.fontFamily || '',
+            fontSize: brandingData.message?.fontSize || '',
+            fontWeight: brandingData.message?.fontWeight || '',
           },
           titleTypography: {
-            fontFamily: brandingData.titleTypography?.fontFamily || '',
-            fontSize: brandingData.titleTypography?.fontSize || '',
-            fontWeight: brandingData.titleTypography?.fontWeight || '',
+            fontFamily: brandingData.title?.fontFamily || '',
+            fontSize: brandingData.title?.fontSize || '',
+            fontWeight: brandingData.title?.fontWeight || '',
           }
         },
         generalStyling: {
-            messageTextColor: brandingData.colors?.messageTextColor || '',
-            messageBackgroundColor: brandingData.colors?.messageBackgroundColor || '',
+            messageTextColor: brandingData.message?.textColor || '',
+            messageBackgroundColor: brandingData.general?.messageBackgroundColor || '',
             direction: 'ltr' as const,
             messageWidth: 500,
             titleAlign: 'center' as const,
@@ -77,20 +81,19 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
         },
         approveBtn: {
             label: 'Approve',
-            bgColor: brandingData.buttonStyles?.approveBgColor || brandingData.colors?.actionPrimaryColor || '',
-            textColor: brandingData.buttonStyles?.approveTextColor || '#ffffff',
+            bgColor: brandingData.actions?.primaryBackground || '',
+            textColor: brandingData.actions?.primaryText || '#ffffff',
             align: 'center' as const,
         },
         buttonStyles: {
-            dismissBgColor: brandingData.buttonStyles?.dismissBgColor || brandingData.colors?.actionSecondaryColor || '',
-            dismissTextColor: brandingData.buttonStyles?.dismissTextColor || '',
+            dismissBgColor: brandingData.actions?.secondaryBackground || '',
+            dismissTextColor: brandingData.actions?.secondaryText || '#ffffff',
         },
-        colors: brandingData.colors,
     }
   }, [brandingData])
 
   const messageContent = React.useMemo(() => ({
-    title: templateData.name,
+    title: templateData.title,
     body: templateData.body,
     actions: [
       {

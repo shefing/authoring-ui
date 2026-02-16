@@ -8,6 +8,7 @@ export const Branding: CollectionConfig = {
         singular: '🎨 Brand',
         plural: '🎨 Brands',
     },
+    trash: true, // Enable trash functionality
     versions: {drafts: true, maxPerDoc: 50},
     enableQueryPresets: true,
     admin: {
@@ -58,84 +59,101 @@ export const Branding: CollectionConfig = {
                             relationTo: 'media',
                         },
                         {
-                            name: 'colors',
                             type: 'group',
-                            label: 'Brand Colors',
+                            label: 'Brand Colors And Typography',
                             fields: [
                                 {
-                                    type: 'row',
+                                    type: 'group',
+                                    name: 'general',
+                                    label: 'Border and Background',
                                     fields: [
-                                        createColorField({name: 'actionPrimaryColor', label: 'Title Text'}),
-                                        createColorField({name: 'actionSecondaryColor', label: 'Border'}),
-                                        createBackgroundColorField({
-                                            name: 'messageBackgroundColor',
-                                            label: 'Message Background'
-                                        }),
-                                        createColorField({name: 'messageTextColor', label: 'Message Text'}),
-                                    ],
+                                        {
+                                            type: 'row',
+                                            fields: [
+                                                createColorField({name: 'borderColor', label: 'Border'}),
+                                                createBackgroundColorField({
+                                                    name: 'messageBackgroundColor',
+                                                    label: 'Message Background'
+                                                }),
+                                            ],
+                                        },
+                                    ]
+                                },
+                                {
+                                  type:'group',
+                                    name:'title',
+                                  label: 'Title',
+                                    fields:[
+                                        {
+                                          type: 'row',
+                                          fields:[
+                                              createColorField({name: 'textColor', label: 'Text Color'}),
+                                              createFontFamilyField({
+                                                  name: 'fontFamily',
+                                                  label: 'Font Family'
+                                              }),
+                                              createFontWeightField({
+                                                  name: 'fontWeight',
+                                                  label: 'Font Weight & Style'
+                                              }),
+                                              createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                          ]
+                                        },
+                                    ]
+                                },
+                                {
+                                    type: 'group',
+                                    name: 'message',
+                                    label: 'Message',
+                                    fields: [
+                                        {
+                                            type: 'row',
+                                            fields: [
+                                                createColorField({name: 'textColor', label: 'Text Color'}),
+                                                createFontFamilyField({
+                                                    name: 'fontFamily',
+                                                    label: 'Font Family'
+                                                }),
+                                                createFontWeightField({
+                                                    name: 'fontWeight',
+                                                    label: 'Font Weight & Style'
+                                                }),
+                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                            ]
+                                        }
+                                        ]
+                                },
+                                {
+                                    type: 'group',
+                                    label: 'Actions',
+                                    name: 'actions',
+                                    fields:[
+                                        {
+                                            type: 'row',
+                                            fields: [
+                                                createBackgroundColorField({
+                                                    name: 'primaryBackground',
+                                                    label: 'Primary Background'
+                                                }),
+                                                createColorField({
+                                                    name: 'primaryText',
+                                                    label: 'Primary Text'
+                                                }),
+                                                createBackgroundColorField({
+                                                    name: 'secondaryBackground',
+                                                    label: 'Secondary Background'
+                                                }),
+                                                createColorField({
+                                                    name: 'secondaryText',
+                                                    label: 'Secondary Text'
+                                                }),
+                                            ],
+                                        }
+                                        ]
                                 },
                             ],
-                        },
-                        {
-                            label: 'Typography and Buttons',
-                          type:'collapsible',
-                            admin: {
-                                initCollapsed : true
-                            },
-                            fields: [
-                                {
-                                    name: 'titleTypography',
-                                    type: 'group',
-                                    label: 'Title Typography',
-                                    fields: [
-                                        {
-                                            type: 'row',
-                                            fields: [
-                                                createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
-                                                createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
-                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    name: 'messageTypography',
-                                    type: 'group',
-                                    label: 'Message Typography',
-                                    fields: [
-                                        {
-                                            type: 'row',
-                                            fields: [
-                                                createFontFamilyField({name: 'fontFamily', label: 'Font Family'}),
-                                                createFontWeightField({name: 'fontWeight', label: 'Font Weight & Style'}),
-                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    name: 'buttonStyles',
-                                    type: 'group',
-                                    label: 'Button Styles', // Empty label to minimize name visibility
-                                    admin: {
-                                        hideGutter: true,
-                                    },
-                                    fields: [
-                                        {
-                                            type: 'row',
-                                            fields: [
-                                                createColorField({name: 'approveBgColor', label: 'Approve Background'}),
-                                                createColorField({name: 'approveTextColor', label: 'Approve Text'}),
-                                                createColorField({name: 'dismissBgColor', label: 'Dismiss Background'}),
-                                                createColorField({name: 'dismissTextColor', label: 'Dismiss Text'}),
-                                            ],
-                                        },
-                                    ],
-                                },
-                            ]
-                        },
-
-                    ],
+                        }
+                        ]
                 },
                 {
                     label: 'Advanced',

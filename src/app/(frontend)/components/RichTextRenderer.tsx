@@ -119,7 +119,7 @@ export function RichTextRenderer({
         <p
           key={index}
           style={{
-            margin: `${spacing.small || '12px'} 0`,
+            margin: 0,
             fontSize: 'inherit',
             lineHeight: 1.5,
             fontFamily: 'inherit',
@@ -328,9 +328,8 @@ export function RichTextRenderer({
     const lexicalContent = content as LexicalContent
     if (lexicalContent.root?.children) {
       return (
-        <div style={{ marginBottom: spacing.medium || '16px', color: 'inherit', fontFamily: 'inherit' }}>
+        <div style={{ color: 'inherit', fontFamily: 'inherit' }}>
           {lexicalContent.root.children.map((node, idx) => renderLexicalNode(node, idx, renderLexicalNode))}
-          <div style={{ height: spacing.small || '12px' }} />
         </div>
       )
     }
@@ -343,7 +342,6 @@ export function RichTextRenderer({
         fontSize: 'inherit',
         lineHeight: 1.5,
         color: 'inherit', // Inherit from container
-        marginBottom: spacing.medium || '16px',
         whiteSpace: 'pre-wrap',
         fontFamily: 'inherit',
       }}

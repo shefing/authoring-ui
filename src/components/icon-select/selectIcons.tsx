@@ -61,7 +61,7 @@ const SelectIcons: React.FC<Props> = (props) => {
   };
   const labelToUse = label ? label : 'Icon';
   return (
-    <div className='comp useTw twp'>
+    <div className='comp useTw twp selectIcon mt-3'>
       <Label
         htmlFor={`comp bfColourPickerField-${path?.replace(/\./gi, '__')}`}
         label={labelToUse}

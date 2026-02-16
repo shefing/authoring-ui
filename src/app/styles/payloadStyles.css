@@ -267,6 +267,11 @@ html[data-theme='dark'] {
 :root {
   --nav-width: 220px;
 }
+/* Live preview window */
+.live-preview-window {
+  width: 50% !important;
+}
+
 @layer payload-default {
 
   .collection-list{

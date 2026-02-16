@@ -45,14 +45,9 @@ export const Templates: CollectionConfig = {
                             fields: [
                                 {name: 'name', type: 'text', required: true},
                                 {
-                                    name: 'priority',
-                                    type: 'select',
-                                    options: [
-                                        {label: 'Normal', value: 'normal'},
-                                        {label: 'High', value: 'high'},
-                                        {label: 'Urgent', value: 'urgent'},
-                                    ],
-                                    defaultValue: 'normal',
+                                    name: 'branding',
+                                    type: 'relationship',
+                                    relationTo: 'branding',
                                 },
                                 {
                                     name: 'isActive',
@@ -62,11 +57,7 @@ export const Templates: CollectionConfig = {
                             ],
                         },
                         {
-                            name: 'description',
-                            type: 'textarea',
-                        },
-                        {
-                            type: 'row',
+                          type: 'row',
                             fields: [
                                 {
                                     name: 'messageType',
@@ -79,6 +70,43 @@ export const Templates: CollectionConfig = {
                                         {label: 'Self-Service', value: 'self-service'},
                                     ],
                                     required: true,
+                                },
+                                {
+                                    name: 'channel',
+                                    type: 'relationship',
+                                    hasMany: true,
+                                    relationTo: 'channels',
+                                    admin: { width: '70%' },
+                                },
+                            ]
+                        },
+                        {
+                            name: 'title',
+                            type: 'richText',
+                        },
+                        {
+                            name: 'body',
+                            type: 'richText',
+                        },
+                    ],
+                },
+                {label: 'Advanced', fields: [
+                        {
+                            name: 'description',
+                            type: 'textarea',
+                        },
+                        {
+                            type: 'row',
+                            fields: [
+                                {
+                                    name: 'priority',
+                                    type: 'select',
+                                    options: [
+                                        {label: 'Normal', value: 'normal'},
+                                        {label: 'High', value: 'high'},
+                                        {label: 'Urgent', value: 'urgent'},
+                                    ],
+                                    defaultValue: 'normal',
                                 },
                                 {
                                     name: 'templateType',
@@ -100,120 +128,11 @@ export const Templates: CollectionConfig = {
                                     ],
                                     defaultValue: 'general',
                                 },
-                                {
-                                    name: 'branding',
-                                    type: 'relationship',
-                                    relationTo: 'branding',
-                                },
+
                             ],
                         },
-                        {
-                            name: 'body',
-                            type: 'richText',
-                        },
-                    ],
-                },
-                {
-                    label: 'Advanced',
-                    fields: [
-                        {
-                            type: 'collapsible',
-                            label: 'Advanced Content Configuration',
-                            fields: [
-                                {
-                                    type: 'row',
-                                    fields: [
-                                        {
-                                            name: 'showHeader',
-                                            type: 'checkbox',
-                                            defaultValue: true,
-                                            admin: {width: '33%'},
-                                        },
-                                        {
-                                            name: 'showDescription',
-                                            type: 'checkbox',
-                                            defaultValue: true,
-                                            admin: {width: '33%'},
-                                        },
-                                        {
-                                            name: 'showBody',
-                                            type: 'checkbox',
-                                            defaultValue: true,
-                                            admin: {width: '33%'},
-                                        },
-                                    ],
-                                },
-                                {
-                                    name: 'title',
-                                    type: 'text',
-                                    admin: {
-                                        condition: (data) => data.showHeader,
-                                    },
-                                },
-                                {
-                                    name: 'messageDescription',
-                                    type: 'textarea',
-                                    admin: {
-                                        condition: (data) => data.showDescription,
-                                    },
-                                },
-                            ],
-                        },
-                        {
-                            type: 'collapsible',
-                            label: 'Actions & Buttons',
-                            fields: [
-                                {
-                                    name: 'buttons',
-                                    type: 'array',
-                                    minRows: 0,
-                                    maxRows: 3,
-                                    fields: [
-                                        {
-                                            type: 'row',
-                                            fields: [
-                                                {
-                                                    name: 'button',
-                                                    type: 'relationship',
-                                                    relationTo: 'buttons',
-                                                    required: true,
-                                                    admin: {width: '50%'},
-                                                },
-                                                {
-                                                    name: 'type',
-                                                    type: 'select',
-                                                    options: [
-                                                        {label: 'Primary', value: 'primary'},
-                                                        {label: 'Secondary', value: 'secondary'},
-                                                        {label: 'Tertiary', value: 'tertiary'},
-                                                    ],
-                                                    defaultValue: 'primary',
-                                                    admin: {width: '50%'},
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            type: 'row',
-                            fields: [
-                                {
-                                    name: 'division',
-                                    type: 'relationship',
-                                    relationTo: 'divisions',
-                                },
-                            ],
-                        },
-                        {
-                            name: 'channels',
-                            type: 'relationship',
-                            relationTo: 'channels',
-                            hasMany: true,
-                        },
-                    ],
-                },
+
+                    ]},
             ],
         },
     ],

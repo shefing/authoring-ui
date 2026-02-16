@@ -163,27 +163,27 @@ export interface Branding {
   name: string;
   isActive?: boolean | null;
   logo?: (string | null) | Media;
-  colors?: {
-    actionPrimaryColor?: string | null;
-    actionSecondaryColor?: string | null;
+  general?: {
+    borderColor?: string | null;
     messageBackgroundColor?: string | null;
-    messageTextColor?: string | null;
   };
-  titleTypography?: {
+  title?: {
+    textColor?: string | null;
     fontFamily?: string | null;
     fontWeight?: string | null;
     fontSize?: string | null;
   };
-  messageTypography?: {
+  message?: {
+    textColor?: string | null;
     fontFamily?: string | null;
     fontWeight?: string | null;
     fontSize?: string | null;
   };
-  buttonStyles?: {
-    approveBgColor?: string | null;
-    approveTextColor?: string | null;
-    dismissBgColor?: string | null;
-    dismissTextColor?: string | null;
+  actions?: {
+    primaryBackground?: string | null;
+    primaryText?: string | null;
+    secondaryBackground?: string | null;
+    secondaryText?: string | null;
   };
   scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
   scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
@@ -200,6 +200,7 @@ export interface Branding {
   publisher?: string | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -248,13 +249,25 @@ export interface Division {
 export interface Template {
   id: string;
   name: string;
-  priority?: ('normal' | 'high' | 'urgent') | null;
-  isActive?: boolean | null;
-  description?: string | null;
-  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  templateType?: ('pre-defined' | 'custom') | null;
-  category?: ('security' | 'hr' | 'it' | 'general') | null;
   branding?: (string | null) | Branding;
+  isActive?: boolean | null;
+  messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  channel?: (string | Channel)[] | null;
+  title?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   body?: {
     root: {
       type: string;
@@ -270,20 +283,10 @@ export interface Template {
     };
     [k: string]: unknown;
   } | null;
-  showHeader?: boolean | null;
-  showDescription?: boolean | null;
-  showBody?: boolean | null;
-  title?: string | null;
-  messageDescription?: string | null;
-  buttons?:
-    | {
-        button: string | Button;
-        type?: ('primary' | 'secondary' | 'tertiary') | null;
-        id?: string | null;
-      }[]
-    | null;
-  division?: (string | null) | Division;
-  channels?: (string | Channel)[] | null;
+  description?: string | null;
+  priority?: ('normal' | 'high' | 'urgent') | null;
+  templateType?: ('pre-defined' | 'custom') | null;
+  category?: ('security' | 'hr' | 'it' | 'general') | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -292,30 +295,6 @@ export interface Template {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buttons".
- */
-export interface Button {
-  id: string;
-  name: string;
-  label?: string | null;
-  icon?: string | null;
-  otherAttributes?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  createdAt: string;
-  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -362,10 +341,25 @@ export interface Message {
   template?: (string | null) | Template;
   targetGroup?: (string | null) | UserGroup;
   channel?: (string | null) | Channel;
-  status?: ('draft' | 'active' | 'scheduled' | 'completed') | null;
+  status?: ('Draft' | 'Active' | 'Triggered' | 'Rendered' | 'Acknowledged' | 'Expired') | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   deliverySchedule?: ('immediate' | 'scheduled') | null;
   scheduledDate?: string | null;
+  title?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Overrides the template content if provided.
    */
@@ -384,6 +378,22 @@ export interface Message {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Button text overrides — e.g. [{ "buttonText": "OK" }, { "buttonText": "Dismiss" }]
+   */
+  buttonsText?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Visibility flag — hidden messages are not shown to end users
+   */
+  isHidden?: boolean | null;
   deliveryRules?: (string | DeliveryRule)[] | null;
   deliveryMode?: ('intrusive' | 'non-intrusive') | null;
   /**
@@ -394,8 +404,11 @@ export interface Message {
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
+  publishDate?: string | null;
+  publisher?: string | null;
   createdAt: string;
   updatedAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -544,6 +557,31 @@ export interface Policy {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons".
+ */
+export interface Button {
+  id: string;
+  name: string;
+  label?: string | null;
+  action?: ('Cancel' | 'Acknowledge') | null;
+  icon?: string | null;
+  otherAttributes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1021,35 +1059,35 @@ export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   isActive?: T;
   logo?: T;
-  colors?:
+  general?:
     | T
     | {
-        actionPrimaryColor?: T;
-        actionSecondaryColor?: T;
+        borderColor?: T;
         messageBackgroundColor?: T;
-        messageTextColor?: T;
       };
-  titleTypography?:
+  title?:
     | T
     | {
+        textColor?: T;
         fontFamily?: T;
         fontWeight?: T;
         fontSize?: T;
       };
-  messageTypography?:
+  message?:
     | T
     | {
+        textColor?: T;
         fontFamily?: T;
         fontWeight?: T;
         fontSize?: T;
       };
-  buttonStyles?:
+  actions?:
     | T
     | {
-        approveBgColor?: T;
-        approveTextColor?: T;
-        dismissBgColor?: T;
-        dismissTextColor?: T;
+        primaryBackground?: T;
+        primaryText?: T;
+        secondaryBackground?: T;
+        secondaryText?: T;
       };
   scope?: T;
   scopeType?: T;
@@ -1063,6 +1101,7 @@ export interface BrandingSelect<T extends boolean = true> {
   publisher?: T;
   createdAt?: T;
   updatedAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -1071,28 +1110,16 @@ export interface BrandingSelect<T extends boolean = true> {
  */
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
-  priority?: T;
+  branding?: T;
   isActive?: T;
-  description?: T;
   messageType?: T;
+  channel?: T;
+  title?: T;
+  body?: T;
+  description?: T;
+  priority?: T;
   templateType?: T;
   category?: T;
-  branding?: T;
-  body?: T;
-  showHeader?: T;
-  showDescription?: T;
-  showBody?: T;
-  title?: T;
-  messageDescription?: T;
-  buttons?:
-    | T
-    | {
-        button?: T;
-        type?: T;
-        id?: T;
-      };
-  division?: T;
-  channels?: T;
   creator?: T;
   updator?: T;
   process?: T;
@@ -1117,7 +1144,10 @@ export interface MessagesSelect<T extends boolean = true> {
   messageType?: T;
   deliverySchedule?: T;
   scheduledDate?: T;
+  title?: T;
   content?: T;
+  buttonsText?: T;
+  isHidden?: T;
   deliveryRules?: T;
   deliveryMode?: T;
   responseRate?: T;
@@ -1125,8 +1155,11 @@ export interface MessagesSelect<T extends boolean = true> {
   creator?: T;
   updator?: T;
   process?: T;
+  publishDate?: T;
+  publisher?: T;
   createdAt?: T;
   updatedAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1256,6 +1289,7 @@ export interface DeliveryRulesSelect<T extends boolean = true> {
 export interface ButtonsSelect<T extends boolean = true> {
   name?: T;
   label?: T;
+  action?: T;
   icon?: T;
   otherAttributes?: T;
   creator?: T;

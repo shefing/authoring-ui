@@ -23,8 +23,8 @@ export function MessagePreview({
   previewHtml,
 }: MessagePreviewProps) {
   // Extract typography settings from Branding
-  const typography = branding?.messageTypography || {}
-  const titleTypography = branding?.titleTypography || {}
+  const typography = (branding as any)?.message || (branding as any)?.messageTypography || {}
+  const titleTypography = (branding as any)?.title || (branding as any)?.titleTypography || {}
   
   // Dynamically load font families if they are not already present
   React.useEffect(() => {
@@ -59,7 +59,17 @@ export function MessagePreview({
   const titleTextSize = parseFontSize(titleTypography.fontSize as string, textSize * 1.25)
 
   // Extract settings from branding
-  const colors = (branding as any)?.colors || {}
+  const general = (branding as any)?.general || {}
+  const colors = {
+    messageBackgroundColor: general.messageBackgroundColor || (branding as any)?.themeTokens?.colors?.background || '',
+    messageTextColor: (branding as any)?.message?.textColor || (branding as any)?.themeTokens?.colors?.text || '',
+    borderColor: general.borderColor || (branding as any)?.themeTokens?.colors?.border || '',
+    primaryBackground: (branding as any)?.actions?.primaryBackground || (branding as any)?.themeTokens?.colors?.primary || '',
+    primaryText: (branding as any)?.actions?.primaryText || '#ffffff',
+    secondaryBackground: (branding as any)?.actions?.secondaryBackground || (branding as any)?.themeTokens?.colors?.secondary || '',
+    secondaryText: (branding as any)?.actions?.secondaryText || '#ffffff',
+    titleTextColor: (branding as any)?.title?.textColor || '',
+  }
   const buttonStyles = (branding as any)?.buttonStyles || {}
   const spacing = (branding as any)?.spacing || {}
   const radii = (branding as any)?.radii || {}
@@ -83,8 +93,8 @@ export function MessagePreview({
   // Get button style by action kind
   const getButtonStyle = React.useCallback((actionKind: string) => {
     if (actionKind === 'approve' || actionKind === 'primary') {
-      const approveBg = (branding as any)?.approveBtn?.bgColor || (buttonStyles as any).approveBgColor || (colors as any).actionPrimaryColor || '#3b82f6'
-      const approveText = (branding as any)?.approveBtn?.textColor || (buttonStyles as any).approveTextColor || '#ffffff'
+      const approveBg = (branding as any)?.approveBtn?.bgColor || colors.primaryBackground || '#3b82f6'
+      const approveText = (branding as any)?.approveBtn?.textColor || colors.primaryText || '#ffffff'
       return {
         backgroundColor: resolveTailwindColor(approveBg),
         color: resolveTailwindColor(approveText),
@@ -92,8 +102,8 @@ export function MessagePreview({
       }
     }
     if (actionKind === 'dismiss' || actionKind === 'secondary') {
-      const dismissBg = (branding as any)?.buttonStyles?.dismissBgColor || (buttonStyles as any).dismissBgColor || (colors as any).actionSecondaryColor || '#6b7280'
-      const dismissText = (branding as any)?.buttonStyles?.dismissTextColor || (buttonStyles as any).dismissTextColor || '#ffffff'
+      const dismissBg = (branding as any)?.buttonStyles?.dismissBgColor || colors.secondaryBackground || '#6b7280'
+      const dismissText = (branding as any)?.buttonStyles?.dismissTextColor || colors.secondaryText || '#ffffff'
       return {
         backgroundColor: resolveTailwindColor(dismissBg),
         color: resolveTailwindColor(dismissText),
@@ -101,11 +111,11 @@ export function MessagePreview({
       }
     }
     return {
-      backgroundColor: resolveTailwindColor((colors as any).actionPrimaryColor || '#3b82f6'),
-      color: resolveTailwindColor('#ffffff'),
+      backgroundColor: resolveTailwindColor(colors.primaryBackground || '#3b82f6'),
+      color: resolveTailwindColor(colors.primaryText || '#ffffff'),
       label: 'Action',
     }
-  }, [branding, buttonStyles, colors])
+  }, [branding, colors])
 
   const styles = React.useMemo(() => ({
     overlay: {
@@ -147,11 +157,11 @@ export function MessagePreview({
       lineHeight: 1,
     },
     container: {
-      backgroundColor: resolveTailwindColor((branding as any)?.colors?.messageBackgroundColor || (branding as any)?.themeTokens?.colors?.background || (branding as any)?.generalStyling?.messageBackgroundColor || colors.messageBackgroundColor || colors.background || '#ffffff'),
-      color: resolveTailwindColor((branding as any)?.colors?.messageTextColor || (branding as any)?.themeTokens?.colors?.text || (branding as any)?.generalStyling?.messageTextColor || colors.messageTextColor || colors.text || '#000000'),
+      backgroundColor: resolveTailwindColor(colors.messageBackgroundColor || (branding as any)?.generalStyling?.messageBackgroundColor || '#ffffff'),
+      color: resolveTailwindColor(colors.messageTextColor || (branding as any)?.generalStyling?.messageTextColor || '#000000'),
       padding: spacing.medium || '16px',
       borderRadius: radii.medium || '8px',
-      border: `1px solid ${resolveTailwindColor((branding as any)?.colors?.actionSecondaryColor || colors.border || '#e5e7eb')}`,
+      border: `1px solid ${resolveTailwindColor(colors.borderColor || '#e5e7eb')}`,
       width: (messageWidth as any) === '100%' ? '100%' : `${messageWidth}px`,
       maxWidth: '100%',
       fontFamily: typography.fontFamily ? `${typography.fontFamily}, system-ui, -apple-system, sans-serif` : 'system-ui, -apple-system, sans-serif',
@@ -191,7 +201,7 @@ export function MessagePreview({
       flexDirection: logoPosition === 'right-inline' ? ('row-reverse' as const) : ('row' as const),
     },
     headerBlock: {
-      marginBottom: spacing.medium || '16px',
+      marginBottom: 0,
     },
     logo: {
       width: 'auto',
@@ -203,15 +213,13 @@ export function MessagePreview({
       fontSize: typeof titleTypography.fontSize === 'number' ? `${titleTypography.fontSize}px` : titleTypography.fontSize || `${titleTextSize}px`,
       fontWeight: titleTypography.fontWeight === 'italic' || titleTypography.fontWeight === 'bold-italic' ? 'normal' : (titleTypography.fontWeight || 600),
       fontStyle: titleTypography.fontWeight === 'italic' || titleTypography.fontWeight === 'bold-italic' ? 'italic' : 'normal',
-      color: resolveTailwindColor((branding as any)?.colors?.actionPrimaryColor || colors.primary || '#1f2937'),
+      color: resolveTailwindColor(colors.titleTextColor || '#1f2937'),
       margin: 0,
       fontFamily: titleTypography.fontFamily ? `${titleTypography.fontFamily}, ${typography.fontFamily ? `${typography.fontFamily}, ` : ''}system-ui, -apple-system, sans-serif` : 'inherit',
       textAlign: titleAlignment as 'left' | 'center' | 'right',
       display: 'block', // Ensure it behaves like a block element since we're using div
       lineHeight: 1.2,
-      borderBottom: `2px solid ${resolveTailwindColor((branding as any)?.colors?.actionSecondaryColor || colors.secondary || 'transparent')}`,
-      paddingBottom: (branding as any)?.colors?.actionSecondaryColor ? '8px' : '0',
-      marginBottom: (branding as any)?.colors?.actionSecondaryColor ? '16px' : '0',
+      marginBottom: 0,
     },
 
     actions: {
@@ -228,12 +236,12 @@ export function MessagePreview({
     signature: {
       marginTop: spacing.medium || '16px',
       paddingTop: spacing.small || '12px',
-      borderTop: `1px solid ${colors.border || '#e5e7eb'}`,
+      borderTop: `1px solid ${colors.borderColor || '#e5e7eb'}`,
       fontSize: `${textSize * 0.75}px`,
-      color: colors.textMuted || '#6b7280',
+      color: '#6b7280',
       fontStyle: 'italic',
     },
-  }), [asPopup, branding, buttonsAlignment, colors.background, colors.border, colors.primary, colors.text, colors.textMuted, direction, logoPosition, messageWidth, radii.medium, radii.small, spacing.medium, spacing.small, spacing.xsmall, titleAlignment, titleTextSize, titleTypography.fontWeight, titleTypography.fontSize, titleTypography.fontFamily, typography.fontFamily, typography.fontSize, typography.fontWeight, textSize])
+  }), [asPopup, branding, buttonsAlignment, colors, direction, logoPosition, messageWidth, radii.medium, radii.small, spacing.medium, spacing.small, spacing.xsmall, titleAlignment, titleTextSize, titleTypography.fontWeight, titleTypography.fontSize, titleTypography.fontFamily, typography.fontFamily, typography.fontSize, typography.fontWeight, textSize])
 
   const getButtonStyles = React.useCallback((actionKind: string) => {
     const buttonStyle = getButtonStyle(actionKind)
@@ -262,7 +270,17 @@ export function MessagePreview({
         )}
         {showTitle && (
           <div style={styles.headerBlock}>
-            <div style={styles.title}>{content.title}</div>
+            <div style={styles.title}>
+              <RichTextRenderer
+                content={content.title}
+                textSize={titleTextSize}
+                colors={colors}
+                spacing={spacing}
+                radii={radii}
+                variableValues={variableValues}
+                customButtons={[]}
+              />
+            </div>
           </div>
         )}
       </>
@@ -286,15 +304,17 @@ export function MessagePreview({
           dangerouslySetInnerHTML={{ __html: previewHtml }}
         />
       ) : (
-        <RichTextRenderer
-          content={content.body}
-          textSize={textSize}
-          colors={colors}
-          spacing={spacing}
-          radii={radii}
-          variableValues={variableValues}
-          customButtons={[]}
-        />
+        <div style={{ marginBottom: spacing.medium || '16px' }}>
+          <RichTextRenderer
+            content={content.body}
+            textSize={textSize}
+            colors={colors}
+            spacing={spacing}
+            radii={radii}
+            variableValues={variableValues}
+            customButtons={[]}
+          />
+        </div>
       )}
 
       {(content.actions && content.actions.length > 0) && (

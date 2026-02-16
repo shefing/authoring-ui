@@ -21,7 +21,7 @@ export const Buttons: CollectionConfig = {
       name: 'name',
       type: 'text',
       admin:{
-        width :'33%',
+        width :'25%',
       },
       required: true,
     },
@@ -29,9 +29,21 @@ export const Buttons: CollectionConfig = {
       name: 'label',
       type: 'text',
       admin:{
-        width :'33%',
+        width :'20%',
       },
     },
+        {
+          name: 'action',
+          type: 'select',
+          options: [
+            { label: 'Cancel', value: 'Cancel' },
+            { label: 'Acknowledge', value: 'Acknowledge' },
+          ],
+          defaultValue: 'Acknowledge',
+          admin:{
+            width :'20%',
+          },
+        },
     createIconSelectField({name:'icon',label:'Icon'}),
       ]},
     {

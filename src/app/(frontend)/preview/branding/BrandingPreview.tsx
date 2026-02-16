@@ -23,17 +23,16 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
   // Debug log to trace data mapping
   console.log('[DEBUG_LOG] Mapping brandingData:', {
     id: brandingData.id,
-    msgTypo: brandingData.messageTypography,
-    titleTypo: brandingData.titleTypography,
-    colors: brandingData.colors,
-    buttonStyles: brandingData.buttonStyles
+    title: brandingData.title,
+    message: brandingData.message,
+    general: brandingData.general,
   });
   
   // Dynamically load font families for the preview page itself
   React.useEffect(() => {
     const fontsToLoad = new Set<string>()
-    if (brandingData.messageTypography?.fontFamily) fontsToLoad.add(brandingData.messageTypography.fontFamily)
-    if (brandingData.titleTypography?.fontFamily) fontsToLoad.add(brandingData.titleTypography.fontFamily)
+    if (brandingData.message?.fontFamily) fontsToLoad.add(brandingData.message.fontFamily)
+    if (brandingData.title?.fontFamily) fontsToLoad.add(brandingData.title.fontFamily)
     
     fontsToLoad.forEach(font => {
       if (font && !['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', '-apple-system'].includes(font.toLowerCase())) {
@@ -48,34 +47,34 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
         }
       }
     })
-  }, [brandingData.messageTypography?.fontFamily, brandingData.titleTypography?.fontFamily])
+  }, [brandingData.message?.fontFamily, brandingData.title?.fontFamily])
   
   const mappedBranding = React.useMemo(() => ({
-    titleTypography: brandingData.titleTypography,
-    messageTypography: brandingData.messageTypography,
+    titleTypography: brandingData.title,
+    messageTypography: brandingData.message,
     themeTokens: {
       colors: {
-        primary: brandingData.colors?.actionPrimaryColor || '',
-        secondary: brandingData.colors?.actionSecondaryColor || '',
-        text: brandingData.colors?.messageTextColor || '',
-        background: brandingData.colors?.messageBackgroundColor || '',
-        border: brandingData.colors?.actionSecondaryColor || '',
+        primary: brandingData.actions?.primaryBackground || '',
+        secondary: brandingData.actions?.secondaryBackground || '',
+        text: brandingData.message?.textColor || '',
+        background: brandingData.general?.messageBackgroundColor || '',
+        border: brandingData.general?.borderColor || '',
         buttonText: '#ffffff',
       },
       typography: {
-        fontFamily: brandingData.messageTypography?.fontFamily || '',
-        fontSize: brandingData.messageTypography?.fontSize || '',
-        fontWeight: brandingData.messageTypography?.fontWeight || '',
+        fontFamily: brandingData.message?.fontFamily || '',
+        fontSize: brandingData.message?.fontSize || '',
+        fontWeight: brandingData.message?.fontWeight || '',
       },
       titleTypography: {
-        fontFamily: brandingData.titleTypography?.fontFamily || '',
-        fontSize: brandingData.titleTypography?.fontSize || '',
-        fontWeight: brandingData.titleTypography?.fontWeight || '',
+        fontFamily: brandingData.title?.fontFamily || '',
+        fontSize: brandingData.title?.fontSize || '',
+        fontWeight: brandingData.title?.fontWeight || '',
       }
     },
     generalStyling: {
-        messageTextColor: brandingData.colors?.messageTextColor || '',
-        messageBackgroundColor: brandingData.colors?.messageBackgroundColor || '',
+        messageTextColor: brandingData.message?.textColor || '',
+        messageBackgroundColor: brandingData.general?.messageBackgroundColor || '',
         direction: 'ltr' as const,
         messageWidth: 500,
         titleAlign: 'center' as const,
@@ -88,16 +87,19 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
     },
     approveBtn: {
         label: 'Approve',
-        bgColor: brandingData.buttonStyles?.approveBgColor || brandingData.colors?.actionPrimaryColor || '',
-        textColor: brandingData.buttonStyles?.approveTextColor || '#ffffff',
+        bgColor: brandingData.actions?.primaryBackground || '',
+        textColor: brandingData.actions?.primaryText || '#ffffff',
         align: 'center' as const,
     },
     buttonStyles: {
-        dismissBgColor: brandingData.buttonStyles?.dismissBgColor || brandingData.colors?.actionSecondaryColor || '',
-        dismissTextColor: brandingData.buttonStyles?.dismissTextColor || '',
+        dismissBgColor: brandingData.actions?.secondaryBackground || '',
+        dismissTextColor: brandingData.actions?.secondaryText || '#ffffff',
     },
-    // Pass original colors and buttonStyles for easier access in MessagePreview
-    colors: brandingData.colors,
+    // Pass branding fields for easier access in MessagePreview
+    general: brandingData.general,
+    title: brandingData.title,
+    message: brandingData.message,
+    actions: brandingData.actions,
   }), [brandingData])
 
   const sampleContent = React.useMemo(() => ({
@@ -117,7 +119,7 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
 
   return (
     <div 
-      key={brandingData.id + JSON.stringify(brandingData.colors) + JSON.stringify(brandingData.buttonStyles) + JSON.stringify(brandingData.messageTypography) + JSON.stringify(brandingData.titleTypography) + (brandingData.logo && typeof brandingData.logo === 'object' ? (brandingData.logo as any).id || (brandingData.logo as any).url : '')} 
+      key={brandingData.id + JSON.stringify(brandingData.general) + JSON.stringify(brandingData.title) + JSON.stringify(brandingData.message) + JSON.stringify(brandingData.actions) + (brandingData.logo && typeof brandingData.logo === 'object' ? (brandingData.logo as any).id || (brandingData.logo as any).url : '')}
       style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#f4f4f4', minHeight: '100vh', color: '#000' }}
     >
       <div style={{ width: '100%', maxWidth: '800px' }}>

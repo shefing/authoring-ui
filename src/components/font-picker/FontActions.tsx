@@ -128,7 +128,7 @@ export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
   }
 
   return (
-    <div className="useTw mb-4 mr-10">
+    <div className="useTw mb-4 mr-2">
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Size'} />
       <div className="flex gap-2 items-center">
           <select 
