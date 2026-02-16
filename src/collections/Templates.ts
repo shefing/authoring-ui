@@ -50,6 +50,16 @@ export const Templates: CollectionConfig = {
                                     relationTo: 'branding',
                                 },
                                 {
+                                    name: 'templateType',
+                                    type: 'select',
+                                    options: [
+                                        {label: 'Pre-defined', value: 'pre-defined'},
+                                        {label: 'Custom', value: 'custom'},
+                                    ],
+                                    defaultValue: 'pre-defined',
+                                },
+
+                                {
                                     name: 'isActive',
                                     type: 'checkbox',
                                     defaultValue: true,
@@ -73,6 +83,7 @@ export const Templates: CollectionConfig = {
                                 },
                                 {
                                     name: 'channel',
+                                    label: 'Channels',
                                     type: 'relationship',
                                     hasMany: true,
                                     relationTo: 'channels',
@@ -83,11 +94,50 @@ export const Templates: CollectionConfig = {
                         {
                             name: 'title',
                             type: 'richText',
+                            admin: {condition: (data) => data.templateType === 'pre-defined' }
                         },
                         {
                             name: 'body',
                             type: 'richText',
+                            admin: {condition: (data) => data.templateType === 'pre-defined' }
                         },
+                        {
+                            type: 'array',
+                            name: 'buttons',
+                            fields: [
+                                {
+                                    type: 'row',
+                                    fields:[
+                                        {
+                                            name: 'button',
+                                            type: 'relationship',
+                                            relationTo: 'buttons',
+                                            admin: {
+                                                width: '50%',
+                                            }
+                                        },
+                                        {
+                                            name: 'label',
+                                            type: 'text',
+                                            admin:{
+                                                width: '50%',
+                                                components: {
+                                                    Field: {
+                                                        path: '/admincomponents/TextFromRelationField',
+                                                        clientProps: {
+                                                            relationField: 'button',
+                                                            relationDisplayField: 'label',
+                                                            fetchEndpoint: '/api/buttons',
+                                                        },
+                                                    },
+                                                },
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+
+                        }
                     ],
                 },
                 {label: 'Advanced', fields: [
@@ -107,15 +157,6 @@ export const Templates: CollectionConfig = {
                                         {label: 'Urgent', value: 'urgent'},
                                     ],
                                     defaultValue: 'normal',
-                                },
-                                {
-                                    name: 'templateType',
-                                    type: 'select',
-                                    options: [
-                                        {label: 'Pre-defined', value: 'pre-defined'},
-                                        {label: 'Custom', value: 'custom'},
-                                    ],
-                                    defaultValue: 'custom',
                                 },
                                 {
                                     name: 'category',

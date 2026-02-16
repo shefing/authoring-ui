@@ -252,6 +252,7 @@ export interface Template {
   id: string;
   name: string;
   branding?: (string | null) | Branding;
+  templateType?: ('pre-defined' | 'custom') | null;
   isActive?: boolean | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
   channel?: (string | Channel)[] | null;
@@ -285,9 +286,15 @@ export interface Template {
     };
     [k: string]: unknown;
   } | null;
+  buttons?:
+    | {
+        button?: (string | null) | Button;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   description?: string | null;
   priority?: ('normal' | 'high' | 'urgent') | null;
-  templateType?: ('pre-defined' | 'custom') | null;
   category?: ('security' | 'hr' | 'it' | 'general') | null;
   creator?: string | null;
   updator?: string | null;
@@ -325,6 +332,31 @@ export interface Channel {
     | null;
   requiresAuth?: boolean | null;
   authProvider?: string | null;
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buttons".
+ */
+export interface Button {
+  id: string;
+  name: string;
+  label?: string | null;
+  action?: ('Cancel' | 'Acknowledge') | null;
+  icon?: string | null;
+  otherAttributes?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
@@ -559,31 +591,6 @@ export interface Policy {
   createdAt: string;
   updatedAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buttons".
- */
-export interface Button {
-  id: string;
-  name: string;
-  label?: string | null;
-  action?: ('Cancel' | 'Acknowledge') | null;
-  icon?: string | null;
-  otherAttributes?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  creator?: string | null;
-  updator?: string | null;
-  process?: string | null;
-  createdAt: string;
-  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1115,14 +1122,21 @@ export interface BrandingSelect<T extends boolean = true> {
 export interface TemplatesSelect<T extends boolean = true> {
   name?: T;
   branding?: T;
+  templateType?: T;
   isActive?: T;
   messageType?: T;
   channel?: T;
   title?: T;
   body?: T;
+  buttons?:
+    | T
+    | {
+        button?: T;
+        label?: T;
+        id?: T;
+      };
   description?: T;
   priority?: T;
-  templateType?: T;
   category?: T;
   creator?: T;
   updator?: T;

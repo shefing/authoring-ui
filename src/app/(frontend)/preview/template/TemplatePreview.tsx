@@ -77,13 +77,13 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
             logo: brandingData.logo && typeof brandingData.logo === 'object' 
                 ? { url: (brandingData.logo as any).url || '' } 
                 : undefined,
-            logoPos: 'center' as const
+            logoPos: (brandingData as any).logoAlignment || 'center'
         },
         approveBtn: {
             label: 'Approve',
             bgColor: brandingData.actions?.primaryBackground || '',
             textColor: brandingData.actions?.primaryText || '#ffffff',
-            align: 'center' as const,
+            align: (brandingData.actions as any)?.buttonAlignment || 'center',
         },
         buttonStyles: {
             dismissBgColor: brandingData.actions?.secondaryBackground || '',
@@ -95,13 +95,12 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
   const messageContent = React.useMemo(() => ({
     title: templateData.title,
     body: templateData.body,
-    actions: [
-      {
-        kind: 'approve',
-        label: 'Approve',
-      },
-    ],
-  }), [templateData.name, templateData.body])
+    actions: templateData.buttons?.map((btn: any) => ({
+      kind: btn.button?.action === 'Cancel' ? 'secondary' : 'primary',
+      label: btn.label || btn.button?.label || 'Action',
+      icon: btn.button?.icon,
+    })) || [],
+  }), [templateData.title, templateData.body, templateData.buttons])
 
   return (
     <div 

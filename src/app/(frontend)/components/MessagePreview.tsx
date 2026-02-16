@@ -2,6 +2,7 @@
 import * as React from 'react'
 import type { Branding } from '@/payload-types'
 import type {MessageContent} from '../lib/messages'
+import * as Icons from 'flowbite-react-icons'
 import {RichTextRenderer} from './RichTextRenderer'
 import {resolveTailwindColor} from '../lib/utils'
 
@@ -98,7 +99,7 @@ export function MessagePreview({
       return {
         backgroundColor: resolveTailwindColor(approveBg),
         color: resolveTailwindColor(approveText),
-        label: (branding as any)?.approveBtn?.label || 'Approve',
+        defaultLabel: (branding as any)?.approveBtn?.label || 'Approve',
       }
     }
     if (actionKind === 'dismiss' || actionKind === 'secondary') {
@@ -107,13 +108,13 @@ export function MessagePreview({
       return {
         backgroundColor: resolveTailwindColor(dismissBg),
         color: resolveTailwindColor(dismissText),
-        label: 'Dismiss',
+        defaultLabel: 'Dismiss',
       }
     }
     return {
       backgroundColor: resolveTailwindColor(colors.primaryBackground || '#3b82f6'),
       color: resolveTailwindColor(colors.primaryText || '#ffffff'),
-      label: 'Action',
+      defaultLabel: 'Action',
     }
   }, [branding, colors])
 
@@ -255,6 +256,9 @@ export function MessagePreview({
       fontWeight: 500,
       cursor: 'pointer',
       transition: 'opacity 0.2s',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
     }
   }, [getButtonStyle, radii.small, spacing.small, spacing.xsmall, textSize])
 
@@ -321,6 +325,8 @@ export function MessagePreview({
         <div style={styles.actions}>
           {content.actions?.map((action, idx) => {
             const buttonStyle = getButtonStyle(action.kind)
+            const IconComponent = action.icon ? (Icons as any)[action.icon] : null
+            
             return (
               <button
                 key={idx}
@@ -330,7 +336,8 @@ export function MessagePreview({
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.9')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                {buttonStyle.label || action.label}
+                {IconComponent && <IconComponent className="w-4 h-4" />}
+                {action.label || buttonStyle.defaultLabel}
               </button>
             )
           })}
