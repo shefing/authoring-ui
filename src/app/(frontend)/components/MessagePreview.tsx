@@ -79,9 +79,9 @@ export function MessagePreview({
   const titleAlignment: any = 'left' 
   const flip: any = { left: 'right', right: 'left' }
 
-  const buttonsAlignment: any = 'center'
+  const buttonsAlignment: any = (branding as any)?.actions?.buttonAlignment || (branding as any)?.approveBtn?.align || 'center'
 
-  const logoPosition: any = 'center'
+  const logoPosition: any = (branding as any)?.logoAlignment || (branding as any)?.logoSettings?.logoPos || 'center'
   const signaturePosition: any = 'center'
 
   // Determine what to show based on availability in branding
@@ -180,9 +180,9 @@ export function MessagePreview({
     logoContainer: {
       display: 'flex',
       justifyContent:
-        (branding as any)?.logoSettings?.logoPos || logoPosition === 'center'
+        logoPosition === 'center'
           ? 'center'
-          : ((branding as any)?.logoSettings?.logoPos || logoPosition) === 'right-inline'
+          : logoPosition === 'right' || logoPosition === 'right-inline'
             ? 'flex-end'
             : 'flex-start',
       marginBottom: spacing.small || '12px',

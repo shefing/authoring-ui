@@ -54,9 +54,30 @@ export const Branding: CollectionConfig = {
                             ],
                         },
                         {
-                            name: 'logo',
-                            type: 'relationship',
-                            relationTo: 'media',
+                            type: 'row',
+                            fields: [
+                                {
+                                    name: 'logo',
+                                    type: 'relationship',
+                                    relationTo: 'media',
+                                    admin: {
+                                        style: {
+                                            marginRight: '10px',
+                                        },
+                                    },
+                                },
+                                {
+                                    name: 'logoAlignment',
+                                    label: 'Logo Alignment',
+                                    type: 'select',
+                                    options: [
+                                        {label: 'Left', value: 'left'},
+                                        {label: 'Center', value: 'center'},
+                                        {label: 'Right', value: 'right'},
+                                    ],
+                                    defaultValue: 'center',
+                                },
+                            ],
                         },
                         {
                             type: 'group',
@@ -148,8 +169,25 @@ export const Branding: CollectionConfig = {
                                                     label: 'Secondary Text'
                                                 }),
                                             ],
-                                        }
-                                        ]
+                                        },
+                                        {type:'row',fields:[
+                                                {
+                                                    name: 'buttonAlignment',
+                                                    label: 'Button Alignment',
+                                                    type: 'select',
+                                                    options: [
+                                                        {label: 'Left', value: 'left'},
+                                                        {label: 'Center', value: 'center'},
+                                                        {label: 'Right', value: 'right'},
+                                                    ],
+                                                    defaultValue: 'center',
+                                                    admin: {
+                                                        width: '200px',
+                                                    },
+                                                },
+                                            ]}
+
+                                    ]
                                 },
                             ],
                         }

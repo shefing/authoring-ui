@@ -83,13 +83,13 @@ export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialDa
         logo: brandingData.logo && typeof brandingData.logo === 'object' 
             ? { url: (brandingData.logo as any).url || '' } 
             : undefined,
-        logoPos: 'center' as const
+        logoPos: (brandingData as any).logoAlignment || 'center'
     },
     approveBtn: {
         label: 'Approve',
         bgColor: brandingData.actions?.primaryBackground || '',
         textColor: brandingData.actions?.primaryText || '#ffffff',
-        align: 'center' as const,
+        align: (brandingData.actions as any)?.buttonAlignment || 'center',
     },
     buttonStyles: {
         dismissBgColor: brandingData.actions?.secondaryBackground || '',

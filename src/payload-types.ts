@@ -163,6 +163,7 @@ export interface Branding {
   name: string;
   isActive?: boolean | null;
   logo?: (string | null) | Media;
+  logoAlignment?: ('left' | 'center' | 'right') | null;
   general?: {
     borderColor?: string | null;
     messageBackgroundColor?: string | null;
@@ -184,6 +185,7 @@ export interface Branding {
     primaryText?: string | null;
     secondaryBackground?: string | null;
     secondaryText?: string | null;
+    buttonAlignment?: ('left' | 'center' | 'right') | null;
   };
   scope?: ('all' | 'urgent' | 'division' | 'message-type') | null;
   scopeType?: ('global' | 'urgency' | 'division' | 'message-type') | null;
@@ -1059,6 +1061,7 @@ export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   isActive?: T;
   logo?: T;
+  logoAlignment?: T;
   general?:
     | T
     | {
@@ -1088,6 +1091,7 @@ export interface BrandingSelect<T extends boolean = true> {
         primaryText?: T;
         secondaryBackground?: T;
         secondaryText?: T;
+        buttonAlignment?: T;
       };
   scope?: T;
   scopeType?: T;

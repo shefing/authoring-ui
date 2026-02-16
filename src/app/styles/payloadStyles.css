@@ -332,3 +332,18 @@ html[data-theme='dark'] {
 
 
 }
+
+
+/* Card title styling */
+.card__title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+}
+
+/* Navigation group label */
+.nav-group__label {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+}
