@@ -71,6 +71,18 @@ export const Branding: CollectionConfig = {
                                     },
                                 },
                                 {
+                                    name: 'logoSize',
+                                    label: 'Logo Size',
+                                    type: 'select',
+                                    options: [
+                                        {label: 'Original', value: 'original'},
+                                        {label: 'X-Small', value: 'logo-xsmall'},
+                                        {label: 'Small', value: 'logo-small'},
+                                        {label: 'Medium', value: 'logo-medium'},
+                                    ],
+                                    defaultValue: 'logo-small',
+                                },
+                                {
                                     name: 'logoAlignment',
                                     label: 'Logo Alignment',
                                     type: 'select',

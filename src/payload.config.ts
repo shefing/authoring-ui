@@ -157,6 +157,18 @@ export default buildConfig({
                 relationTo: 'media',
                 required: true,
               },
+              {
+                name: 'size',
+                type: 'select',
+                options: [
+                  { label: 'Original', value: 'original' },
+                  { label: 'X-Small', value: 'logo-xsmall' },
+                  { label: 'Small', value: 'logo-small' },
+                  { label: 'Medium', value: 'logo-medium' },
+                  { label: 'Large', value: 'large' },
+                ],
+                defaultValue: 'logo-small',
+              },
             ],
           },
           {

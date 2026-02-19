@@ -75,9 +75,13 @@ export const TemplatePreview: React.FC<{ initialData: Template }> = ({ initialDa
         },
         logoSettings: {
             logo: brandingData.logo && typeof brandingData.logo === 'object' 
-                ? { url: (brandingData.logo as any).url || '' } 
+                ? { 
+                    url: (brandingData.logo as any).url || '',
+                    sizes: (brandingData.logo as any).sizes || {}
+                  } 
                 : undefined,
-            logoPos: (brandingData as any).logoAlignment || 'center'
+            logoPos: (brandingData as any).logoAlignment || 'center',
+            logoSize: (brandingData as any).logoSize || 'logo-small'
         },
         approveBtn: {
             label: 'Approve',

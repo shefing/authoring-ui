@@ -77,9 +77,13 @@ export const MessagePreviewPage: React.FC<{ initialData: Message }> = ({ initial
         },
         logoSettings: {
             logo: brandingData.logo && typeof brandingData.logo === 'object' 
-                ? { url: (brandingData.logo as any).url || '' } 
+                ? { 
+                    url: (brandingData.logo as any).url || '',
+                    sizes: (brandingData.logo as any).sizes || {}
+                  } 
                 : undefined,
-            logoPos: 'center' as const
+            logoPos: (brandingData as any).logoAlignment || 'center',
+            logoSize: (brandingData as any).logoSize || 'logo-small'
         },
         approveBtn: {
             label: 'Approve',

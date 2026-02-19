@@ -167,6 +167,7 @@ export interface Branding {
   name: string;
   isActive?: boolean | null;
   logo?: (string | null) | Media;
+  logoSize?: ('original' | 'logo-xsmall' | 'logo-small' | 'logo-medium') | null;
   logoAlignment?: ('left' | 'center' | 'right') | null;
   general?: {
     borderColor?: string | null;
@@ -240,6 +241,14 @@ export interface Media {
       filename?: string | null;
     };
     thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    'logo-xsmall'?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -1126,6 +1135,7 @@ export interface BrandingSelect<T extends boolean = true> {
   name?: T;
   isActive?: T;
   logo?: T;
+  logoSize?: T;
   logoAlignment?: T;
   general?:
     | T
@@ -1334,6 +1344,16 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
         thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        'logo-xsmall'?:
           | T
           | {
               url?: T;

@@ -203,11 +203,26 @@ export function RichTextRenderer({
 
       // Image block
       if (fields?.blockType === 'image' && fields?.asset) {
+        const asset = fields.asset;
+        const size = fields.size || 'logo-small';
+        
+        let imageUrl = asset.url;
+        if (size && size !== 'original' && asset.sizes?.[size]?.url) {
+          imageUrl = asset.sizes[size].url;
+        } else if (size !== 'original') {
+           // Fallbacks
+           if (size === 'logo-xsmall') {
+             imageUrl = asset.sizes?.['logo-small']?.url || asset.sizes?.['logo-medium']?.url || asset.url;
+           } else if (size === 'logo-small') {
+             imageUrl = asset.sizes?.['logo-medium']?.url || asset.url;
+           }
+        }
+
         return (
           <img
             key={index}
-            src={fields.asset.url}
-            alt={fields.alt || fields.asset.alt || ''}
+            src={imageUrl}
+            alt={fields.alt || asset.alt || ''}
             style={{
               maxWidth: '100%',
               height: 'auto',

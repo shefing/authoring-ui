@@ -87,8 +87,25 @@ export function MessagePreview({
 
   // Determine what to show based on availability in branding
   const showTitle = !!content?.title
-  const showLogo = !!(branding?.logo && typeof branding.logo === 'object' && (branding.logo as any).url) || !!((branding as any)?.logoSettings?.logo?.url)
-  const logoUrl = (branding?.logo && typeof branding.logo === 'object' && (branding.logo as any).url) || (branding as any)?.logoSettings?.logo?.url || ''
+  const logoMedia = (branding?.logo && typeof branding.logo === 'object' ? branding.logo : (branding as any)?.logoSettings?.logo) as any
+  const showLogo = !!logoMedia?.url
+  const logoSize = branding?.logoSize || (branding as any)?.logoSettings?.logoSize || 'logo-small'
+  
+  // Get the best logo URL (prefer selected logoSize, then fallback to original url)
+  const logoUrl = React.useMemo(() => {
+    if (!logoMedia) return ''
+    if (logoSize && logoSize !== 'original' && logoMedia.sizes?.[logoSize]?.url) {
+      return logoMedia.sizes[logoSize].url
+    }
+    // Fallback if specific size not found or 'original' selected
+    if (logoSize === 'logo-xsmall') {
+      if (logoMedia.sizes?.['logo-small']?.url) return logoMedia.sizes['logo-small'].url
+      if (logoMedia.sizes?.['logo-medium']?.url) return logoMedia.sizes['logo-medium'].url
+    }
+    if (logoSize === 'logo-small' && logoMedia.sizes?.['logo-medium']?.url) return logoMedia.sizes['logo-medium'].url
+    return logoMedia.url || ''
+  }, [logoMedia, logoSize])
+
   const showSignature = false
 
   // Get button style by action kind

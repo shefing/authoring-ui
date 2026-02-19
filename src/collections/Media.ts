@@ -32,6 +32,11 @@ export const Media: CollectionConfig = {
 
       },
       {
+        name: 'logo-xsmall',
+        width: 50,
+        formatOptions: { format: 'webp' },
+      },
+      {
         name: 'logo-small',
         width: 200,
         formatOptions: { format: 'webp' },
