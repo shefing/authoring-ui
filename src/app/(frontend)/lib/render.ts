@@ -1,23 +1,35 @@
-import { Template } from '@/payload-types'
-import {extractHtml, extractPlainText} from './utils'
+import { Template, Message } from '@/payload-types'
+import { extractHtml, extractPlainText } from './utils'
+import { splitRenderData } from '@/lib/messageRenderData'
 
 export type PreviewInput = {
   template: Template
-  variables: Record<string, unknown>
+  variables?: Record<string, unknown>
+  message?: Message | null
 }
 
-export function buildPreview({ template, variables }: PreviewInput) {
-  const body = template?.body ?? template
-  const text = extractPlainText(body, variables)
-  const html = extractHtml(body, variables)
+export function buildPreview({ template, variables, message }: PreviewInput) {
+  const isCustom = message?.templateType === 'custom'
 
-  const title = template?.name || 'Preview'
+  const renderData = splitRenderData(message?.renderData as any)
+  const mergedVars = {
+    ...renderData.variables,
+    ...(variables || {}),
+  }
+  
+  const titleSource = isCustom ? message?.title : template?.title
+  const bodySource = isCustom ? message?.content : (template?.body ?? template)
+
+  const titleText = isCustom ? extractPlainText(titleSource, mergedVars) : (template?.name || 'Preview')
+  const titleHtml = extractHtml(titleSource, mergedVars)
+  const bodyText = extractPlainText(bodySource, mergedVars)
+  const bodyHtml = extractHtml(bodySource, mergedVars)
 
   const device = {
     kind: template?.messageType === 'confirmation' ? 'confirm' : 'info',
-    title,
-    body: text,
-    actions: [],
+    title: titleText,
+    body: bodyText,
+    actions: renderData.buttons.map((label) => ({ kind: 'action', label })),
   }
 
   const teams = {
@@ -25,8 +37,8 @@ export function buildPreview({ template, variables }: PreviewInput) {
     $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
     version: '1.5',
     body: [
-      { type: 'TextBlock', text: title, weight: 'Bolder', size: 'Medium' },
-      ...text.split('\n').filter(line => line.trim() !== '').map(line => ({
+      { type: 'TextBlock', text: titleText, weight: 'Bolder', size: 'Medium' },
+      ...bodyText.split('\n').filter(line => line.trim() !== '').map(line => ({
         type: 'TextBlock',
         text: line,
         wrap: true
@@ -39,5 +51,5 @@ export function buildPreview({ template, variables }: PreviewInput) {
     })),
   }
 
-  return { title, text, html, device, teams }
+  return { title: titleText, titleHtml, text: bodyText, html: bodyHtml, device, teams }
 }

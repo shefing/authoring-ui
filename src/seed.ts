@@ -453,7 +453,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'survey',
         template: templates[0].id, // Multi-step Survey
         targetGroup: userGroups[0].id, // All Employees
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'normal',
@@ -493,7 +493,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'confirmation',
         template: templates[1].id, // Remediation Confirmation
         targetGroup: userGroups[1].id, // Engineering Department
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'normal',
@@ -533,7 +533,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'notification',
         template: templates[2].id, // Success Notification
         targetGroup: userGroups[2].id, // Remote Workers
-        channel: channels[1].id,
+        channels: [channels[1].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -573,7 +573,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'reminder',
         template: templates[3].id, // Remediation Reminder
         targetGroup: userGroups[5].id, // Sales Department
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'intrusive',
         status: 'Triggered',
         priority: 'normal',
@@ -614,7 +614,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'self-service',
         template: templates[4].id, // Chat Interface
         targetGroup: userGroups[3].id, // VIP Users
-        channel: channels[1].id,
+        channels: [channels[1].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -654,7 +654,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'survey',
         template: templates[6].id, // Annual Survey
         targetGroup: userGroups[0].id, // All Employees
-        channel: channels[3].id,
+        channels: [channels[3].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -694,7 +694,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'confirmation',
         template: templates[7].id, // Urgent Confirmation
         targetGroup: userGroups[4].id, // IT Security Team
-        channel: channels[2].id,
+        channels: [channels[2].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'high',
@@ -734,7 +734,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'notification',
         template: templates[8].id, // System Notification
         targetGroup: userGroups[12].id, // All Users
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'non-intrusive',
         status: 'Triggered',
         priority: 'normal',
@@ -775,7 +775,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'reminder',
         template: templates[9].id, // Scheduled Reminder
         targetGroup: userGroups[6].id, // Finance Department
-        channel: channels[3].id,
+        channels: [channels[3].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -815,7 +815,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'self-service',
         template: templates[4].id, // Chat Interface
         targetGroup: userGroups[0].id, // All Employees
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -855,7 +855,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'survey',
         template: templates[0].id, // Multi-step Survey
         targetGroup: userGroups[7].id, // Marketing Department
-        channel: channels[1].id,
+        channels: [channels[1].id],
         deliveryMode: 'intrusive',
         status: 'Acknowledged',
         priority: 'normal',
@@ -895,7 +895,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'confirmation',
         template: templates[1].id, // Remediation Confirmation
         targetGroup: userGroups[8].id, // New Hires
-        channel: channels[3].id,
+        channels: [channels[3].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'normal',
@@ -935,7 +935,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'notification',
         template: templates[2].id, // Success Notification
         targetGroup: userGroups[9].id, // Development Team
-        channel: channels[2].id,
+        channels: [channels[2].id],
         deliveryMode: 'non-intrusive',
         status: 'Acknowledged',
         priority: 'normal',
@@ -975,7 +975,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'reminder',
         template: templates[9].id, // Scheduled Reminder
         targetGroup: userGroups[10].id, // IT Managers
-        channel: channels[1].id,
+        channels: [channels[1].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'high',
@@ -1015,7 +1015,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'self-service',
         template: templates[4].id, // Chat Interface
         targetGroup: userGroups[2].id, // Remote Workers
-        channel: channels[2].id,
+        channels: [channels[2].id],
         deliveryMode: 'non-intrusive',
         status: 'Active',
         priority: 'normal',
@@ -1055,7 +1055,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'survey',
         template: templates[6].id, // Annual Survey
         targetGroup: userGroups[0].id, // All Employees
-        channel: channels[2].id,
+        channels: [channels[2].id],
         deliveryMode: 'non-intrusive',
         status: 'Draft',
         priority: 'normal',
@@ -1095,7 +1095,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'confirmation',
         template: templates[1].id, // Remediation Confirmation
         targetGroup: userGroups[11].id, // Data Owners
-        channel: channels[1].id,
+        channels: [channels[1].id],
         deliveryMode: 'non-intrusive',
         status: 'Triggered',
         priority: 'normal',
@@ -1136,7 +1136,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'notification',
         template: templates[5].id, // Security Alert - Engineering
         targetGroup: userGroups[12].id, // All Users
-        channel: channels[0].id,
+        channels: [channels[0].id],
         deliveryMode: 'intrusive',
         status: 'Active',
         priority: 'urgent',
@@ -1176,7 +1176,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'reminder',
         template: templates[3].id, // Remediation Reminder
         targetGroup: userGroups[1].id, // Engineering Department
-        channel: channels[2].id,
+        channels: [channels[2].id],
         deliveryMode: 'non-intrusive',
         status: 'Acknowledged',
         priority: 'normal',
@@ -1216,7 +1216,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         messageType: 'self-service',
         template: templates[4].id, // Chat Interface
         targetGroup: userGroups[5].id, // Sales Department
-        channel: channels[3].id,
+        channels: [channels[3].id],
         deliveryMode: 'non-intrusive',
         status: 'Draft',
         priority: 'normal',

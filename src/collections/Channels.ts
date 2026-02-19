@@ -11,6 +11,7 @@ export const Channels: CollectionConfig = {
     group: 'Configuration',
     useAsTitle: 'name',
   },
+  trash: true, // Enable trash functionality
   access: {
     read: () => true,
   },

@@ -255,7 +255,7 @@ export interface Template {
   templateType?: ('pre-defined' | 'custom') | null;
   isActive?: boolean | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
-  channel?: (string | Channel)[] | null;
+  channels?: (string | Channel)[] | null;
   title?: {
     root: {
       type: string;
@@ -303,6 +303,7 @@ export interface Template {
   publisher?: string | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -337,6 +338,7 @@ export interface Channel {
   process?: string | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -369,14 +371,12 @@ export interface Button {
  */
 export interface Message {
   id: string;
-  name: string;
-  description?: string | null;
-  priority?: ('normal' | 'high' | 'urgent') | null;
   template?: (string | null) | Template;
   targetGroup?: (string | null) | UserGroup;
-  channel?: (string | null) | Channel;
   status?: ('Draft' | 'Active' | 'Triggered' | 'Rendered' | 'Acknowledged' | 'Expired') | null;
+  templateType?: ('pre-defined' | 'custom') | null;
   messageType: 'survey' | 'confirmation' | 'notification' | 'reminder' | 'self-service';
+  channels?: (string | Channel)[] | null;
   deliverySchedule?: ('immediate' | 'scheduled') | null;
   scheduledDate?: string | null;
   title?: {
@@ -413,9 +413,9 @@ export interface Message {
     [k: string]: unknown;
   } | null;
   /**
-   * Button text overrides — e.g. [{ "buttonText": "OK" }, { "buttonText": "Dismiss" }]
+   * Variables and button text overrides.
    */
-  buttonsText?:
+  renderData?:
     | {
         [k: string]: unknown;
       }
@@ -428,6 +428,9 @@ export interface Message {
    * Visibility flag — hidden messages are not shown to end users
    */
   isHidden?: boolean | null;
+  name: string;
+  description?: string | null;
+  priority?: ('normal' | 'high' | 'urgent') | null;
   deliveryRules?: (string | DeliveryRule)[] | null;
   deliveryMode?: ('intrusive' | 'non-intrusive') | null;
   /**
@@ -442,6 +445,7 @@ export interface Message {
   publisher?: string | null;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
 }
 /**
@@ -1125,7 +1129,7 @@ export interface TemplatesSelect<T extends boolean = true> {
   templateType?: T;
   isActive?: T;
   messageType?: T;
-  channel?: T;
+  channels?: T;
   title?: T;
   body?: T;
   buttons?:
@@ -1145,6 +1149,7 @@ export interface TemplatesSelect<T extends boolean = true> {
   publisher?: T;
   createdAt?: T;
   updatedAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -1152,20 +1157,21 @@ export interface TemplatesSelect<T extends boolean = true> {
  * via the `definition` "messages_select".
  */
 export interface MessagesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  priority?: T;
   template?: T;
   targetGroup?: T;
-  channel?: T;
   status?: T;
+  templateType?: T;
   messageType?: T;
+  channels?: T;
   deliverySchedule?: T;
   scheduledDate?: T;
   title?: T;
   content?: T;
-  buttonsText?: T;
+  renderData?: T;
   isHidden?: T;
+  name?: T;
+  description?: T;
+  priority?: T;
   deliveryRules?: T;
   deliveryMode?: T;
   responseRate?: T;
@@ -1177,6 +1183,7 @@ export interface MessagesSelect<T extends boolean = true> {
   publisher?: T;
   createdAt?: T;
   updatedAt?: T;
+  deletedAt?: T;
   _status?: T;
 }
 /**
@@ -1280,6 +1287,7 @@ export interface ChannelsSelect<T extends boolean = true> {
   process?: T;
   createdAt?: T;
   updatedAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

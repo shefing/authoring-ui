@@ -64,21 +64,22 @@ export async function POST(req: NextRequest) {
 
     // Fetch template/message and build preview
     let tpl: Template
+    let msg: any = null
     try {
       if (messageId) {
-        const msg = await getMessageByIdServer(messageId, { draft: !!draft })
+        msg = await getMessageByIdServer(messageId, { draft: !!draft })
         if (!msg) throw new Error('message not found')
         tpl = msg.template as unknown as Template
       } else {
         tpl = (await getTemplateByIdServer(templateId, { draft: !!draft })) as unknown as Template
       }
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e)
-      const status = /\b404\b/.test(msg) ? 404 : 502
-      return new Response(JSON.stringify({ error: 'fetch_failed', detail: msg }), { status })
+      const msgError = e instanceof Error ? e.message : String(e)
+      const status = /\b404\b/.test(msgError) ? 404 : 502
+      return new Response(JSON.stringify({ error: 'fetch_failed', detail: msgError }), { status })
     }
 
-    const preview = buildPreview({ template: tpl, variables: variables || {} })
+    const preview = buildPreview({ template: tpl, variables: variables || {}, message: msg })
     return new Response(JSON.stringify({ templateId, preview }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

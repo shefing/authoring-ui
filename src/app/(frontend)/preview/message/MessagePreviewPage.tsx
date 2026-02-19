@@ -4,6 +4,7 @@ import React from 'react'
 import { useLivePreview } from '@payloadcms/live-preview-react'
 import { Message, Template, Branding } from '@/payload-types'
 import { MessagePreview } from '@/app/(frontend)/components/MessagePreview'
+import { splitRenderData } from '@/lib/messageRenderData'
 
 export const MessagePreviewPage: React.FC<{ initialData: Message }> = ({ initialData }) => {
   const { data } = useLivePreview<Message>({
@@ -93,16 +94,28 @@ export const MessagePreviewPage: React.FC<{ initialData: Message }> = ({ initial
     }
   }, [brandingData])
 
-  const messageContent = React.useMemo(() => ({
-    title: messageData.title,
-    body: messageData.content || templateData?.body,
-    actions: [
-      {
-        kind: 'approve',
-        label: 'Approve',
-      },
-    ],
-  }), [messageData.name, messageData.content, templateData?.body])
+  const renderData = React.useMemo(
+    () => splitRenderData(messageData.renderData as any),
+    [messageData.renderData],
+  )
+
+  const messageContent = React.useMemo(() => {
+    const templateButtons = Array.isArray(templateData?.buttons) ? templateData?.buttons : []
+    const buttonLabels = templateButtons.map((buttonEntry: any, index: number) => {
+      const buttonDoc = buttonEntry?.button && typeof buttonEntry.button === 'object' ? buttonEntry.button : null
+      const defaultLabel = buttonEntry?.label || buttonDoc?.label || buttonDoc?.name || `Button ${index + 1}`
+      return renderData.buttons[index] || defaultLabel
+    })
+
+    return {
+      title: messageData.title,
+      body: messageData.content || templateData?.body,
+      actions: buttonLabels.map((label, index) => ({
+        kind: index === 0 ? 'primary' : 'secondary',
+        label,
+      })),
+    }
+  }, [messageData.title, messageData.content, templateData?.body, templateData?.buttons, renderData.buttons])
 
   return (
     <div 
@@ -124,6 +137,7 @@ export const MessagePreviewPage: React.FC<{ initialData: Message }> = ({ initial
             <MessagePreview 
                 content={messageContent as any} 
                 branding={mappedBranding as any}
+                variableValues={renderData.variables}
             />
         </div>
         

@@ -7,6 +7,7 @@ export const Templates: CollectionConfig = {
         singular: '📑 Template',
         plural: '📑 Templates',
     },
+    trash: true, // Enable trash functionality
     enableQueryPresets: true,
     versions: {drafts: true, maxPerDoc: 50},
     access: {
@@ -82,7 +83,7 @@ export const Templates: CollectionConfig = {
                                     required: true,
                                 },
                                 {
-                                    name: 'channel',
+                                    name: 'channels',
                                     label: 'Channels',
                                     type: 'relationship',
                                     hasMany: true,
