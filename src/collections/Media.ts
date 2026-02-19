@@ -19,5 +19,38 @@ export const Media: CollectionConfig = {
       type: 'text',
     },
   ],
-  upload: true,
+  upload: {
+    imageSizes: [
+      {
+        name: 'webp',
+        formatOptions: { format: 'webp' },
+      },
+      {
+        name: 'thumbnail',
+        width: 250,
+        formatOptions: { format: 'webp' },
+
+      },
+      {
+        name: 'logo-small',
+        width: 200,
+        formatOptions: { format: 'webp' },
+      },
+      {
+        name: 'logo-medium',
+        width: 400,
+        formatOptions: { format: 'webp' },
+      },
+      {
+        name: 'medium',
+        width: 800,
+        formatOptions: { format: 'webp', options: { quality: 90 } },
+      },
+      {
+        name: 'large',
+        width: 1200,
+        formatOptions: { format: 'webp' },
+      },
+    ],
+  },
 }

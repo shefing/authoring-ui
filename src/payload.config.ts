@@ -40,11 +40,13 @@ import {DeliveryRules} from './collections/DeliveryRules'
 import {MessageAnalytics} from './collections/MessageAnalytics'
 import {seed} from './seed'
 import {en} from "@payloadcms/translations/languages/en";
+import sharp from 'sharp';
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+    sharp,
     debug: process.env.NODE_ENV === 'development',
     i18n: {
         supportedLanguages: {en},

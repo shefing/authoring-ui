@@ -320,7 +320,7 @@ export const Messages: CollectionConfig = {
                     { label: 'Scheduled', value: 'scheduled' },
                   ],
                   defaultValue: 'immediate',
-                  admin: { width: '23.33%' },
+                  admin: { width: '200px' },
                 },
                 {
                   name: 'scheduledDate',
