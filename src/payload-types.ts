@@ -211,7 +211,7 @@ export interface Branding {
  */
 export interface Media {
   id: string;
-  alt: string;
+  alt?: string | null;
   creator?: string | null;
   updator?: string | null;
   process?: string | null;
