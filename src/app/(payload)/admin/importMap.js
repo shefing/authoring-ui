@@ -1,4 +1,5 @@
 import { default as default_5afd0140fc7ba52afd83ccfe6007c5d5 } from '../../../admincomponents/cell/YesNoCell'
+import { default as default_19fb7ce04a418cb58d80406f0d8052a3 } from '../../../admincomponents/cell/MediaCell'
 import { SelectColorFont as SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { SelectColorBackground as SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3 } from '../../../components/color-picker/CustomTailWindColors'
 import { ActionFont as ActionFont_60743c5858c0abf56b6430f8ff699141 } from '../../../components/font-picker/FontActions'
@@ -52,6 +53,7 @@ import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } f
 
 export const importMap = {
   "/admincomponents/cell/YesNoCell#default": default_5afd0140fc7ba52afd83ccfe6007c5d5,
+  "/admincomponents/cell/MediaCell#default": default_19fb7ce04a418cb58d80406f0d8052a3,
   "/components/color-picker/CustomTailWindColors#SelectColorFont": SelectColorFont_e0f5be1d6287c601bb047e81dc12f6c3,
   "/components/color-picker/CustomTailWindColors#SelectColorBackground": SelectColorBackground_e0f5be1d6287c601bb047e81dc12f6c3,
   "/components/font-picker/FontActions#ActionFont": ActionFont_60743c5858c0abf56b6430f8ff699141,

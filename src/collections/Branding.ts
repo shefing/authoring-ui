@@ -64,6 +64,9 @@ export const Branding: CollectionConfig = {
                                         style: {
                                             marginRight: '10px',
                                         },
+                                        components: {
+                                            Cell: '/admincomponents/cell/MediaCell',
+                                        },
                                     },
                                 },
                                 {
