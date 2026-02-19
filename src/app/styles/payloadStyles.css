@@ -330,6 +330,9 @@ html[data-theme='dark'] {
     padding-bottom: 0;
   }
 
+  .fontAction .field-label {
+    padding-bottom: 5px !important;
+  }
 
 }
 
@@ -347,3 +350,4 @@ html[data-theme='dark'] {
   font-weight: var(--font-weight-medium);
   color: var(--foreground);
 }
+

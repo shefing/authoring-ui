@@ -58,9 +58,9 @@ export const ActionFont: React.FC<TextFieldClientProps & { apiUrl?: string }> = 
   }, [apiUrl])
 
   return (
-    <div className="useTw mb-4 mr-10" >
+    <div className="useTw mr-10 fontAction w-45" >
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Family'} />
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} >
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -128,7 +128,7 @@ export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
   }
 
   return (
-    <div className="useTw mb-4 mr-2">
+    <div className="useTw fontAction">
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Size'} />
       <div className="flex gap-2 items-center">
           <select 
@@ -186,7 +186,7 @@ export const ActionFontStyle: React.FC<TextFieldClientProps> = (props) => {
   }
 
   return (
-    <div className="useTw mb-4 mr-10" >
+    <div className="useTw mr-10 fontAction" >
       <FieldLabel htmlFor={`field-${path}`} label={field.label || 'Font Weight & Style'} />
       <select 
         value={inputValue} 
