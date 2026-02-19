@@ -134,22 +134,13 @@ export const ActionFontSize: React.FC<TextFieldClientProps> = (props) => {
           <select 
             value={inputValue} 
             onChange={(e) => handleChange(e.target.value)}
-            className="flex h-9 w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           >
               <option value="" disabled>Select...</option>
               {displaySizes.map(size => (
                   <option key={size} value={size}>{size}</option>
               ))}
           </select>
-          <input 
-            type="range" 
-            min="8" 
-            max="100" 
-            value={parseInt(inputValue || '16')} 
-            onChange={(e) => handleChange(e.target.value + 'px')}
-            className="flex-1"
-          />
-          <span className="text-xs w-8 text-right">{parseInt(inputValue || '16')}px</span>
       </div>
     </div>
   )
