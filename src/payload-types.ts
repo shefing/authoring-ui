@@ -536,6 +536,18 @@ export interface Policy {
   };
   quietHours?: {
     timezone: string;
+    /**
+     * Optional list of VIP user IDs exempt from quiet hours.
+     */
+    vipUserIds?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
     windows?:
       | {
           /**
@@ -552,18 +564,6 @@ export interface Policy {
           days?: string | null;
           id?: string | null;
         }[]
-      | null;
-    /**
-     * Optional list of VIP user IDs exempt from quiet hours.
-     */
-    vipUserIds?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
       | null;
   };
   routing?: {
@@ -1216,6 +1216,7 @@ export interface PoliciesSelect<T extends boolean = true> {
     | T
     | {
         timezone?: T;
+        vipUserIds?: T;
         windows?:
           | T
           | {
@@ -1224,7 +1225,6 @@ export interface PoliciesSelect<T extends boolean = true> {
               days?: T;
               id?: T;
             };
-        vipUserIds?: T;
       };
   routing?:
     | T

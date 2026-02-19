@@ -47,8 +47,13 @@ export const Policies: CollectionConfig = {
           condition: (data) => data?.type === 'fatigue',
       },
       fields: [
-        { name: 'maxSurveysPerWeek', type: 'number', required: true, defaultValue: 2 },
-        { name: 'minDaysBetweenSurveys', type: 'number', required: true, defaultValue: 3 },
+        {
+          type: 'row',
+          fields: [
+            { name: 'maxSurveysPerWeek', type: 'number', required: true, defaultValue: 2 },
+            { name: 'minDaysBetweenSurveys', type: 'number', required: true, defaultValue: 3 },
+          ],
+        },
       ],
     },
 
@@ -60,9 +65,14 @@ export const Policies: CollectionConfig = {
           condition: (data) => data?.type === 'sequencing',
       },
       fields: [
-        { name: 'allowParallelExecution', type: 'checkbox', defaultValue: false },
-        { name: 'maxConcurrentActions', type: 'number', defaultValue: 1 },
-        { name: 'queueNonIntrusiveMessages', type: 'checkbox', defaultValue: true },
+        {
+          type: 'row',
+          fields: [
+            { name: 'allowParallelExecution', type: 'checkbox', defaultValue: false },
+            { name: 'maxConcurrentActions', type: 'number', defaultValue: 1 },
+            { name: 'queueNonIntrusiveMessages', type: 'checkbox', defaultValue: true },
+          ],
+        },
       ],
     },
 
@@ -75,21 +85,26 @@ export const Policies: CollectionConfig = {
       },
       fields: [
         {
-            name: 'reminderFrequency',
-            type: 'select',
-            options: [
+          type: 'row',
+          fields: [
+            {
+              name: 'reminderFrequency',
+              type: 'select',
+              options: [
                 { label: 'More Frequent', value: 'more_frequent' },
                 { label: 'Less Frequent', value: 'less_frequent' },
                 { label: 'Custom', value: 'custom' },
-            ],
-            defaultValue: 'less_frequent',
-        },
-        {
-            name: 'customIntervalDays',
-            type: 'number',
-            admin: {
-                condition: (data) => data?.vip?.reminderFrequency === 'custom',
+              ],
+              defaultValue: 'less_frequent',
             },
+            {
+              name: 'customIntervalDays',
+              type: 'number',
+              admin: {
+                condition: (data) => data?.vip?.reminderFrequency === 'custom',
+              },
+            },
+          ],
         },
       ],
     },
@@ -102,17 +117,28 @@ export const Policies: CollectionConfig = {
           condition: (data) => data?.type === 'quietHours',
       },
       fields: [
-        { name: 'timezone', type: 'text', required: true, defaultValue: 'UTC' },
+        {
+          type: 'row',
+          fields: [
+            { name: 'timezone', type: 'text', required: true, defaultValue: 'UTC' },
+            {
+              name: 'vipUserIds',
+              type: 'json',
+              admin: { description: 'Optional list of VIP user IDs exempt from quiet hours.' },
+            },
+          ],
+        },
         {
           name: 'windows',
           type: 'array',
           fields: [
-            { name: 'start', type: 'text', required: true, admin: { description: 'e.g., 22:00' } },
-            { name: 'end', type: 'text', required: true, admin: { description: 'e.g., 07:00' } },
-            { name: 'days', type: 'text', admin: { description: 'e.g., Mon-Fri' } },
+              { type: 'row' ,fields: [
+                      { name: 'start', type: 'text', required: true, admin: { description: 'e.g., 22:00' } },
+                      { name: 'end', type: 'text', required: true, admin: { description: 'e.g., 07:00' } },
+                      { name: 'days', type: 'text', admin: { description: 'e.g., Mon-Fri' } },
+                  ]}
           ],
         },
-        { name: 'vipUserIds', type: 'json', admin: { description: 'Optional list of VIP user IDs exempt from quiet hours.' } },
       ],
     },
 
@@ -126,28 +152,33 @@ export const Policies: CollectionConfig = {
         },
       fields: [
         {
-          name: 'preferredChannel',
-          type: 'select',
-          options: [
-            { label: 'Device', value: 'device' },
-            { label: 'Teams', value: 'teams' },
-            { label: 'Both', value: 'both' },
+          type: 'row',
+          fields: [
+            {
+              name: 'preferredChannel',
+              type: 'select',
+              options: [
+                { label: 'Device', value: 'device' },
+                { label: 'Teams', value: 'teams' },
+                { label: 'Both', value: 'both' },
+              ],
+              required: true,
+              defaultValue: 'device',
+            },
+            {
+              name: 'bothStrategy',
+              type: 'select',
+              options: [
+                { label: 'Parallel', value: 'parallel' },
+                { label: 'Fallback to Teams', value: 'fallbackToTeams' },
+                { label: 'Fallback to Device', value: 'fallbackToDevice' },
+              ],
+              admin: {
+                condition: (data) => data?.routing?.preferredChannel === 'both',
+                description: 'Used when preferredChannel = both',
+              },
+            },
           ],
-          required: true,
-          defaultValue: 'device',
-        },
-        {
-          name: 'bothStrategy',
-          type: 'select',
-          options: [
-            { label: 'Parallel', value: 'parallel' },
-            { label: 'Fallback to Teams', value: 'fallbackToTeams' },
-            { label: 'Fallback to Device', value: 'fallbackToDevice' },
-          ],
-          admin: {
-              condition: (data) => data?.routing?.preferredChannel === 'both',
-              description: 'Used when preferredChannel = both'
-          },
         },
       ],
     },
@@ -160,7 +191,16 @@ export const Policies: CollectionConfig = {
           condition: (data) => data?.type === 'dndExceptions',
       },
       fields: [
-        { name: 'allowedDuringDndKinds', type: 'json', admin: { description: 'E.g., { "kinds": ["urgent", "security"] }' } },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'allowedDuringDndKinds',
+              type: 'json',
+              admin: { description: 'E.g., { "kinds": ["urgent", "security"] }' },
+            },
+          ],
+        },
       ],
     },
   ],

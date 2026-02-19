@@ -324,7 +324,7 @@ html[data-theme='dark'] {
     }
   }
   .field-type.checkbox {
-    margin-top: 35px;
+    margin-top: 35px !important;
   }
   .group-field--within-tab {
     padding-bottom: 0;
