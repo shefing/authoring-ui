@@ -1,6 +1,7 @@
 import type {CollectionConfig} from 'payload'
 import {createBackgroundColorField, createColorField} from '@/components/color-picker/index'
 import {createFontFamilyField, createFontSizeField, createFontWeightField} from '@/components/font-picker/index'
+import {getCachedSettings} from '../globals/settingsCache'
 
 export const Branding: CollectionConfig = {
     slug: 'branding',
@@ -94,10 +95,15 @@ export const Branding: CollectionConfig = {
                                         {
                                             type: 'row',
                                             fields: [
-                                                createColorField({name: 'borderColor', label: 'Border'}),
+                                                createColorField({
+                                                    name: 'borderColor',
+                                                    label: 'Border',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.general?.borderColor
+                                                }),
                                                 createBackgroundColorField({
                                                     name: 'messageBackgroundColor',
-                                                    label: 'Message Background'
+                                                    label: 'Message Background',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.general?.messageBackgroundColor
                                                 }),
                                             ],
                                         },
@@ -111,16 +117,26 @@ export const Branding: CollectionConfig = {
                                         {
                                           type: 'row',
                                           fields:[
-                                              createColorField({name: 'textColor', label: 'Text Color'}),
+                                              createColorField({
+                                                  name: 'textColor',
+                                                  label: 'Text Color',
+                                                  defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.title?.textColor
+                                              }),
                                               createFontFamilyField({
                                                   name: 'fontFamily',
-                                                  label: 'Font Family'
+                                                  label: 'Font Family',
+                                                  defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.title?.fontFamily
                                               }),
                                               createFontWeightField({
                                                   name: 'fontWeight',
-                                                  label: 'Font Weight & Style'
+                                                  label: 'Font Weight & Style',
+                                                  defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.title?.fontWeight
                                               }),
-                                              createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                              createFontSizeField({
+                                                  name: 'fontSize',
+                                                  label: 'Font Size',
+                                                  defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.title?.fontSize
+                                              }),
                                           ]
                                         },
                                     ]
@@ -133,16 +149,26 @@ export const Branding: CollectionConfig = {
                                         {
                                             type: 'row',
                                             fields: [
-                                                createColorField({name: 'textColor', label: 'Text Color'}),
+                                                createColorField({
+                                                    name: 'textColor',
+                                                    label: 'Text Color',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.message?.textColor
+                                                }),
                                                 createFontFamilyField({
                                                     name: 'fontFamily',
-                                                    label: 'Font Family'
+                                                    label: 'Font Family',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.message?.fontFamily
                                                 }),
                                                 createFontWeightField({
                                                     name: 'fontWeight',
-                                                    label: 'Font Weight & Style'
+                                                    label: 'Font Weight & Style',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.message?.fontWeight
                                                 }),
-                                                createFontSizeField({name: 'fontSize', label: 'Font Size'}),
+                                                createFontSizeField({
+                                                    name: 'fontSize',
+                                                    label: 'Font Size',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.message?.fontSize
+                                                }),
                                             ]
                                         }
                                         ]
@@ -157,19 +183,23 @@ export const Branding: CollectionConfig = {
                                             fields: [
                                                 createBackgroundColorField({
                                                     name: 'primaryBackground',
-                                                    label: 'Primary Background'
+                                                    label: 'Primary Background',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.actions?.primaryBackground
                                                 }),
                                                 createColorField({
                                                     name: 'primaryText',
-                                                    label: 'Primary Text'
+                                                    label: 'Primary Text',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.actions?.primaryText
                                                 }),
                                                 createBackgroundColorField({
                                                     name: 'secondaryBackground',
-                                                    label: 'Secondary Background'
+                                                    label: 'Secondary Background',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.actions?.secondaryBackground
                                                 }),
                                                 createColorField({
                                                     name: 'secondaryText',
-                                                    label: 'Secondary Text'
+                                                    label: 'Secondary Text',
+                                                    defaultValue: async ({req}) => (await getCachedSettings(req.payload))?.actions?.secondaryText
                                                 }),
                                             ],
                                         },

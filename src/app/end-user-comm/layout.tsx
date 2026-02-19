@@ -1,8 +1,9 @@
 import React from 'react'
 import '../(frontend)/globals.css'
 import '../../components/EndUserComm/styles/globals.css'
+import {Metadata} from "next";
 
-export const metadata = {
+export const metadata:Metadata = {
   title: 'End-user Communication',
   description: 'Create and manage branded message & templates',
 }

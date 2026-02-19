@@ -4,16 +4,19 @@ interface FontFieldOptions {
   name?: string;
   label?: string;
   apiUrl?: string;
+  defaultValue?: string | ((args: any) => Promise<string | null | undefined> | string | null | undefined);
 }
 
 export const createFontFamilyField = ({
   name = 'fontFamily',
   label = 'Font Family',
   apiUrl = '/api/fonts',
+  defaultValue,
 }: FontFieldOptions = {}): Field => ({
   name,
   type: 'text',
   label,
+  defaultValue,
   admin: {
     width : '25%',
     components: {
@@ -30,10 +33,12 @@ export const createFontFamilyField = ({
 export const createFontSizeField = ({
   name = 'fontSize',
   label = 'Font Size',
+  defaultValue,
 }: FontFieldOptions = {}): Field => ({
   name,
   type: 'text',
   label,
+  defaultValue,
   admin: {
     width : '25%',
     components: {
@@ -45,10 +50,12 @@ export const createFontSizeField = ({
 export const createFontWeightField = ({
   name = 'fontWeight',
   label = 'Font Weight & Style',
+  defaultValue,
 }: FontFieldOptions = {}): Field => ({
   name,
   type: 'text',
   label,
+  defaultValue,
   admin: {
     width : '25%',
     components: {

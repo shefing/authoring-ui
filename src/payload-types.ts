@@ -118,8 +118,12 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    setting: Setting;
+  };
+  globalsSelect: {
+    setting: SettingSelect<false> | SettingSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -1606,6 +1610,90 @@ export interface PayloadQueryPresetsSelect<T extends boolean = true> {
   isTemp?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "setting".
+ */
+export interface Setting {
+  id: string;
+  name: string;
+  brandDefaults?: {
+    general?: {
+      borderColor?: string | null;
+      messageBackgroundColor?: string | null;
+    };
+    title?: {
+      textColor?: string | null;
+      fontFamily?: string | null;
+      fontWeight?: string | null;
+      fontSize?: string | null;
+    };
+    message?: {
+      textColor?: string | null;
+      fontFamily?: string | null;
+      fontWeight?: string | null;
+      fontSize?: string | null;
+    };
+    actions?: {
+      primaryBackground?: string | null;
+      primaryText?: string | null;
+      secondaryBackground?: string | null;
+      secondaryText?: string | null;
+    };
+  };
+  creator?: string | null;
+  updator?: string | null;
+  process?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "setting_select".
+ */
+export interface SettingSelect<T extends boolean = true> {
+  name?: T;
+  brandDefaults?:
+    | T
+    | {
+        general?:
+          | T
+          | {
+              borderColor?: T;
+              messageBackgroundColor?: T;
+            };
+        title?:
+          | T
+          | {
+              textColor?: T;
+              fontFamily?: T;
+              fontWeight?: T;
+              fontSize?: T;
+            };
+        message?:
+          | T
+          | {
+              textColor?: T;
+              fontFamily?: T;
+              fontWeight?: T;
+              fontSize?: T;
+            };
+        actions?:
+          | T
+          | {
+              primaryBackground?: T;
+              primaryText?: T;
+              secondaryBackground?: T;
+              secondaryText?: T;
+            };
+      };
+  creator?: T;
+  updator?: T;
+  process?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -34,6 +34,7 @@ import {Channels} from './collections/Channels'
 import {Buttons} from './collections/Buttons'
 import {Messages} from './collections/Messages'
 import {Divisions} from './collections/Divisions'
+import {Setting} from './globals/Setting'
 import {UserGroups} from './collections/UserGroups'
 import {DeliveryRules} from './collections/DeliveryRules'
 import {MessageAnalytics} from './collections/MessageAnalytics'
@@ -129,6 +130,9 @@ export default buildConfig({
     Users,
     Divisions,
     UserGroups,
+  ],
+  globals: [
+    Setting,
   ],
   editor: lexicalEditor({
     features: () => [

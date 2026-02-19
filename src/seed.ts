@@ -1251,6 +1251,36 @@ export const seed = async (payload: Payload): Promise<void> => {
   ]);
 
   console.log('✅ Seed data created successfully!');
+  await payload.updateGlobal({
+    slug: 'setting',
+    data: {
+      name: 'Default Brand Settings',
+      brandDefaults: {
+        general: {
+          borderColor: '#E2E8F0',
+          messageBackgroundColor: '#FFFFFF',
+        },
+        title: {
+          textColor: '#1E293B',
+          fontFamily: 'Inter',
+          fontWeight: '600',
+          fontSize: '18px',
+        },
+        message: {
+          textColor: '#475569',
+          fontFamily: 'Inter',
+          fontWeight: '400',
+          fontSize: '14px',
+        },
+        actions: {
+          primaryBackground: '#2563EB',
+          primaryText: '#FFFFFF',
+          secondaryBackground: '#F1F5F9',
+          secondaryText: '#475569',
+        },
+      },
+    },
+  });
   console.log(`
   📊 Summary:
   - ${divisions.length} Divisions
