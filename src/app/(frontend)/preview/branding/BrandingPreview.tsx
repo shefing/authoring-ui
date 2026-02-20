@@ -8,7 +8,7 @@ import { MessagePreview } from '@/app/(frontend)/components/MessagePreview'
 export const BrandingPreview: React.FC<{ initialData: Branding }> = ({ initialData }) => {
   const { data } = useLivePreview<Branding>({
     serverURL: process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'),
-    depth: 1,
+    depth: 2,
     initialData: initialData,
   })
 

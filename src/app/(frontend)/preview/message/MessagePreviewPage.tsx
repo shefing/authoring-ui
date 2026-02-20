@@ -9,7 +9,7 @@ import { splitRenderData } from '@/lib/messageRenderData'
 export const MessagePreviewPage: React.FC<{ initialData: Message }> = ({ initialData }) => {
   const { data } = useLivePreview<Message>({
     serverURL: process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'),
-    depth: 3,
+    depth: 4,
     initialData: initialData,
   })
 
